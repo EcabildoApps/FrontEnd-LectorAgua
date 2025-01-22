@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Menú Principal</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="logo-container">
+    <ion-icon name="water" size="large" color="primary"></ion-icon>
+  </div>
+
+
+  <ion-card class="custom-card">
+    <ion-card-header>
+      <ion-card-title>Toma Lectura</ion-card-title>
+      <ion-card-subtitle>
+        Permite gestionar lecturas de agua potable.
+      </ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+
+  <div class="permission-message">
+    <ion-icon name="alert-circle" color="dark"></ion-icon>
+    <span>Permiso de escritura no concedido</span>
+  </div>
+</ion-content>

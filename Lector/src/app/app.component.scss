@@ -1,0 +1,10 @@
+/* Estilo para el ítem seleccionado */
+ion-item.selected {
+    background-color: #5478fd !important;
+    color: rgb(0, 0, 0);
+
+    ion-icon,
+    ion-label {
+        color: #5478fd;
+    }
+}

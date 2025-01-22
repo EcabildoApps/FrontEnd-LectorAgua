@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Corrige Lectura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <!-- Filtro -->
+    <div class="filter-container">
+      <ion-item>
+        <ion-label>Filtro:</ion-label>
+        <ion-select placeholder="Seleccionar filtro" interface="popover">
+          <ion-select-option value="cuenta">Cuenta</ion-select-option>
+          <ion-select-option value="medidor">Medidor</ion-select-option>
+          <ion-select-option value="nombres">Nombres</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <!-- Ruta Actual -->
+    <div class="dropdown-container">
+      <ion-item>
+        <ion-label>Ruta Actual:</ion-label>
+        <ion-select placeholder="Seleccionar ruta">
+          <ion-select-option value="0101-01">0101-01 - BAR</ion-select-option>
+          <!-- Agregar más opciones dinámicamente si es necesario -->
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <!-- Registros -->
+    <div class="record-container">
+      <!-- Registro dinámico -->
+      <ion-card *ngFor="let registro of registros">
+        <ion-card-content>
+          <p><strong>Nro. Sec:</strong> {{ registro.nroSec }} <strong>Nro. Cuenta:</strong> {{ registro.nroCuenta }}</p>
+          <p>{{ registro.nombre }}</p>
+          <p><strong>Nro. Med:</strong> {{ registro.nroMedidor }}</p>
+          <p><strong>L</strong> - {{ registro.tipo }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje de alerta -->
+    <div class="footer">
+
+    </div>
+  </div>
+</ion-content>
