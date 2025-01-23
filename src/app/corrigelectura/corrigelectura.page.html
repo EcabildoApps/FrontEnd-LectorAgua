@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Corrige Lectura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <!-- Ruta Actual -->
+    <div class="dropdown-container">
+      <ion-item>
+        <ion-label>Ruta Actual:</ion-label>
+        <ion-select [(ngModel)]="rutaSeleccionada" placeholder="Seleccionar ruta" (ionChange)="cargarRegistros()">
+          <ion-select-option *ngFor="let ruta of rutasDisponibles" [value]="ruta">
+            {{ ruta }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+
+    <!-- Filtro (solo aparece después de seleccionar una ruta) -->
+    <div class="filter-container" *ngIf="rutaSeleccionada">
+      <ion-item>
+        <ion-label>Filtro:</ion-label>
+        <ion-select [(ngModel)]="filtros" placeholder="Seleccionar filtro" interface="popover">
+          <ion-select-option value="cuenta">Cuenta</ion-select-option>
+          <ion-select-option value="medidor">Medidor</ion-select-option>
+          <ion-select-option value="nombres">Nombres</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Input para valor de filtro -->
+      <ion-item *ngIf="filtros">
+        <ion-label position="floating">Valor</ion-label>
+        <ion-input [(ngModel)]="valorFiltro" (ionInput)="cargarRegistros()" debounce="500"></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Registros -->
+    <div class="record-container" *ngIf="registros.length > 0">
+      <ion-card *ngFor="let registro of registros">
+        <ion-card-content>
+            <p><strong>Nro. Sec:</strong> {{ registro.SECTOR }} <strong>Nro. Cuenta:</strong> {{ registro.NRO_CUENTA }}
+          </p>
+          <p>{{ registro.CONSUMIDOR }}</p>
+          <p><strong>Nro. Med:</strong> {{ registro.NRO_MEDIDOR }}</p>
+          <p>{{ registro.TARIFA }}</p>
+        </ion-card-content>
+        <ion-button color="primary" (click)="irATomaLectura(registro.IDCUENTA)" fill="solid" size="small">
+          Toma Lectura
+        </ion-button>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje de alerta -->
+    <div class="footer" *ngIf="registros.length === 0 && rutaSeleccionada">
+      <ion-text>
+        <p>No se encontraron registros para la ruta seleccionada.</p>
+      </ion-text>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,128 @@
+.container {
+    padding: 16px;
+}
+
+ion-card {
+    margin-bottom: 20px;
+}
+
+ion-card-header {
+    background-color: #f7f7f7;
+    padding: 16px;
+}
+
+ion-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+ion-separator {
+    margin: 10px 0;
+}
+
+ion-item {
+    margin-bottom: 12px;
+}
+
+ion-label {
+    font-weight: bold;
+}
+
+input[type="number"],
+ion-select {
+    width: 100%;
+}
+
+ion-button {
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+ion-button:focus {
+    outline: none;
+}
+
+ion-input {
+    width: 100%;
+}
+
+ion-card-content p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+ion-select-option {
+    font-size: 14px;
+}
+
+.photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.photo-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    /* Puedes ajustar el tamaño del contenedor */
+    height: 100px;
+    border: 2px dashed #3d7ff3;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+ion-icon {
+    color: #3d7ff3;
+    font-size: 40px;
+    /* Tamaño más grande para los íconos */
+    margin: auto;
+    /* Esto asegura que el ícono se mantenga centrado */
+}
+
+
+.photo-item p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #3d7ff3;
+}
+
+.photo-item:hover {
+    cursor: pointer;
+    background-color: #f4f5f8;
+}
+
+.photo-item input[type="file"] {
+    display: none;
+}
+
+input[type="number"] {
+    width: 100%;
+    /* Asegura que el input ocupe todo el ancho disponible */
+    padding: 10px;
+    /* Espaciado interno para que sea cómodo escribir */
+    font-size: 16px;
+    /* Tamaño de fuente adecuado */
+    border: 2px solid #3d7ff3;
+    /* Borde azul que coincide con tu estilo */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    background-color: #f9f9f9;
+    /* Color de fondo claro */
+    box-sizing: border-box;
+    /* Asegura que el padding no afecte el ancho */
+}
+
+input[type="number"]:focus {
+    outline: none;
+    /* Elimina el borde de enfoque predeterminado */
+    border-color: #3d7ff3;
+    /* Mantiene el borde azul cuando está en foco */
+    background-color: #e8f4fd;
+    /* Fondo suave cuando está enfocado */
+}

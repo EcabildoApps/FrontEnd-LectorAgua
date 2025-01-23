@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Toma Lectura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <ion-card *ngFor="let registro of registros">
+      <ion-card-header>
+        <!-- Título de la tarjeta -->
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ registro.TARIFA }}</p>
+        <p>{{ registro.RUTA }}</p>
+        <p><strong>Nro. Cuenta:</strong> {{ registro.NRO_CUENTA }}</p>
+        <p><strong>Nro. Medidor:</strong> {{ registro.NRO_MEDIDOR }}</p>
+
+        <ion-separator></ion-separator>
+
+        <p><strong>Consumidor:</strong> {{ registro.CONSUMIDOR }}</p>
+        <p><strong>Dirección:</strong> {{ registro.DIRECCION }}</p>
+
+        <ion-separator></ion-separator>
+
+        <p><strong>Secuencia:</strong> {{ registro.SEQUENCIA }}</p>
+
+        <input type="number" [(ngModel)]="registro.LECT_ACTUAL" placeholder="Ingrese la lectura"/>
+
+        <ion-separator></ion-separator>
+
+        <ion-item>
+          <ion-label>Causa</ion-label>
+          <ion-select [(ngModel)]="registro.ESTADO" placeholder="Seleccionar estado">
+            <ion-select-option value="1">Normal</ion-select-option>
+            <ion-select-option value="2">Anormal</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Novedad</ion-label>
+          <ion-select [(ngModel)]="registro.NOVEDAD" placeholder="Seleccionar novedad">
+            <ion-select-option value="1">Normal</ion-select-option>
+            <ion-select-option value="2">Anormal</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Contenedor para fotos -->
+        <div class="photo-container">
+          <ion-item button (click)="fileInput.click()" class="photo-item">
+            <ion-icon name="camera" size="large"></ion-icon>
+            <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+          </ion-item>
+
+          <ion-item button (click)="fileInput2.click()" class="photo-item">
+            <ion-icon name="camera" size="large"></ion-icon>
+            <input #fileInput2 type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+          </ion-item>
+        </div>
+
+        <ion-button expand="full">Guardar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

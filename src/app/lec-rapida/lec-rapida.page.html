@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Lectura Rápida</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Campo de entrada para el número de cuenta -->
+  <ion-item>
+    <ion-input [(ngModel)]="nroCuenta" placeholder="Ingresa el Nro de Cuenta" clearInput></ion-input>
+  </ion-item>
+
+  <!-- Botón para buscar -->
+  <ion-button expand="full" color="primary" (click)="buscar()">
+    Buscar
+  </ion-button>
+
+  <!-- Mensaje de error o de resultados -->
+  <ion-card *ngIf="datosCuenta">
+    <ion-card-header>
+      <ion-card-title>Datos de la Cuenta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Cédula:</strong> {{ datosCuenta.CEDULA_RUC }}</p>
+      <p><strong>Nombre:</strong> {{ datosCuenta.CONSUMIDOR }}</p>
+      <p><strong>Dirección:</strong> {{ datosCuenta.DIRECCION }}</p>
+      <!-- Agrega más campos según la estructura de la respuesta -->
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="error">
+    <ion-card-header>
+      <ion-card-title>Error</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ error }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

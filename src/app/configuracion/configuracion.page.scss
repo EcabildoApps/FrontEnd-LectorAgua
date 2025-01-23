@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f4f5f8;
+    height: 100vh;
+    /* Asegura que ocupe todo el alto de la pantalla */
+}
+
+.icon-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    font-size: 100px;
+    /* Hacer el icono de gota grande */
+    color: blue;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px 0;
+}
+
+ion-item {
+    --background: #fff;
+    --border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+ion-label {
+    color: blue;
+}
+
+ion-input {
+    --background: #fff;
+    --border-radius: 10px;
+}
+
+ion-button {
+    margin-top: 20px;
+    --border-radius: 5px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+ion-button {
+    --border-radius: 5px;
+    margin-top: 10px;
+}
+
+ion-button[color='primary'] {
+    --background: blue;
+    --color: white;
+}
+
+ion-button[color='secondary'] {
+    --background: #8c8c8c;
+    --color: white;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+ion-footer {
+    margin-top: 20px;
+}

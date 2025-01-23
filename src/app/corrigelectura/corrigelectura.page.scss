@@ -1,0 +1,96 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #f4f5f8;
+
+    /* Estilos para el contenedor de la ruta */
+    .dropdown-container {
+        ion-item {
+            --background: #fff;
+            --border-radius: 10px;
+            margin-bottom: 10px;
+
+            ion-label {
+                font-weight: bold;
+                color: #3d7ff3; // Consistencia con el tema
+            }
+        }
+    }
+
+    /* Estilos para el filtro */
+    .filter-container {
+        margin-bottom: 10px;
+
+        ion-item {
+            --background: #fff;
+            --border-radius: 10px;
+            margin-bottom: 10px;
+
+            ion-label {
+                font-weight: bold;
+                color: #3d7ff3; // Consistencia con el tema
+            }
+
+            ion-select {
+                --placeholder-color: #7a7a7a; // Mejor visibilidad del placeholder
+                --color: #000;
+            }
+        }
+
+        /* Input para valor de filtro */
+        ion-item {
+            ion-label {
+                position: floating;
+            }
+
+            ion-input {
+                width: 100%;
+                --padding-start: 10px;
+            }
+        }
+    }
+
+    /* Contenedor de registros */
+    .record-container {
+        margin-top: 20px;
+
+        ion-card {
+            margin-bottom: 15px;
+            border: 1px solid #3d7ff3;
+            --border-radius: 10px;
+
+            ion-card-content {
+                font-size: 14px;
+                line-height: 1.6;
+                color: #000;
+
+                p {
+                    margin: 5px 0;
+                }
+
+                strong {
+                    color: #3d7ff3;
+                }
+            }
+        }
+    }
+
+    /* Footer */
+    .footer {
+        margin-top: 20px;
+        /* Mayor separación visual */
+        display: flex;
+        justify-content: center;
+
+        ion-chip {
+            --background: #3d7ff3;
+            /* Color azul para resaltar */
+            --color: #fff;
+
+            ion-icon {
+                margin-right: 5px;
+            }
+        }
+    }
+}
