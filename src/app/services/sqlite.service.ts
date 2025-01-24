@@ -16,8 +16,6 @@ export class SqliteService {
   public dbName: string;
   public jeepSqlite: any;
 
-
-
   public readonly dbConfig = {
     database: 'lecturas.db',
     version: 1,
@@ -82,16 +80,11 @@ export class SqliteService {
     this.isIOS = false;
     this.dbName = this.dbConfig.database;
     console.log('Nombre de la base de datos:', this.dbName);
-
-
   }
 
   async init() {
     const info = await Device.getInfo();
     const sqlite = CapacitorSQLite as any;
-
-
-
 
     if (info.platform === 'android') {
       try {
@@ -129,12 +122,10 @@ export class SqliteService {
         console.error('Error al abrir la base de datos:', error);
       }
     }
-
   }
 
   async createDatabase() {
     console.log('Creando tablas de la base de datos...');
-
     try {
       // Crear conexión a la base de datos
       await CapacitorSQLite.createConnection({ database: this.dbName });
@@ -147,7 +138,6 @@ export class SqliteService {
         console.log('Ejecutando consulta:', query);
         await CapacitorSQLite.run({ database: this.dbName, statement: query });
       }
-
 
       console.log('Tablas creadas con éxito.');
 
@@ -223,5 +213,4 @@ export class SqliteService {
       console.error('Error al guardar las lecturas en la base de datos:', error);
     }
   }
-
 }
