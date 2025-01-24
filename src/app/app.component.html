@@ -80,5 +80,6 @@
   </ion-menu>
 
   <!-- Contenido principal -->
-  <ion-router-outlet id="main"></ion-router-outlet>
+  <ion-router-outlet *ngIf="load" id="main"></ion-router-outlet>
+  <jeep-sqlite *ngIf="isWeb"></jeep-sqlite>
 </ion-app>

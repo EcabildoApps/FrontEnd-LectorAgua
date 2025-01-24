@@ -1,0 +1,189 @@
+{
+    "database": "lecturas.db",
+    "version": 1,
+    "encrypted": false,
+    "mode": "full",
+    "tables": [
+        {
+            "name": "AGUALEC_APP",
+            "schema": [
+                {
+                    "column": "IDCUENTA",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "NRO_CUENTA",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "NRO_MEDIDOR",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "CIU",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "CONSUMIDOR",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "CEDULA_RUC",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "EMAIL",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "PARROQUIA",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "SECTOR",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "RUTA",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "SEQUENCIA",
+                    "value": "INTEGER"
+                },
+                {
+                    "column": "DIRECCION",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "CLAVE_PREDIO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "ESTADO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "STATUS",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "TARIFA",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "ALCANTARILLADO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "LECT_ACTUAL",
+                    "value": "INTEGER"
+                },
+                {
+                    "column": "LECT_ANTERIOR",
+                    "value": "INTEGER"
+                },
+                {
+                    "column": "CONSUMO_PROMEDIO",
+                    "value": "REAL"
+                },
+                {
+                    "column": "CONSUMO_CONTROL_MIN",
+                    "value": "REAL"
+                },
+                {
+                    "column": "CONSUMO_CONTROL_MAX",
+                    "value": "REAL"
+                },
+                {
+                    "column": "CONSUMO",
+                    "value": "REAL"
+                },
+                {
+                    "column": "EXONERACION",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "TERCERA_EDAD",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "DISCAPACIDAD",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "DEPARTAMENTO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "PISO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "MANZANA",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "TIPO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "ANIOMES",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "ACTIVO",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "USER_LEC",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "FECHA_LEC",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "X_LECTURA",
+                    "value": "REAL"
+                },
+                {
+                    "column": "Y_LECTURA",
+                    "value": "REAL"
+                },
+                {
+                    "column": "X_MEDIDOR",
+                    "value": "REAL"
+                },
+                {
+                    "column": "Y_MEDIDOR",
+                    "value": "REAL"
+                },
+                {
+                    "column": "TIPOCAUSA",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "LEC04ID",
+                    "value": "INTEGER"
+                },
+                {
+                    "column": "FECHA_STRING_LEC",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "FTOMA",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "PORCENTAGE_CON_PROMEDIO",
+                    "value": "REAL"
+                },
+                {
+                    "column": "TIPONOVEDAD",
+                    "value": "TEXT"
+                }
+            ]
+        }
+    ]
+}
