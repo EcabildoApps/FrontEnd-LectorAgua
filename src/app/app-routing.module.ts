@@ -63,7 +63,11 @@ const routes: Routes = [
   {
     path: 'controlacceso',
     loadChildren: () => import('./controlacceso/controlacceso.module').then( m => m.ControlaccesoPageModule)
+  },  {
+    path: 'lecturagt',
+    loadChildren: () => import('./lecturagt/lecturagt.module').then( m => m.LecturagtPageModule)
   },
+
 ];
 
 @NgModule({

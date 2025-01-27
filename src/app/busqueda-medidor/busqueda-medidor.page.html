@@ -10,14 +10,12 @@
 <ion-content>
   <!-- Formulario de búsqueda del medidor -->
   <ion-item>
-    <ion-input [(ngModel)]="nroMedidor" type="text" placeholder="Ingresa el número de medidor"></ion-input>
+    <ion-input [(ngModel)]="NRO_MEDIDOR" type="text" placeholder="Ingresa el número de medidor"
+      (input)="onInputChange()"></ion-input>
   </ion-item>
 
-  <!-- Botón para realizar la búsqueda -->
-  <ion-button expand="full" (click)="buscar()">Buscar</ion-button>
-
   <!-- Mensaje de error si no se encontró el medidor o si ocurre un error -->
-  <ion-card *ngIf="error">
+  <ion-card *ngIf="error" class="error-message">
     <ion-card-header>
       <ion-card-title>Error</ion-card-title>
     </ion-card-header>
@@ -27,19 +25,17 @@
   </ion-card>
 
   <!-- Resultados de la búsqueda -->
-  <ion-card *ngIf="datosMedidor?.length">
-    <ion-card-header>
-      <ion-card-title>Datos del Medidor</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <!-- Iterar sobre los resultados -->
-      <div *ngFor="let medidor of datosMedidor">
+  <div *ngIf="datosMedidor?.length">
+    <ion-card *ngFor="let medidor of datosMedidor">
+      <ion-card-header>
+        <ion-card-title>Datos del Medidor</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
         <p><strong>CIU:</strong> {{ medidor.CIU }}</p>
         <p><strong>Identificación:</strong> {{ medidor.CEDULA_RUC }}</p>
         <p><strong>Consumidor:</strong> {{ medidor.CONSUMIDOR }}</p>
         <p><strong>Parroquia:</strong> {{ medidor.PARROQUIA }}</p>
- 
-      </div>
-    </ion-card-content>
-  </ion-card>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

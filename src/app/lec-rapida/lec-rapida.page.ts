@@ -1,6 +1,6 @@
-import { Component, } from '@angular/core';
+import { Component } from '@angular/core';
+import { IonicstorageService } from '../services/ionicstorage.service'; // Asegúrate de tener el servicio de IonicStorage importado
 import { ToastController } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -10,52 +10,45 @@ import { HttpClient } from '@angular/common/http';
   standalone: false,
 })
 export class LecRapidaPage {
-  nroCuenta: string = ''; // Variable para el número de cuenta
-  datosCuenta: any = null; // Variable para los datos de la cuenta
-  error: string = ''; // Mensaje de error
+  NRO_CUENTA: string = '';   // Variable para el número de medidor
+  datosMedidor: any = [];     // Variable para los datos del medidor
+  error: string = '';         // Mensaje de error
 
   constructor(
-    private toastController: ToastController,
-    private http: HttpClient
+    private ionicStorageService: IonicstorageService, // Usamos el servicio de almacenamiento
+    private toastController: ToastController          // Para mostrar notificaciones
   ) { }
 
-  // Método para buscar los datos de la cuenta
-  async buscar() {
-    if (this.nroCuenta) {
-      this.http
-        .get(`http://localhost:3000/api/auth/lecturaR?cuenta=${this.nroCuenta}`)
-        .subscribe(
-          async (response: any) => {
-            if (response?.data?.length) {
-              this.datosCuenta = response.data[0]; // Obtén el primer resultado
-              this.error = ''; // Limpia cualquier error anterior
-            } else {
-              this.datosCuenta = null;
-              this.error = 'No se encontraron datos para este número de cuenta.';
-              await this.presentToast(this.error, 'warning');
-            }
-          },
-          async () => {
-            this.datosCuenta = null;
-            this.error = 'Ocurrió un error al buscar los datos.';
-            await this.presentToast(this.error, 'danger');
-          }
-        );
+  // Método para realizar la búsqueda del medidor mientras se escribe
+  async onInputChange() {
+    if (this.NRO_CUENTA.trim()) {
+      try {
+        // Buscar medidores que coincidan con el número ingresado
+        const medidores = await this.ionicStorageService.buscarCuentaNumeroParcial(this.NRO_CUENTA);
+
+        if (medidores && medidores.length > 0) {
+          this.datosMedidor = medidores; // Asignar los medidores encontrados
+          this.error = ''; // Limpia el error si la búsqueda es exitosa
+        } else {
+          this.datosMedidor = [];
+          this.error = 'No se encontraron medidores que coincidan con la búsqueda.';
+        }
+      } catch (error) {
+        this.datosMedidor = [];
+        this.error = 'Error al acceder a los datos del medidor.';
+        await this.presentToast(this.error); // Muestra un toast de error
+      }
     } else {
-      // Si no se ingresó un número de cuenta
-      this.datosCuenta = null;
-      this.error = 'Por favor, ingresa un número de cuenta.';
-      await this.presentToast(this.error, 'danger');
+      this.datosMedidor = []; // Si no hay texto, limpia los resultados
     }
   }
 
-  // Método para mostrar un toast con un mensaje
-  async presentToast(message: string, color: string) {
+  // Método para mostrar un toast
+  async presentToast(message: string) {
     const toast = await this.toastController.create({
-      message,
-      duration: 2000,
-      color,
-      position: 'bottom',
+      message: message,
+      duration: 2000,  // Duración en milisegundos
+      position: 'bottom',  // Posición del toast
     });
     toast.present();
   }

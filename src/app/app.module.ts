@@ -9,9 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 
-jeepSqlite(window);
+import { IonicStorageModule } from '@ionic/storage-angular';
+
 
 const routes: Routes = [
   {
@@ -28,7 +28,8 @@ const routes: Routes = [
     AppRoutingModule,
     RouterModule.forRoot(routes), 
     FormsModule, 
-    HttpClientModule
+    HttpClientModule,
+    IonicStorageModule.forRoot()
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }], 
   bootstrap: [AppComponent],

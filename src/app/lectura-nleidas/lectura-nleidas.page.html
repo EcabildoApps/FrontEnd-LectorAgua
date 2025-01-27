@@ -23,22 +23,10 @@
 
 
     <!-- Filtro (solo aparece después de seleccionar una ruta) -->
-    <div class="filter-container" *ngIf="rutaSeleccionada">
-      <ion-item>
-        <ion-label>Filtro:</ion-label>
-        <ion-select [(ngModel)]="filtros" placeholder="Seleccionar filtro" interface="popover">
-          <ion-select-option value="cuenta">Cuenta</ion-select-option>
-          <ion-select-option value="medidor">Medidor</ion-select-option>
-          <ion-select-option value="nombres">Nombres</ion-select-option>
-        </ion-select>
-      </ion-item>
-
-      <!-- Input para valor de filtro -->
-      <ion-item *ngIf="filtros">
-        <ion-label position="floating">Valor</ion-label>
-        <ion-input [(ngModel)]="valorFiltro" (ionInput)="cargarRegistros()" debounce="500"></ion-input>
-      </ion-item>
-    </div>
+    <ion-item>
+      <ion-input [(ngModel)]="valorFiltro" type="text" placeholder="Ingresa nombre/cuenta/medidor"
+        (input)="cargarRegistros()"></ion-input>
+    </ion-item>
 
     <!-- Registros -->
     <div class="record-container" *ngIf="registros.length > 0">

@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
-import { Device } from '@capacitor/device';
+import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Location } from '@angular/common';
-import { SqliteService } from './services/sqlite.service';
-
 
 @Component({
   selector: 'app-root',
@@ -11,55 +8,17 @@ import { SqliteService } from './services/sqlite.service';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   submenuVisible: boolean = false;
   public isWeb: boolean;
   public load: boolean = false;
 
   constructor(private navCtrl: NavController,
-    private location: Location,
-    private platform: Platform,
-    private sqliteService: SqliteService) {
-    this.initApp();
+    private location: Location,) {
     this.isWeb = false;
     this.load = false;
   }
 
-  async ngOnInit() {
-
-    await this.sqliteService.init();
-    await this.sqliteService.setupDatabase();
-
-    this.sqliteService.dbready.subscribe((ready) => {
-      if (ready) {
-        console.log('Base de datos inicializada y lista para usar.');
-      } else {
-        console.error('La base de datos no está lista.');
-      }
-    });
-
-
-
-    setTimeout(() => {
-      this.load = true;
-    }, 1000);
-    console.log('Estado de load:', this.load);
-
-  }
-
-  initApp() {
-
-    this.platform.ready().then(async () => {
-      const info = await Device.getInfo();
-      this.isWeb = info.platform === 'web';
-      this.load = true;
-      this.sqliteService.init();
-      this.sqliteService.dbready.subscribe(load => {
-        this.load = load;
-      });
-    })
-
-  }
 
   isSelected(route: string): boolean {
     return this.location.path() === route;

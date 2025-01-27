@@ -1,11 +1,12 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Corrige Lectura</ion-title>
+    <ion-title>Toma Lectura</ion-title>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content>
   <div class="container">
@@ -22,7 +23,7 @@
     </div>
 
     <ion-item>
-      <ion-input [(ngModel)]="valorFiltro" type="text" placeholder="Ingresa nombre/cuenta/medidor"
+      <ion-input [(ngModel)]="valorFiltro" type="text" placeholder="Ingresa nombre/cuenta/medidor "
         (input)="cargarRegistros()"></ion-input>
     </ion-item>
 

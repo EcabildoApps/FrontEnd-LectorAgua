@@ -4,14 +4,14 @@ import { ToastController, NavController } from '@ionic/angular';
 import { IonicstorageService } from '../services/ionicstorage.service'; // Asegúrate de tener el servicio de IonicStorage importado
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
-  selector: 'app-corrigelectura',
-  templateUrl: './corrigelectura.page.html',
-  styleUrls: ['./corrigelectura.page.scss'],
+  selector: 'app-lecturagt',
+  templateUrl: './lecturagt.page.html',
+  styleUrls: ['./lecturagt.page.scss'],
   standalone: false,
 })
-export class CorrigelecturaPage implements OnInit {
+export class LecturagtPage implements OnInit {
+
 
   filtros: string = '';
   valorFiltro: string = '';
@@ -40,8 +40,8 @@ export class CorrigelecturaPage implements OnInit {
 
   async cargarRegistros() {
     if (!this.rutaSeleccionada) {
-      this.registros = [];
-      return;
+      await this.presentToast('Por favor, selecciona una ruta primero.');
+      return; // No hacer nada si no se seleccionó una ruta
     }
 
     try {
@@ -90,5 +90,8 @@ export class CorrigelecturaPage implements OnInit {
     }
   }
 
-
+  onInputChange() {
+    // Cargar los registros con los filtros aplicados
+    this.cargarRegistros();
+  }
 }
