@@ -14,12 +14,15 @@ import { Geolocation } from '@capacitor/geolocation';
 })
 export class TomalecturaPage {
   registros: any[] = [];
+  causas: any[] = [];
+  novedades: any[] = [];
   idCuenta: number = 0;
+  selectedImages: File[] = [];
 
   constructor(
     private toastController: ToastController,
     private router: Router,
-    private ionicStorageService: IonicstorageService // Inyecta el servicio
+    private ionicStorageService: IonicstorageService
   ) { }
 
   async ngOnInit() {
@@ -27,31 +30,32 @@ export class TomalecturaPage {
       const currentUrl = this.router.url;
       const urlSegments = currentUrl.split('/');
       const idFromUrl = urlSegments[urlSegments.length - 1];
-      this.idCuenta = parseInt(idFromUrl, 10); // Convierte a número
+      this.idCuenta = parseInt(idFromUrl, 10);
 
       if (isNaN(this.idCuenta)) {
-        console.error('El ID de cuenta en la URL no es válido:', idFromUrl);
         await this.presentToast('Error: El ID de cuenta no es válido.');
         return;
       }
-
-      console.log('ID Cuenta obtenido:', this.idCuenta); // Asegúrate de que IDCUENTA se obtiene correctamente
+      await this.cargarCausasYNovedades();
       await this.cargarRegistros();
     } catch (error) {
-      console.error('Error durante la inicialización:', error);
       await this.presentToast('Ocurrió un error al cargar la página.');
     }
   }
 
   async cargarRegistros() {
     try {
-      const registro = await this.ionicStorageService.obtenerCuentaPorID(this.idCuenta);
-      if (registro) {
-        this.registros = [registro]; // Asegúrate de asignar un arreglo
-        console.log('Registros cargados:', this.registros);
+      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas(); // Usamos el nuevo método
+      console.log('Registros de Lecturas:', registrosLecturas);
+
+      // Filtrar registros por ID de cuenta
+      const registrosFiltrados = registrosLecturas.filter(registro => registro.IDCUENTA === this.idCuenta);
+
+      if (registrosFiltrados.length > 0) {
+        this.registros = registrosFiltrados;
+        console.log('Registros filtrados:', this.registros);
       } else {
         this.registros = [];
-        console.warn(`No se encontraron registros para IDCUENTA: ${this.idCuenta}`);
         await this.presentToast('No se encontraron registros para el ID de cuenta proporcionado.');
       }
     } catch (error) {
@@ -60,30 +64,98 @@ export class TomalecturaPage {
     }
   }
 
+  async cargarCausasYNovedades() {
+    try {
+      const datosGuardados = await this.ionicStorageService.listar();
+
+      if (!datosGuardados || datosGuardados.length === 0) {
+        await this.presentToast('No se encontraron datos guardados.');
+        return;
+      }
+
+      // Cargar causas filtrando por el identificador 'CAUSAS'
+      const causasData = datosGuardados
+        .find(item => item.k === 'CAUSAS' && item.v) // Filtramos por 'CAUSAS'
+        ?.v || [];
+
+      // Cargar novedades filtrando por el identificador 'NOVEDADES'
+      const novedadesData = datosGuardados
+        .find(item => item.k === 'NOVEDADES' && item.v) // Filtramos por 'NOVEDADES'
+        ?.v || [];
+
+      // Asumimos que dentro de `v` hay una propiedad `data` que contiene la lista
+      const causas = causasData?.data || [];
+      const novedades = novedadesData?.data || [];
+
+      // Si las causas o novedades no tienen datos, mostramos un mensaje
+      if (causas.length === 0) {
+        await this.presentToast('No se encontraron causas.');
+      }
+      if (novedades.length === 0) {
+        await this.presentToast('No se encontraron novedades.');
+      }
+
+      // Filtramos y ordenamos los datos
+      this.causas = causas
+        .filter((item) => item.REN21CODI && item.REN21DESC) // Filtramos los elementos con estos campos
+        .sort((a, b) => a.REN21DESC.localeCompare(b.REN21DESC));
+
+      this.novedades = novedades
+        .filter((item) => item.REN21CODI && item.REN21DESC) // Filtramos los elementos con estos campos
+        .sort((a, b) => a.REN21DESC.localeCompare(b.REN21DESC));
+
+      // Mostrar los resultados en consola (puedes eliminar esto después)
+      console.log('Causas cargadas:', this.causas);
+      console.log('Novedades cargadas:', this.novedades);
+
+    } catch (error) {
+      console.error('Error al cargar las causas y novedades:', error);
+      await this.presentToast('Ocurrió un error al cargar las causas y novedades.');
+    }
+  }
+
+
+
+
   async guardarLectura(registro: any) {
     try {
-      // Captura la posición del usuario
-      const position = await Geolocation.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
+      // Obtener la entrada "Lecturas" de la base de datos o almacenamiento
+      const lecturas = await this.ionicStorageService.rescatar('LECTURAS');
 
-      // Recupera el registro actual por su clave
-      const registroExistente = await this.ionicStorageService.rescatar(registro.NRO_CUENTA);
+      if (lecturas && lecturas.data && lecturas.data.length > 0) {
+        // Buscar el índice del registro a actualizar usando el identificador (NRO_CUENTA o NRO_MEDIDOR)
+        const index = lecturas.data.findIndex(item => item.NRO_CUENTA === registro.NRO_CUENTA);
 
-      if (registroExistente) {
-        // Actualiza los campos del registro existente
-        registroExistente.X_LECTURA = longitude;
-        registroExistente.Y_LECTURA = latitude;
-        registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
+        if (index !== -1) {
+          // Si el registro existe, actualizamos sus valores
+          const registroExistente = lecturas.data[index];
 
-        // Guarda el registro actualizado
-        await this.ionicStorageService.agregarConKey(registro.NRO_CUENTA, registroExistente);
+          const position = await Geolocation.getCurrentPosition();
+          const { latitude, longitude } = position.coords;
 
-        console.log('Registro actualizado con éxito:', registroExistente);
-        await this.presentToast('Lectura actualizada correctamente.');
+
+          registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
+          registroExistente.TIPOCAUSA = registro.TIPOCAUSA || '';
+          registroExistente.TIPONOVEDAD = registro.TIPONOVEDAD || '';
+          registroExistente.X_LECTURA = longitude;  // Coordenada de longitud (X)
+          registroExistente.Y_LECTURA = latitude;
+
+
+          // Actualizar las imágenes si están presentes
+          if (registro.imagenes && registro.imagenes.length > 0) {
+            registroExistente.IMAGENES = registro.imagenes;
+          }
+
+          // Guardar los datos actualizados
+          await this.ionicStorageService.agregarConKey('LECTURAS', lecturas);
+
+          await this.presentToast('Lectura actualizada correctamente.');
+        } else {
+          // Si no se encuentra el registro
+          await this.presentToast('No se encontró el registro con el número de cuenta proporcionado.');
+        }
       } else {
-        // Si no existe, muestra un mensaje de error
-        console.warn(`No se encontró un registro con NRO_CUENTA: ${registro.NRO_CUENTA}. No se guardará la lectura.`);
-        await this.presentToast('No se encontró el registro. Verifica el número de medidor.');
+        await this.presentToast('No hay datos de lecturas almacenados.');
       }
     } catch (error) {
       console.error('Error al actualizar la lectura:', error);
@@ -103,9 +175,10 @@ export class TomalecturaPage {
   }
 
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      console.log('Archivo seleccionado:', file);
+    const files = event.target.files;
+    if (files.length > 0) {
+      this.selectedImages = Array.from(files);
+      console.log('Imágenes seleccionadas:', this.selectedImages);
     } else {
       console.warn('No se seleccionó ningún archivo.');
     }

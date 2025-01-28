@@ -9,12 +9,12 @@ import { ToastController } from '@ionic/angular';
   standalone: false,
 })
 export class BusquedaMedidorPage {
-  NRO_MEDIDOR: string = '';   // Variable para el número de medidor
-  datosMedidor: any = [];     // Variable para los datos del medidor
-  error: string = '';         // Mensaje de error
+  NRO_MEDIDOR: string = '';  // Variable para el número de medidor
+  datosMedidor: any[] = [];  // Datos de los medidores encontrados
+  error: string = '';  // Mensaje de error
 
   constructor(
-    private ionicStorageService: IonicstorageService, // Usamos el servicio de almacenamiento
+    private ionicStorageService: IonicstorageService, // Servicio de almacenamiento
     private toastController: ToastController          // Para mostrar notificaciones
   ) { }
 
@@ -22,12 +22,10 @@ export class BusquedaMedidorPage {
   async onInputChange() {
     if (this.NRO_MEDIDOR.trim()) {
       try {
-        // Buscar medidores que coincidan con el número ingresado
         const medidores = await this.ionicStorageService.buscarMedidoresPorNumeroParcial(this.NRO_MEDIDOR);
-
-        if (medidores && medidores.length > 0) {
-          this.datosMedidor = medidores; // Asignar los medidores encontrados
-          this.error = ''; // Limpia el error si la búsqueda es exitosa
+        if (medidores.length > 0) {
+          this.datosMedidor = medidores;
+          this.error = '';
         } else {
           this.datosMedidor = [];
           this.error = 'No se encontraron medidores que coincidan con la búsqueda.';
@@ -35,19 +33,20 @@ export class BusquedaMedidorPage {
       } catch (error) {
         this.datosMedidor = [];
         this.error = 'Error al acceder a los datos del medidor.';
-        await this.presentToast(this.error); // Muestra un toast de error
+        await this.presentToast(this.error);
       }
     } else {
-      this.datosMedidor = []; // Si no hay texto, limpia los resultados
+      this.datosMedidor = [];  // Limpiar los resultados si no hay texto
+      this.error = '';
     }
   }
 
-  // Método para mostrar un toast
+  // Mostrar un mensaje tipo toast
   async presentToast(message: string) {
     const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,  // Duración en milisegundos
-      position: 'bottom',  // Posición del toast
+      message,
+      duration: 2000,
+      position: 'bottom',
     });
     toast.present();
   }

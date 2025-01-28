@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IonicstorageService } from '../services/ionicstorage.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sincronizar',
@@ -11,6 +12,8 @@ import { IonicstorageService } from '../services/ionicstorage.service';
 export class SincronizarPage implements OnInit {
 
   rutasDisponibles: string[] = [];
+  lecturas: any[] = [];  // Variable para almacenar los datos de lecturas
+
 
   constructor(private http: HttpClient, private ionicStorageService: IonicstorageService) { }
 
@@ -19,53 +22,111 @@ export class SincronizarPage implements OnInit {
     if (rutasGuardadas) {
       this.rutasDisponibles = JSON.parse(rutasGuardadas);
     }
+    this.obtenerLecturas();
+  }
+
+
+  async obtenerLecturas() {
+    try {
+      const lecturasGuardadas = await this.ionicStorageService.rescatar('LECTURAS');
+      if (lecturasGuardadas && lecturasGuardadas.data) {
+        this.lecturas = lecturasGuardadas.data; // Asignar los datos a la variable 'lecturas'
+      } else {
+        console.warn('No se encontraron lecturas almacenadas');
+      }
+    } catch (error) {
+      console.error('Error al recuperar lecturas:', error);
+    }
   }
 
   async obtenerDatos() {
 
+    const dominio = localStorage.getItem('domain');
+    const puerto = localStorage.getItem('port');
+    const baseUrl = `http://${dominio}:${puerto}`;
+
+    
     // URLs para las tablas
-    const urlLecturas = `http://localhost:3000/api/auth/lecturas?ruta=${this.rutasDisponibles}`;
-    const urlCatalogo = `http://localhost:3000/api/auth/catalogo`;
+    const urlLecturas = `${baseUrl}/api/auth/lecturas?ruta=${this.rutasDisponibles}`;
+    const urlCatalogo = `${baseUrl}/api/auth/causas`;
+    const urlNovedad = `${baseUrl}/api/auth/novedades`;
 
     try {
-      // Obtener lecturas de la tabla AGUALEC_APP
-      const responseLecturas: any = await this.http.get(urlLecturas).toPromise();
-      if (responseLecturas.data && Array.isArray(responseLecturas.data) && responseLecturas.data.length > 0) {
-        console.log('Lecturas obtenidas:', responseLecturas.data);
+      // Procesar lecturas
+      await this.sincronizarTabla(
+        urlLecturas,
+        'Lecturas',
+        'NRO_CUENTA'
+      );
 
-        // Guardar lecturas en el almacenamiento local (sobreescribir siempre)
-        for (let lectura of responseLecturas.data) {
-          await this.ionicStorageService.agregarConKey(lectura.NRO_CUENTA, lectura); // Sobrescribe directamente
-          console.log(`Registro de lectura actualizado para NRO_CUENTA: ${lectura.NRO_CUENTA}`);
-        }
+      // Procesar catálogos
+      await this.sincronizarTabla(
+        urlCatalogo,
+        'Catálogos',
+        'REN21CODI',
+        false // Evitar sobreescribir
+      );
 
-        alert('Lecturas sincronizadas con éxito.');
-      } else {
-        console.warn('No se encontraron lecturas para sincronizar.');
-      }
+      // Procesar novedades
+      await this.sincronizarTabla(
+        urlNovedad,
+        'Novedades',
+        'REN21CODI'
+      );
 
-      // Obtener catálogos de la tabla REN21
-      const responseCatalogo: any = await this.http.get(urlCatalogo).toPromise();
-      if (responseCatalogo.data && Array.isArray(responseCatalogo.data) && responseCatalogo.data.length > 0) {
-        console.log('Catálogos obtenidos:', responseCatalogo.data);
-
-        // Guardar catálogos en el almacenamiento local (solo si no existen)
-        for (let catalogo of responseCatalogo.data) {
-          const registroExistente = await this.ionicStorageService.rescatar(catalogo.REN21CODI);
-
-          if (!registroExistente) {
-            // Si no existe, se agrega el nuevo registro
-            await this.ionicStorageService.agregarConKey(catalogo.REN21CODI, catalogo);
-          }
-        }
-
-        alert('Catálogos sincronizados con éxito.');
-      } else {
-        console.warn('No se encontraron catálogos para sincronizar.');
-      }
+      alert('Sincronización completada con éxito.');
     } catch (error) {
       console.error('Error al sincronizar datos:', error);
-      alert('Ocurrió un error al sincronizar los datos. Por favor, verifica la conexión al servidor.');
+      alert(
+        'Ocurrió un error al sincronizar los datos. Por favor, verifica la conexión al servidor.'
+      );
+    }
+  }
+
+  private async sincronizarTabla(
+    url: string,
+    nombreTabla: string,
+    key: string,
+    sobrescribir: boolean = true
+  ) {
+    console.log(`Sincronizando ${nombreTabla} desde: ${url}`);
+
+    const response: any = await this.http.get(url).toPromise();
+    if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+      console.log(`${nombreTabla} obtenidas:`, response.data);
+
+      const dataToStore = {
+        nombreTabla: nombreTabla,
+        data: response.data,
+      };
+
+      // Definir la clave basada en el tipo de tabla
+      let keyValue: string;
+      if (nombreTabla === 'Lecturas') {
+        keyValue = 'LECTURAS'; // Clave para lecturas
+      } else if (nombreTabla === 'Catálogos') {
+        keyValue = 'CAUSAS'; // Clave para causas
+      } else if (nombreTabla === 'Novedades') {
+        keyValue = 'NOVEDADES'; // Clave para novedades
+      } else {
+        keyValue = nombreTabla.toUpperCase(); // Usar el nombre de la tabla si no se encuentra en los casos anteriores
+      }
+
+      // Verifica si debe sobrescribir o no
+      if (sobrescribir) {
+        await this.ionicStorageService.agregarConKey(keyValue, dataToStore);
+        console.log(`Datos de ${nombreTabla} almacenados bajo la clave: ${keyValue}`);
+      } else {
+        const registroExistente = await this.ionicStorageService.rescatar(keyValue);
+        if (!registroExistente) {
+          await this.ionicStorageService.agregarConKey(keyValue, dataToStore);
+          console.log(`Nuevo registro agregado para ${nombreTabla} bajo la clave: ${keyValue}`);
+        }
+      }
+
+      console.log(`${nombreTabla} sincronizadas con éxito.`);
+    } else {
+      console.warn(`No se encontraron datos para ${nombreTabla}.`);
     }
   }
 

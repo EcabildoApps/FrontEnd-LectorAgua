@@ -8,7 +8,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
   <ion-card *ngFor="let registro of registros">
     <ion-card-header>
       <!-- Título de la tarjeta -->
@@ -25,20 +24,28 @@
       <p><strong>Secuencia:</strong> {{ registro.SEQUENCIA }}</p>
       <input type="number" [(ngModel)]="registro.LECT_ACTUAL" placeholder="Ingrese la lectura" />
       <ion-separator></ion-separator>
+
+      <!-- Causa -->
       <ion-item>
         <ion-label>Causa</ion-label>
-        <ion-select [(ngModel)]="registro.ESTADO" placeholder="Seleccionar estado">
-          <ion-select-option value="1">Normal</ion-select-option>
-          <ion-select-option value="2">Anormal</ion-select-option>
+        <ion-select [(ngModel)]="registro.TIPOCAUSA" placeholder="Selecciona una causa">
+          <ion-select-option *ngFor="let causa of causas" [value]="causa.REN21DESC">
+            {{ causa.REN21DESC }}
+          </ion-select-option>
         </ion-select>
       </ion-item>
+
+      <!-- Novedad -->
       <ion-item>
         <ion-label>Novedad</ion-label>
-        <ion-select [(ngModel)]="registro.NOVEDAD" placeholder="Seleccionar novedad">
-          <ion-select-option value="1">Normal</ion-select-option>
-          <ion-select-option value="2">Anormal</ion-select-option>
+        <ion-select [(ngModel)]="registro.TIPONOVEDAD" placeholder="Selecciona una novedad">
+          <ion-select-option *ngFor="let novedad of novedades" [value]="novedad.REN21DESC">
+            {{ novedad.REN21DESC }}
+          </ion-select-option>
         </ion-select>
       </ion-item>
+
+      <!-- Cargar imágenes -->
       <div class="photo-container">
         <ion-item button (click)="fileInput.click()" class="photo-item">
           <ion-icon name="camera" size="large"></ion-icon>
@@ -48,14 +55,15 @@
           <ion-icon name="camera" size="large"></ion-icon>
           <input #fileInput2 type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
         </ion-item>
-
       </div>
+
       <input type="number" [(ngModel)]="registro.TIPO" placeholder="Detalle Incidencia" />
+
+      <!-- Botón para guardar -->
       <ion-button expand="full" (click)="guardarLectura(registro)">Guardar</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Mensaje si no hay registros -->
   <p *ngIf="registros.length === 0">No hay registros para mostrar.</p>
-
-
 </ion-content>

@@ -50,25 +50,72 @@ export class IonicstorageService {
   }
 
   async buscarMedidoresPorNumeroParcial(nroMedidor: string) {
-    const listado = await this.listar(); // Obtener todos los datos almacenados
-    const medidoresEncontrados = listado.filter(item =>
-      item.v.NRO_MEDIDOR && item.v.NRO_MEDIDOR.includes(nroMedidor)
-    );
-    return medidoresEncontrados.map(item => item.v); // Retorna los medidores encontrados
+    try {
+      // Obtener todos los datos almacenados
+      const listado = await this.listar();
+
+      // Filtrar los registros de 'LECTURAS'
+      const registrosLecturas = listado.filter(item => item.k === 'LECTURAS');
+
+      // Si no se encuentran registros de lecturas
+      if (registrosLecturas.length === 0) {
+        throw new Error('No se encontraron registros de lecturas.');
+      }
+
+      // Obtener los datos de las lecturas, asumiendo que están en item.v.data
+      const datosLecturas = registrosLecturas[0].v.data;
+
+      // Filtrar medidores por el número de medidor
+      const medidoresEncontrados = datosLecturas.filter(item =>
+        item.NRO_MEDIDOR?.toString().includes(nroMedidor) // Filtrar por número de medidor
+      );
+
+      // Si se encuentran medidores, devolverlos, si no, retornar un mensaje vacío
+      return medidoresEncontrados.length > 0 ? medidoresEncontrados : [];
+    } catch (error) {
+      console.error('Error al buscar medidores por número parcial:', error);
+      throw new Error('Ocurrió un error al buscar medidores.');
+    }
   }
+
+
 
   async buscarCuentaNumeroParcial(nroCuenta: string) {
-    const listado = await this.listar(); // Obtener todos los datos almacenados
+    try {
+      // Obtener todos los datos almacenados
+      const listado = await this.listar();
 
-    const cuentasEncontrados = listado.filter(item =>
-      item.v.NRO_MEDIDOR && item.v.NRO_CUENTA.includes(nroCuenta)
-    );
-    return cuentasEncontrados.map(item => item.v); // Retorna los medidores encontrados
+      // Filtrar los registros de 'LECTURAS'
+      const registrosLecturas = listado.filter(item => item.k === 'LECTURAS');
+
+      // Si no se encuentran registros de lecturas
+      if (registrosLecturas.length === 0) {
+        throw new Error('No se encontraron registros de lecturas.');
+      }
+
+      // Obtener los datos de las lecturas, asumiendo que están en item.v.data
+      const datosLecturas = registrosLecturas[0].v.data;
+
+      // Filtrar cuentas por el número de cuenta parcial
+      const cuentasEncontradas = datosLecturas.filter(item =>
+        item.NRO_CUENTA?.toString().includes(nroCuenta) // Filtrar por número de cuenta
+      );
+
+      // Si se encuentran cuentas, devolverlas, si no, retornar un mensaje vacío
+      return cuentasEncontradas.length > 0 ? cuentasEncontradas : [];
+    } catch (error) {
+      console.error('Error al buscar cuentas por número parcial:', error);
+      throw new Error('Ocurrió un error al buscar cuentas.');
+    }
   }
+
   async cargarRegistrosConFiltrosLocal(ruta: string, filtros: string = '', valorFiltro: string = '') {
     try {
-      const listado = await this.listar(); // Utiliza el método listar() del servicio para obtener los datos locales
-      let registrosFiltrados = listado.filter(item => item.v.RUTA === ruta);
+      const listado = await this.listar(); // Obtener todos los datos almacenados
+      let registrosFiltrados = listado.filter(item =>
+        item.k === 'CAUSAS' || item.k === 'NOVEDADES' || item.k === 'LECTURAS'
+      ); // Filtrar por las claves
+
       if (filtros && valorFiltro) {
         switch (filtros) {
           case 'cuenta':
@@ -98,24 +145,42 @@ export class IonicstorageService {
     }
   }
 
+
   async cargarRegistrosConFiltroGeneral(ruta: string, valorFiltro: string = '') {
     try {
-      const listado = await this.listar(); // Obtener todos los datos almacenados
-      let registrosFiltrados = listado.filter(item => item.v.RUTA === ruta);
+      // Obtener todos los datos almacenados, incluyendo la clave 'LECTURAS'
+      const listado = await this.listar(); // Aquí `listar()` obtiene todos los datos
+
+      // Filtrar los registros que tengan la clave 'LECTURAS'
+      const registrosLecturas = listado.filter(item => item.k === 'LECTURAS');
+
+      if (registrosLecturas.length === 0) {
+        throw new Error('No se encontraron registros de lecturas.');
+      }
+
+      // Acceder al array de datos de lecturas (dentro de item.v)
+      const datosLecturas = registrosLecturas[0].v.data; // Suponiendo que 'v' tiene la propiedad 'data'
+
+      // Filtrar los registros por la ruta (si es necesario)
+      let registrosFiltrados = datosLecturas.filter(item => item.RUTA === ruta);
+
+      // Aplicar el filtro adicional si se proporciona el valorFiltro
       if (valorFiltro) {
         registrosFiltrados = registrosFiltrados.filter(item =>
-          item.v.NRO_CUENTA?.includes(valorFiltro) ||
-          item.v.NRO_MEDIDOR?.includes(valorFiltro) ||
-          item.v.CONSUMIDOR?.toLowerCase().includes(valorFiltro.toLowerCase())
+          item.NRO_CUENTA?.includes(valorFiltro) ||
+          item.NRO_MEDIDOR?.includes(valorFiltro) ||
+          item.CONSUMIDOR?.toLowerCase().includes(valorFiltro.toLowerCase())
         );
       }
 
-      return registrosFiltrados.map(item => item.v);
+      // Retornar los registros filtrados
+      return registrosFiltrados;
     } catch (error) {
       console.error('Error al cargar registros con filtros locales:', error);
       throw new Error('Ocurrió un error al cargar los registros locales.');
     }
   }
+
 
 
   async obtenerCuentaPorID(idCuenta: number) {
@@ -128,6 +193,38 @@ export class IonicstorageService {
       throw new Error('No se pudo obtener la cuenta.');
     }
   }
+
+
+  async obtenerRegistrosPorClave(clave: string) {
+    try {
+      const datos = await this.storage.get(clave);  // Usando Ionic Storage
+      return datos ? datos : { data: [] }; // Retorna un objeto con un array vacío si no hay datos
+      console.log('Datos obtenidos:', datos);
+    } catch (error) {
+      console.error('Error al obtener registros por clave:', error);
+      throw new Error('No se pudieron obtener los registros.');
+    }
+  }
+
+  async obtenerRegistrosLecturas() {
+    try {
+      const listado = await this.listar();
+      // Buscar registros con clave 'LECTURAS'
+      const registrosLecturas = listado.find(item => item.k === 'LECTURAS');
+      if (!registrosLecturas) {
+        throw new Error('No se encontraron registros de lecturas.');
+      }
+
+      // Retornar los registros de 'LECTURAS' (se asume que 'data' es un array dentro de 'v')
+      return registrosLecturas.v.data;
+    } catch (error) {
+      console.error('Error al obtener registros de lecturas:', error);
+      throw new Error('No se pudieron obtener los registros de lecturas.');
+    }
+  }
+
+
+
 
   async actualizar(key: string, nuevosValores: any) {
     try {
