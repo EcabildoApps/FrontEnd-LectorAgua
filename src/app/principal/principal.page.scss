@@ -2,54 +2,54 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
-
-  ion-icon {
-    font-size: 130px !important;
-    /* Forzamos el tamaño con !important */
-    width: 130px;
-    /* Aseguramos que el contenedor también se ajuste */
-    height: 130px;
-  }
 }
 
+.logo-container ion-icon {
+  font-size: 120px;
+  width: 120px;
+  height: 120px;
+}
 
 .custom-card {
-  margin: 20px;
-  padding: 15px;
+  margin: 15px auto;
+  padding: 20px;
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+}
 
-  ion-card-title {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 5px;
-  }
+.custom-card ion-card-title {
+  font-weight: bold;
+  font-size: 22px;
+  /* Tamaño de texto más grande */
+  margin-bottom: 5px;
+}
 
-  ion-card-subtitle {
-    font-size: 14px;
-    color: #666;
-  }
+.custom-card ion-card-subtitle {
+  font-size: 16px;
+  color: #666;
 }
 
 .permission-message {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px auto;
   background-color: #e6e6e6;
   border-radius: 20px;
-  padding: 10px;
+  padding: 15px;
+  max-width: 80%;
+}
 
-  ion-icon {
-    font-size: 20px;
-    margin-right: 10px;
-  }
+.permission-message ion-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
 
-  span {
-    font-size: 14px;
-    color: #333;
-  }
+.permission-message span {
+  font-size: 16px;
+  color: #333;
 }
 
 /* Animación cuando se selecciona la tarjeta */
@@ -66,5 +66,89 @@
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* ---- Media Queries para Responsividad ---- */
+
+/* Smartphones pequeños */
+@media (max-width: 480px) {
+  .logo-container ion-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .custom-card {
+    max-width: 95%;
+    margin: 10px auto;
+  }
+
+  .custom-card ion-card-title {
+    font-size: 18px;
+  }
+
+  .custom-card ion-card-subtitle {
+    font-size: 14px;
+  }
+
+  .permission-message {
+    max-width: 90%;
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* Tablets y pantallas medianas */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .logo-container ion-icon {
+    font-size: 140px;
+    width: 140px;
+    height: 140px;
+  }
+
+  .custom-card {
+    max-width: 80%;
+  }
+
+  .custom-card ion-card-title {
+    font-size: 24px;
+  }
+
+  .custom-card ion-card-subtitle {
+    font-size: 18px;
+  }
+
+  .permission-message {
+    max-width: 80%;
+    font-size: 18px;
+    padding: 15px;
+  }
+}
+
+/* Pantallas grandes */
+@media (min-width: 1025px) {
+  .logo-container ion-icon {
+    font-size: 160px;
+    width: 160px;
+    height: 160px;
+  }
+
+  .custom-card {
+    max-width: 60%;
+  }
+
+  .custom-card ion-card-title {
+    font-size: 26px;
+  }
+
+  .custom-card ion-card-subtitle {
+    font-size: 20px;
+  }
+
+  .permission-message {
+    max-width: 70%;
+    font-size: 20px;
+    padding: 20px;
   }
 }

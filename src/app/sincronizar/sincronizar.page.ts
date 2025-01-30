@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IonicstorageService } from '../services/ionicstorage.service';
-import { environment } from 'src/environments/environment';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sincronizar',
@@ -15,7 +15,9 @@ export class SincronizarPage implements OnInit {
   lecturas: any[] = [];  // Variable para almacenar los datos de lecturas
 
 
-  constructor(private http: HttpClient, private ionicStorageService: IonicstorageService) { }
+  constructor(private http: HttpClient,
+     private ionicStorageService: IonicstorageService,
+    private toastController: ToastController) { }
 
   ngOnInit() {
     const rutasGuardadas = localStorage.getItem('rutas');
@@ -23,6 +25,16 @@ export class SincronizarPage implements OnInit {
       this.rutasDisponibles = JSON.parse(rutasGuardadas);
     }
     this.obtenerLecturas();
+  }
+
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,  // Duración en milisegundos (2 segundos)
+      position: 'bottom', // Puedes cambiar la posición (top, middle, bottom)
+      color: 'primary', // Puedes cambiar el color (primary, success, danger, etc.)
+    });
+    toast.present();
   }
 
 
@@ -41,10 +53,14 @@ export class SincronizarPage implements OnInit {
 
   async obtenerDatos() {
 
-    const dominio = localStorage.getItem('domain');
-    const puerto = localStorage.getItem('port');
-    const baseUrl = `http://${dominio}:${puerto}`;
+    const dominio = await this.ionicStorageService.rescatar('dominio');
+    const puerto = await this.ionicStorageService.rescatar('port');
+    if (!dominio || !puerto) {
+      await this.showToast('Dominio o puerto no configurados.');
+      return;
+    }
 
+    const baseUrl = `http://${dominio}:${puerto}`;
     
     // URLs para las tablas
     const urlLecturas = `${baseUrl}/api/auth/lecturas?ruta=${this.rutasDisponibles}`;
@@ -133,10 +149,6 @@ export class SincronizarPage implements OnInit {
 
 
 
-  // Método para sincronizar las lecturas locales con la API (si es necesario)
-  async sincronizarLecturas() {
-    const ruta = '0404-04- BAR'; // Ruta fija (puedes hacerlo dinámico si es necesario)
-    await this.ionicStorageService.sincronizarConApi(ruta);
-  }
+
 
 }

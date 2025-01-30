@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class IonicstorageService {
 
   constructor(
     private storage: Storage,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastController: ToastController
   ) {
     this.init();
   }
@@ -49,6 +51,17 @@ export class IonicstorageService {
     await this.storage.clear();
   }
 
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,  // Duración en milisegundos (2 segundos)
+      position: 'bottom', // Puedes cambiar la posición (top, middle, bottom)
+      color: 'primary', // Puedes cambiar el color (primary, success, danger, etc.)
+    });
+    toast.present();
+  }
+  
+  
   async buscarMedidoresPorNumeroParcial(nroMedidor: string) {
     try {
       // Obtener todos los datos almacenados
@@ -244,21 +257,9 @@ export class IonicstorageService {
     }
   }
 
+ 
 
 
 
 
-
-  async sincronizarConApi(ruta: string) {
-    const url = `http://localhost:3000/api/auth/lecturas?ruta=${ruta}`;
-    const lecturas = await this.listar();
-    try {
-      const response = await this.http.post(url, lecturas).toPromise();
-      console.log('Lecturas sincronizadas con éxito:', response);
-      await this.eliminarTodo();
-      console.log('Lecturas locales eliminadas después de sincronización.');
-    } catch (error) {
-      console.error('Error al sincronizar las lecturas:', error);
-    }
-  }
 }

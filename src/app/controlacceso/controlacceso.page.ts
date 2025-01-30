@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonicstorageService } from '../services/ionicstorage.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-controlacceso',
@@ -8,36 +10,51 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class ControlaccesoPage {
-  currentDomain: string = ''; // IP/Dominio anterior
-  currentPort: string = ''; // Puerto anterior
-  newDomain: string = ''; // Para ingresar el nuevo dominio
-  newPort: string = ''; // Para ingresar el nuevo puerto
+  currentDomain: string = '';  // Para mostrar el dominio actual
+  currentPort: string = '';  // Para mostrar el puerto actual
+  newDomain: string = '';  // Para nuevo dominio ingresado
+  newPort: string = '';  // Para nuevo puerto ingresado
 
-  constructor(private router: Router) { }
+  constructor(
+    private storageService: IonicstorageService,
+    private router: Router,
+    private toastController: ToastController // Usamos ToastController
+  ) {}
 
   ngOnInit() {
-    // Recuperar el dominio y puerto actuales desde localStorage o usar valores predeterminados
-    this.currentDomain = localStorage.getItem('domain') || 'localhost';
-    this.currentPort = localStorage.getItem('port') || '3000';
+    // Cargar la configuración de dominio y puerto almacenados
+    this.loadConfig();
   }
 
-  saveConfig() {
-    if (this.newDomain.trim() && this.newPort.trim()) {
-      // Actualizar los valores "anteriores" y guardar los nuevos valores
-      this.currentDomain = this.newDomain;
-      this.currentPort = this.newPort;
+  async loadConfig() {
+    this.currentDomain = await this.storageService.rescatar('dominio') || '';
+    this.currentPort = await this.storageService.rescatar('port') || '';
+  }
 
-      // Guardar en localStorage
-      localStorage.setItem('domain', this.newDomain);
-      localStorage.setItem('port', this.newPort);
+  // Método para mostrar el toast
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,  // Duración en milisegundos (2 segundos)
+      position: 'bottom', // Puedes cambiar la posición (top, middle, bottom)
+      color: 'primary', // Puedes cambiar el color (primary, success, danger, etc.)
+    });
+    toast.present();
+  }
 
-      alert('Configuración guardada con éxito.');
+  async saveConfig() {
+    if (this.newDomain && this.newPort) {
+      // Guardamos el nuevo dominio y puerto
+      await this.storageService.agregarConKey('dominio', this.newDomain);
+      await this.storageService.agregarConKey('port', this.newPort);
 
-      // Limpiar los campos de nuevo dominio y puerto
-      this.newDomain = '';
-      this.newPort = '';
+      await this.showToast(`Configuración guardada: Dominio: ${this.newDomain}, Puerto: ${this.newPort}`);
+
+      // Actualizamos la vista para mostrar el nuevo dominio y puerto
+      this.loadConfig();
+      this.router.navigate(['/home']);
     } else {
-      alert('Por favor, complete todos los campos.');
+      await this.showToast('Por favor, ingrese un dominio y puerto válidos.');
     }
   }
 }

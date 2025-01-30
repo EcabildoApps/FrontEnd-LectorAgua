@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { Network } from '@ionic-native/network/ngx';
+
 
 
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -29,9 +31,9 @@ const routes: Routes = [
     RouterModule.forRoot(routes), 
     FormsModule, 
     HttpClientModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot( )
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }], 
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Network], 
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

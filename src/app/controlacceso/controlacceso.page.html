@@ -1,42 +1,41 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
-    </ion-buttons>
     <ion-title>Control Acceso</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Control Acceso</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="background-container">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">Control Acceso</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-  <div class="form-container">
-    <h2>Configuración de Dominio y Puerto</h2>
+    <div class="form-container">
+      <h2>Configuración de Dominio y Puerto</h2>
 
-    <ion-item>
-      <ion-label position="stacked">IP/Dominio Anterior</ion-label>
-      <ion-input [value]="currentDomain" readonly></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">IP/Dominio Anterior</ion-label>
+        <ion-input [value]="currentDomain" readonly></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Puerto Anterior</ion-label>
-      <ion-input [value]="currentPort" readonly></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Puerto Anterior</ion-label>
+        <ion-input [value]="currentPort" readonly></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Nuevo Dominio</ion-label>
-      <ion-input [(ngModel)]="newDomain" placeholder="Ingrese nuevo dominio"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Nuevo Dominio</ion-label>
+        <ion-input [(ngModel)]="newDomain" placeholder="Ingrese nuevo dominio"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Nuevo Puerto</ion-label>
-      <ion-input [(ngModel)]="newPort" placeholder="Ingrese nuevo puerto"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Nuevo Puerto</ion-label>
+        <ion-input [(ngModel)]="newPort" placeholder="Ingrese nuevo puerto"></ion-input>
+      </ion-item>
 
-    <ion-button expand="block" (click)="saveConfig()">Guardar</ion-button>
+      <ion-button expand="block" (click)="saveConfig()">Guardar</ion-button>
+    </div>
   </div>
 </ion-content>

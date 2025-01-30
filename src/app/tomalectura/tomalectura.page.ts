@@ -3,6 +3,7 @@ import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { IonicstorageService } from '../services/ionicstorage.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 
 
@@ -18,6 +19,8 @@ export class TomalecturaPage {
   novedades: any[] = [];
   idCuenta: number = 0;
   selectedImages: File[] = [];
+  image1: string | undefined = undefined;  // Para la primera imagen
+  image2: string | undefined = undefined;  // Para la segunda imagen
 
   constructor(
     private toastController: ToastController,
@@ -174,13 +177,26 @@ export class TomalecturaPage {
     toast.present();
   }
 
-  onFileSelected(event: any) {
-    const files = event.target.files;
-    if (files.length > 0) {
-      this.selectedImages = Array.from(files);
-      console.log('Imágenes seleccionadas:', this.selectedImages);
-    } else {
-      console.warn('No se seleccionó ningún archivo.');
+
+
+  // Método para abrir la cámara y tomar una foto
+  async takePhoto(photoNumber: number) {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90, // Calidad de la imagen
+        source: CameraSource.Camera, // Usar la cámara
+        resultType: CameraResultType.Uri, // Obtener URI de la imagen
+        correctOrientation: true, // Corregir la orientación de la imagen
+      });
+
+      // Dependiendo del número de la foto, asigna la imagen tomada
+      if (photoNumber === 1) {
+        this.image1 = image.webPath;  // Guardar la primera imagen
+      } else if (photoNumber === 2) {
+        this.image2 = image.webPath;  // Guardar la segunda imagen
+      }
+    } catch (error) {
+      console.error('Error al tomar la foto:', error);
     }
   }
 }

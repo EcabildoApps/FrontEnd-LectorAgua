@@ -47,15 +47,26 @@
 
       <!-- Cargar imágenes -->
       <div class="photo-container">
-        <ion-item button (click)="fileInput.click()" class="photo-item">
+        <ion-item button (click)="takePhoto(1)" class="photo-item">
           <ion-icon name="camera" size="large"></ion-icon>
-          <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+          <span>Tomar Foto 1</span>
         </ion-item>
-        <ion-item button (click)="fileInput2.click()" class="photo-item">
+
+        <ion-item button (click)="takePhoto(2)" class="photo-item">
           <ion-icon name="camera" size="large"></ion-icon>
-          <input #fileInput2 type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+          <span>Tomar Foto 2</span>
         </ion-item>
+
+        <!-- Mostrar las imágenes tomadas -->
+        <div *ngIf="image1">
+          <img [src]="image1" alt="Imagen 1" width="100%" />
+        </div>
+
+        <div *ngIf="image2">
+          <img [src]="image2" alt="Imagen 2" width="100%" />
+        </div>
       </div>
+
 
       <input type="number" [(ngModel)]="registro.TIPO" placeholder="Detalle Incidencia" />
 

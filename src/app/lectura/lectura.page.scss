@@ -46,3 +46,46 @@
     font-size: 32px;
     margin-bottom: 10px;
 }
+
+
+/* Tablets (dos columnas, iconos y textos más grandes) */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .logo-container ion-icon {
+        font-size: 100px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .custom-card ion-card-header {
+        font-size: 20px;
+    }
+
+    .custom-card ion-icon {
+        font-size: 50px;
+    }
+}
+
+/* Pantallas grandes (tres columnas) */
+@media (min-width: 1025px) {
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .logo-container ion-icon {
+        font-size: 140px;
+        width: 140px;
+        height: 140px;
+    }
+
+    .custom-card ion-card-header {
+        font-size: 22px;
+    }
+
+    .custom-card ion-icon {
+        font-size: 60px;
+    }
+}
