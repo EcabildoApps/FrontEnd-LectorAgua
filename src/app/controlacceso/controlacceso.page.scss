@@ -1,4 +1,15 @@
-/* Estilos generales para el fondo */
+ion-content {
+    --background: transparent;
+    height: 100%;
+    overflow: hidden;
+}
+
+.form-container h2{
+    color: #3880ff;
+    font-size: 35px;
+    font-weight: bold;
+}
+
 .background-container {
     background-image: url('/assets/img/login.jpg');
     background-size: cover;
@@ -9,85 +20,153 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    /* Previene el scroll */
 }
 
-/* Estilos para el formulario */
-.form-container {
-    background-color: rgba(255, 255, 255, 0.8);
-    /* Fondo blanco semi-transparente */
-    padding: 16px;
-    width: 90%;
-    max-width: 500px;
-    /* Ancho máximo para el formulario */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-/* Título */
-h2 {
+.ecabildo-text {
+    font-size: 70px;
+    font-weight: bold;
+    color: #3880ff;
     text-align: center;
     margin-bottom: 20px;
-    color: var(--ion-color-primary);
+    margin-top: 20px;
 }
 
-/* Estilo de los items del formulario */
+.welcome-message {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 ion-item {
     margin-bottom: 15px;
 }
 
+ion-label {
+    color: #3880ff;
+}
+
+ion-input {
+    font-size: 16px;
+}
+
 ion-button {
+    color: white;
+    font-weight: bold;
+}
+
+ion-button[expand="full"] {
     margin-top: 20px;
 }
 
-/* Media Queries para hacerlo responsivo */
+ion-select {
+    font-size: 16px;
+}
+
+.connect-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: black;
+}
+
+.connect-button ion-icon {
+    margin-left: 8px;
+    font-size: 20px;
+    color: black;
+}
+
+.connect-button:hover {
+    background-color: #f0f0f0;
+    color: #3880ff;
+}
+
+.connect-button:hover ion-icon {
+    color: #3880ff;
+}
+
+ion-buttons[slot="end"] {
+    display: flex;
+    align-items: center;
+    color: black;
+}
+
+ion-icon[name="lock-closed"] {
+    color: black;
+    font-size: 24px;
+}
+
+ion-button[fill="clear"] {
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+}
+
+ion-icon[name="eye"] {
+    font-size: 30px;
+    color: #3880ff;
+}
+
+ion-button[fill="clear"]:hover ion-icon[name="eye"] {
+    color: #ff5733;
+}
+
+ion-button[fill="clear"]:active ion-icon[name="eye"] {
+    color: #ff9a3d;
+}
+
+/* Media Queries para dispositivos Tablet y pantallas más grandes */
+
 @media only screen and (max-width: 768px) {
-
-    /* Ajustar el fondo y el formulario en dispositivos pequeños */
-    .background-container {
-        height: auto;
-        /* El fondo no necesita cubrir toda la altura */
-        padding: 20px;
+    .ecabildo-text {
+        font-size: 50px;
     }
 
-    .form-container {
-        width: 100%;
-        padding: 15px;
+    ion-card {
+        width: 80%;
+        max-width: 600px;
     }
 
-    h2 {
-        font-size: 22px;
-        margin-bottom: 15px;
+    .logo-container {
+        margin-bottom: 10px;
     }
 
-    ion-item {
-        margin-bottom: 12px;
-    }
-
-    ion-button {
-        margin-top: 15px;
+    ion-input,
+    ion-select {
         font-size: 14px;
-        /* Ajusta el tamaño del botón */
+    }
+
+    ion-button[expand="full"] {
+        margin-top: 10px;
     }
 }
 
+/* Media Queries para pantallas más grandes como desktop */
+
 @media only screen and (min-width: 769px) {
-
-    /* Ajustes para pantallas de tablets y escritorios */
-    .background-container {
-        padding: 40px;
+    .ecabildo-text {
+        font-size: 80px;
     }
 
-    .form-container {
+    ion-card {
         width: 60%;
-        /* Ancho más grande en pantallas grandes */
+        max-width: 700px;
     }
 
-    h2 {
-        font-size: 26px;
-        margin-bottom: 25px;
+    .logo-container {
+        margin-bottom: 30px;
     }
 
-    ion-button {
-        margin-top: 30px;
+    ion-input,
+    ion-select {
+        font-size: 18px;
     }
 }
