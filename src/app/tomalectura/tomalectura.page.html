@@ -29,7 +29,7 @@
       <ion-item>
         <ion-label>Causa</ion-label>
         <ion-select [(ngModel)]="registro.TIPOCAUSA" placeholder="Selecciona una causa">
-          <ion-select-option *ngFor="let causa of causas" [value]="causa.REN21DESC">
+          <ion-select-option *ngFor="let causa of causas" [value]="causa.REN21SUBF">
             {{ causa.REN21DESC }}
           </ion-select-option>
         </ion-select>
@@ -39,7 +39,7 @@
       <ion-item>
         <ion-label>Novedad</ion-label>
         <ion-select [(ngModel)]="registro.TIPONOVEDAD" placeholder="Selecciona una novedad">
-          <ion-select-option *ngFor="let novedad of novedades" [value]="novedad.REN21DESC">
+          <ion-select-option *ngFor="let novedad of novedades" [value]="novedad.REN21SUBF">
             {{ novedad.REN21DESC }}
           </ion-select-option>
         </ion-select>
@@ -68,10 +68,11 @@
       </div>
 
 
-      <input type="number" [(ngModel)]="registro.TIPO" placeholder="Detalle Incidencia" />
+      <textarea [(ngModel)]="registro.TIPO" placeholder="Ingrese los detalles de la incidencia"></textarea>
+
 
       <!-- Botón para guardar -->
-      <ion-button expand="full" (click)="guardarLectura(registro)">Guardar</ion-button>
+      <ion-button expand="full" (click)="guardarLectura(registro); guardarImagenes()">Guardar</ion-button>
     </ion-card-content>
   </ion-card>
 

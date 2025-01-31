@@ -1,4 +1,4 @@
-<ion-app>
+<ion-app (click)="cerrarMenuSiEstaAbierto()">
   <!-- Menú lateral -->
   <ion-menu menuId="main-menu" content-id="main">
     <ion-header>
@@ -63,12 +63,12 @@
       <ion-item-divider>
       </ion-item-divider>
       <ion-list>
-        <ion-menu-toggle>
+<!--         <ion-menu-toggle>
           <ion-item routerLink="/configuracion" routerDirection="forward" routerLinkActive="selected">
             <ion-icon name="settings" slot="start"></ion-icon>
             <ion-label>Configuración</ion-label>
           </ion-item>
-        </ion-menu-toggle>
+        </ion-menu-toggle> -->
         <ion-menu-toggle>
           <ion-item (click)="cerrarSesion()">
             <ion-icon name="log-out" slot="start"></ion-icon>

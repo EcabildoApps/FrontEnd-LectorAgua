@@ -19,8 +19,8 @@ export class TomalecturaPage {
   novedades: any[] = [];
   idCuenta: number = 0;
   selectedImages: File[] = [];
-  image1: string | undefined = undefined;  // Para la primera imagen
-  image2: string | undefined = undefined;  // Para la segunda imagen
+  image1: string | null = null; // Imagen 1 (base64 o URL)
+  image2: string | null = null; // Imagen 2 (base64 o URL)
 
   constructor(
     private toastController: ToastController,
@@ -44,6 +44,8 @@ export class TomalecturaPage {
     } catch (error) {
       await this.presentToast('Ocurrió un error al cargar la página.');
     }
+
+
   }
 
   async cargarRegistros() {
@@ -122,62 +124,132 @@ export class TomalecturaPage {
 
   async guardarLectura(registro: any) {
     try {
-      // Obtener la entrada "Lecturas" de la base de datos o almacenamiento
-      const lecturas = await this.ionicStorageService.rescatar('LECTURAS');
+      const lecturas = await this.ionicStorageService.rescatar('LECTURAS') || { data: [] };
 
-      if (lecturas && lecturas.data && lecturas.data.length > 0) {
-        // Buscar el índice del registro a actualizar usando el identificador (NRO_CUENTA o NRO_MEDIDOR)
-        const index = lecturas.data.findIndex(item => item.NRO_CUENTA === registro.NRO_CUENTA);
+      console.log('Lectura recibida:', registro);
 
-        if (index !== -1) {
-          // Si el registro existe, actualizamos sus valores
-          const registroExistente = lecturas.data[index];
+      const index = lecturas.data.findIndex(item => item.NRO_CUENTA === registro.NRO_CUENTA);
 
-          const position = await Geolocation.getCurrentPosition();
-          const { latitude, longitude } = position.coords;
+      if (index !== -1) {
+        const registroExistente = lecturas.data[index];
+        const position = await Geolocation.getCurrentPosition();
+        const { latitude, longitude } = position.coords;
 
+        registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
+        registroExistente.TIPOCAUSA = registro.TIPOCAUSA || '';
+        registroExistente.TIPONOVEDAD = registro.TIPONOVEDAD || '';
+        registroExistente.X_LECTURA = longitude;
+        registroExistente.Y_LECTURA = latitude;
 
-          registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
-          registroExistente.TIPOCAUSA = registro.TIPOCAUSA || '';
-          registroExistente.TIPONOVEDAD = registro.TIPONOVEDAD || '';
-          registroExistente.X_LECTURA = longitude;  // Coordenada de longitud (X)
-          registroExistente.Y_LECTURA = latitude;
-
-
-          // Actualizar las imágenes si están presentes
-          if (registro.imagenes && registro.imagenes.length > 0) {
-            registroExistente.IMAGENES = registro.imagenes;
-          }
-
-          // Guardar los datos actualizados
-          await this.ionicStorageService.agregarConKey('LECTURAS', lecturas);
-
-          await this.presentToast('Lectura actualizada correctamente.');
-        } else {
-          // Si no se encuentra el registro
-          await this.presentToast('No se encontró el registro con el número de cuenta proporcionado.');
-        }
+        await this.ionicStorageService.agregarConKey('LECTURAS', lecturas);
+        await this.presentToast('Lectura guardada correctamente.');
       } else {
-        await this.presentToast('No hay datos de lecturas almacenados.');
+        await this.presentToast('No se encontró el registro con el número de cuenta proporcionado.');
       }
     } catch (error) {
-      console.error('Error al actualizar la lectura:', error);
-      await this.presentToast('Ocurrió un error al actualizar la lectura.');
+      console.error('Error al guardar la lectura:', error);
+      await this.presentToast('Hubo un error al guardar la lectura.');
     }
   }
 
 
+  async guardarImagenes() {
+    try {
+      const rutaGuardada = localStorage.getItem('rutas');
+
+      if (!rutaGuardada) {
+        console.log('No se encontró la ruta en el localStorage.');
+        await this.presentToast('No se encontró la ruta de guardado.');
+        return;
+      }
+
+      const rutaArray = JSON.parse(rutaGuardada);
+
+      if (!Array.isArray(rutaArray) || rutaArray.length === 0) {
+        console.log('El array de rutas está vacío o no es válido.');
+        await this.presentToast('Ruta de guardado no válida.');
+        return;
+      }
+
+      const rutaFormateada = rutaArray[0]?.trim() || '';
+
+      if (!rutaFormateada) {
+        console.log('La ruta formateada está vacía.');
+        await this.presentToast('Error al obtener la ruta de guardado.');
+        return;
+      }
+
+      console.log('Ruta obtenida:', rutaFormateada);
+
+      if (!this.idCuenta) {
+        console.log('ID de cuenta no definido.');
+        await this.presentToast('Error: ID de cuenta no encontrado.');
+        return;
+      }
+
+      // Guardar la primera imagen si existe
+      if (this.image1 && this.image1.startsWith('data:image')) {
+        const byteImg1 = await this.dataURItoBlob(this.image1);
+        await this.ionicStorageService.guardarImagenAGUAAPP(
+          byteImg1,
+          'image1.jpg',
+          'jpg',
+          rutaFormateada,
+          this.idCuenta.toString()
+        );
+      }
+
+      // Guardar la segunda imagen si existe
+      if (this.image2 && this.image2.startsWith('data:image')) {
+        const byteImg2 = await this.dataURItoBlob(this.image2);
+        await this.ionicStorageService.guardarImagenAGUAAPP(
+          byteImg2,
+          'image2.jpg',
+          'jpg',
+          rutaFormateada,
+          this.idCuenta.toString()
+        );
+      }
+
+      await this.presentToast('Imágenes guardadas correctamente.');
+    } catch (error) {
+      console.error('Error al guardar las imágenes:', error);
+      await this.presentToast('Hubo un error al guardar las imágenes.');
+    }
+  }
+
+  async dataURItoBlob(dataURI: string): Promise<Blob> {
+    try {
+      if (!dataURI || !dataURI.includes(',')) {
+        throw new Error('Formato de imagen inválido.');
+      }
+
+      const byteString = atob(dataURI.split(',')[1]);
+      const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const uintArray = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < byteString.length; i++) {
+        uintArray[i] = byteString.charCodeAt(i);
+      }
+
+      console.log('Tipo MIME del archivo:', mimeString);
+      return new Blob([uintArray], { type: mimeString });
+    } catch (error) {
+      console.error('Error al convertir dataURI a Blob:', error);
+      throw error;
+    }
+  }
 
   async presentToast(message: string) {
     const toast = await this.toastController.create({
-      message: message,
+      message,
       duration: 2000,
       position: 'bottom',
+      color: 'primary',
     });
     toast.present();
   }
-
-
 
   // Método para abrir la cámara y tomar una foto
   async takePhoto(photoNumber: number) {
@@ -185,18 +257,25 @@ export class TomalecturaPage {
       const image = await Camera.getPhoto({
         quality: 90, // Calidad de la imagen
         source: CameraSource.Camera, // Usar la cámara
-        resultType: CameraResultType.Uri, // Obtener URI de la imagen
+        resultType: CameraResultType.DataUrl, // Obtener URI de la imagen
         correctOrientation: true, // Corregir la orientación de la imagen
       });
 
-      // Dependiendo del número de la foto, asigna la imagen tomada
-      if (photoNumber === 1) {
-        this.image1 = image.webPath;  // Guardar la primera imagen
-      } else if (photoNumber === 2) {
-        this.image2 = image.webPath;  // Guardar la segunda imagen
+      if (!image || !image.dataUrl) {
+        throw new Error('No se pudo obtener la imagen.');
       }
+
+      // Asigna la imagen tomada al atributo correspondiente
+      if (photoNumber === 1) {
+        this.image1 = image.dataUrl;
+      } else if (photoNumber === 2) {
+        this.image2 = image.dataUrl;
+      }
+
+      console.log(`Foto ${photoNumber} tomada correctamente.`);
     } catch (error) {
       console.error('Error al tomar la foto:', error);
+      await this.presentToast('Error al capturar la foto.');
     }
   }
-}
+}  

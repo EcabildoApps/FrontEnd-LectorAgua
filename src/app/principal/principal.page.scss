@@ -1,7 +1,22 @@
+.background-container {
+  background-image: url('/assets/img/fondo1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  /* Previene el scroll */
+}
+
 .logo-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .logo-container ion-icon {

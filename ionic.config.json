@@ -4,6 +4,7 @@
     "capacitor": {}
   },
   "type": "angular",
+  "ssl": true,
   "proxies": [
     {
       "path": "/api",

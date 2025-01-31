@@ -8,13 +8,15 @@
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    <div class="icon-container">
-      <ion-icon name="water" class="icon"></ion-icon>
-    </div>
-    <div class="button-container">
-      <ion-button expand="block" color="secondary" (click)="obtenerDatos()">Obtener Lecturas</ion-button>
-      <ion-button expand="block" color="secondary">Actualizar Lecturas</ion-button>
+  <div class="background-container">
+    <div class="container">
+      <div class="icon-container">
+        <ion-icon name="water" class="icon"></ion-icon>
+      </div>
+      <div class="button-container">
+        <ion-button expand="block" color="secondary" (click)="obtenerDatos()">Obtener Lecturas</ion-button>
+        <ion-button expand="block" color="secondary" (click)="actualizarLecturas()">Actualizar Lecturas</ion-button>
+      </div>
     </div>
   </div>
 </ion-content>

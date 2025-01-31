@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IonicstorageService } from '../services/ionicstorage.service';
 import { ToastController } from '@ionic/angular';
+import { EnviarlocalService } from '../services/enviarlocal.service';
 
 @Component({
   selector: 'app-sincronizar',
@@ -16,8 +17,9 @@ export class SincronizarPage implements OnInit {
 
 
   constructor(private http: HttpClient,
-     private ionicStorageService: IonicstorageService,
-    private toastController: ToastController) { }
+    private ionicStorageService: IonicstorageService,
+    private toastController: ToastController,
+    private enviarlocalService: EnviarlocalService) { }
 
   ngOnInit() {
     const rutasGuardadas = localStorage.getItem('rutas');
@@ -61,7 +63,7 @@ export class SincronizarPage implements OnInit {
     }
 
     const baseUrl = `http://${dominio}:${puerto}`;
-    
+
     // URLs para las tablas
     const urlLecturas = `${baseUrl}/api/auth/lecturas?ruta=${this.rutasDisponibles}`;
     const urlCatalogo = `${baseUrl}/api/auth/causas`;
@@ -143,6 +145,19 @@ export class SincronizarPage implements OnInit {
       console.log(`${nombreTabla} sincronizadas con éxito.`);
     } else {
       console.warn(`No se encontraron datos para ${nombreTabla}.`);
+    }
+  }
+
+
+
+  async actualizarLecturas() {
+    const sincronizado = await this.enviarlocalService.sincronizarImagenes();
+    this.enviarlocalService.enviarLecturasAlServidor();
+
+    if (sincronizado) {
+      await this.showToast('¡Imágenes y Lectura sincronizadas con éxito!');
+    } else {
+      await this.showToast('Hubo un problema al sincronizar los datos.');
     }
   }
 

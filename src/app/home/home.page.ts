@@ -59,7 +59,7 @@ export class HomePage {
   }
 
 
-  async getCoordinates() {
+  /* async getCoordinates() {
     try {
       // Solicitar permisos de ubicación
       const permission = await Geolocation.requestPermissions();
@@ -78,7 +78,7 @@ export class HomePage {
       console.error('Error al obtener las coordenadas', error);
       return null;
     }
-  }
+  } */
 
 
 
@@ -94,12 +94,12 @@ export class HomePage {
       const puerto = await this.storageService.rescatar('port') || '3000';
 
       // Obtener coordenadas del dispositivo
-      const coordinates = await this.getCoordinates();
+      /* const coordinates = await this.getCoordinates();
 
       if (!coordinates) {
         await this.showToast('📍 No se pudo obtener la ubicación.');
         return;
-      }
+      } */
 
       // Construcción de la URL
       const baseUrl = `http://${dominio}:${puerto}/api/auth/login`;
@@ -109,8 +109,8 @@ export class HomePage {
       const body = {
         username: this.username,
         password: this.password,
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude
+      //  latitude: coordinates.latitude,
+      //  longitude: coordinates.longitude
       };
 
       // Configurar los encabezados

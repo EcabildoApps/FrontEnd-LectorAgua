@@ -4,7 +4,6 @@
     padding: 10px;
     background-color: #f4f5f8;
 
-    /* Estilos para el contenedor de la ruta */
     .dropdown-container {
         ion-item {
             --background: #fff;
@@ -13,12 +12,11 @@
 
             ion-label {
                 font-weight: bold;
-                color: #3d7ff3; // Consistencia con el tema
+                color: #3d7ff3;
             }
         }
     }
 
-    /* Estilos para el filtro */
     .filter-container {
         margin-bottom: 10px;
 
@@ -29,16 +27,15 @@
 
             ion-label {
                 font-weight: bold;
-                color: #3d7ff3; // Consistencia con el tema
+                color: #3d7ff3;
             }
 
             ion-select {
-                --placeholder-color: #7a7a7a; // Mejor visibilidad del placeholder
+                --placeholder-color: #7a7a7a;
                 --color: #000;
             }
         }
 
-        /* Input para valor de filtro */
         ion-item {
             ion-label {
                 position: floating;
@@ -51,7 +48,6 @@
         }
     }
 
-    /* Contenedor de registros */
     .record-container {
         margin-top: 20px;
 
@@ -76,16 +72,13 @@
         }
     }
 
-    /* Footer */
     .footer {
         margin-top: 20px;
-        /* Mayor separación visual */
         display: flex;
         justify-content: center;
 
         ion-chip {
             --background: #3d7ff3;
-            /* Color azul para resaltar */
             --color: #fff;
 
             ion-icon {

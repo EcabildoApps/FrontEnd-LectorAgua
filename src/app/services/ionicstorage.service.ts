@@ -3,6 +3,9 @@ import { Storage } from '@ionic/storage-angular';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { ToastController } from '@ionic/angular';
+import imageCompression from 'browser-image-compression';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -60,8 +63,7 @@ export class IonicstorageService {
     });
     toast.present();
   }
-  
-  
+
   async buscarMedidoresPorNumeroParcial(nroMedidor: string) {
     try {
       // Obtener todos los datos almacenados
@@ -90,8 +92,6 @@ export class IonicstorageService {
       throw new Error('Ocurrió un error al buscar medidores.');
     }
   }
-
-
 
   async buscarCuentaNumeroParcial(nroCuenta: string) {
     try {
@@ -150,7 +150,6 @@ export class IonicstorageService {
             break;
         }
       }
-
       return registrosFiltrados.map(item => item.v);
     } catch (error) {
       console.error('Error al cargar registros con filtros locales:', error);
@@ -238,6 +237,70 @@ export class IonicstorageService {
 
 
 
+  async guardarImagenAGUAAPP(byteImg: Blob, pathImg: string, tipoImg: string, ruta: string, idCuenta: string) {
+    try {
+      const aguaAppImgs = await this.storage.get('AGUAAPP_IMG');
+      const aguaAppImgsArray = Array.isArray(aguaAppImgs) ? aguaAppImgs : [];
+
+      const compressedImageBase64 = await this.compressImage(byteImg, pathImg);
+
+      const entrada = {
+        ID_AGUALEC_APP_IMG: aguaAppImgsArray.length + 1,
+        BYTE_IMG: compressedImageBase64,
+        FECHA_REGISTRO: new Date().toISOString(),
+        PATH_IMG: pathImg,
+        TIPO_IMG: tipoImg,
+        RUTA: ruta,
+        IDCUENTA: idCuenta
+      };
+
+      aguaAppImgsArray.push(entrada);
+      await this.storage.set('AGUAAPP_IMG', aguaAppImgsArray);
+
+      this.presentToast('Imagen guardada correctamente en AGUAAPP_IMG');
+    } catch (error) {
+      console.error('Error al guardar los datos:', error);
+      this.presentToast('Ocurrió un error al guardar la imagen.');
+    }
+  }
+
+  async compressImage(blob: Blob, fileName: string): Promise<string> {
+    try {
+      const file = new File([blob], fileName, { type: blob.type });
+
+      const options = {
+        maxWidthOrHeight: 400,
+        maxSizeMB: 1,
+        useWebWorker: true,
+        fileType: 'image/jpeg',
+        quality: 0.8
+      };
+
+      let compressedImage = await imageCompression(file, options);
+      console.log('Imagen comprimida:', compressedImage);
+
+      // Reducir calidad si sigue siendo muy grande
+      if (compressedImage.size > 1000000) {
+        options.quality = 0.6;
+        compressedImage = await imageCompression(file, options);
+        console.log('Imagen comprimida nuevamente:', compressedImage);
+      }
+
+      return await this.blobToBase64(compressedImage);
+    } catch (error) {
+      console.error('Error al comprimir la imagen:', error);
+      return await this.blobToBase64(blob);
+    }
+  }
+
+  async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
 
   async actualizar(key: string, nuevosValores: any) {
     try {
@@ -257,9 +320,42 @@ export class IonicstorageService {
     }
   }
 
- 
+  async obtenerTodasLasCausas() {
+    try {
+      const causas = await this.storage.get('CAUSAS');
+      return causas ? causas.data : []; // Retorna el array de causas
+    } catch (error) {
+      console.error('Error al obtener las causas:', error);
+      return [];
+    }
+  }
 
+  // Filtrar causas por código o descripción
+  async filtrarCausas(criterio: string) {
+    try {
+      const causas = await this.obtenerTodasLasCausas();
 
+      if (!criterio.trim()) {
+        return causas; // Si el criterio está vacío, retorna todas las causas
+      }
 
+      return causas.filter(causa =>
+        causa.REN21CODI.toString().includes(criterio) ||
+        causa.REN21DESC.toLowerCase().includes(criterio.toLowerCase())
+      );
+    } catch (error) {
+      console.error('Error al filtrar causas:', error);
+      return [];
+    }
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom',
+    });
+    await toast.present();
+  }
 
 }

@@ -3,14 +3,58 @@
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Pendientes x Causa</ion-title>
+    <ion-title>Pendiente x Causa</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">pendienteXcausa</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  <ion-content>
+    <div class="container">
+      <!-- Ruta Actual -->
+      <div class="dropdown-container">
+        <ion-item>
+          <ion-label>Ruta Actual:</ion-label>
+          <ion-select [(ngModel)]="rutaSeleccionada" placeholder="Seleccionar ruta" (ionChange)="cargarRegistros()">
+            <ion-select-option *ngFor="let ruta of rutasDisponibles" [value]="ruta">
+              {{ ruta }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <ion-item>
+        <ion-label>Causa</ion-label>
+        <ion-select [(ngModel)]="causaSeleccionada" placeholder="Selecciona una causa" (ionChange)="cargarRegistros()">
+          <ion-select-option *ngFor="let causa of causas" [value]="causa.REN21SUBF">
+            {{ causa.REN21DESC }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-input [(ngModel)]="valorFiltro" type="text" placeholder="Ingresa nombre/cuenta/medidor"
+          (input)="cargarRegistros()"></ion-input>
+      </ion-item>
+
+      <!-- Registros -->
+      <div class="record-container" *ngIf="registros.length > 0">
+        <ion-card *ngFor="let registro of registros" (click)="irATomaLectura(registro.IDCUENTA)" button>
+          <ion-card-content>
+            <p><strong>Nro. Sec:</strong> {{ registro.SECTOR }} <strong>Nro. Cuenta:</strong> {{ registro.NRO_CUENTA }}
+            </p>
+            <p>{{ registro.CONSUMIDOR }}</p>
+            <p><strong>Nro. Med:</strong> {{ registro.NRO_MEDIDOR }}</p>
+            <p>{{ registro.TARIFA }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Mensaje de alerta -->
+      <div class="footer" *ngIf="registros.length === 0 && rutaSeleccionada">
+        <ion-text>
+          <p>No se encontraron registros para la ruta seleccionada.</p>
+        </ion-text>
+      </div>
+    </div>
+  </ion-content>

@@ -8,3 +8,18 @@ ion-item.selected {
         color: #5478fd;
     }
 }
+
+/* ==========================
+    EFECTOS RESPONSIVOS
+========================== */
+@media (max-width: 768px) {
+    ion-menu {
+        width: 80%;
+    }
+}
+
+@media (min-width: 769px) {
+    ion-menu {
+        width: 300px;
+    }
+}
