@@ -4,24 +4,33 @@ ion-content {
     overflow: hidden;
 }
 
-.form-container h2{
+.form-container h2 {
     color: #3880ff;
-    font-size: 35px;
+    font-size: 6vw;
+    /* Se ajusta el tamaño en función del ancho de la pantalla */
     font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .background-container {
-    background-image: url('/assets/img/login.jpg');
+    background-image: url('/assets/img/login2.jpeg');
     background-size: cover;
+    /* La imagen cubre toda el área disponible */
     background-position: center;
+    /* Centra la imagen */
     background-repeat: no-repeat;
-    height: 95.4vh;
+    /* No repite la imagen */
+    background-attachment: fixed;
+    /* Fija la imagen al hacer scroll */
+    height: 100vh;
+    /* Asegura que ocupe toda la altura de la ventana */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    /* Previene el scroll */
+    margin: 0;
 }
 
 .logo-container {
@@ -32,7 +41,8 @@ ion-content {
 }
 
 .ecabildo-text {
-    font-size: 70px;
+    font-size: 10vw;
+    /* Tamaño dinámico basado en el ancho de la ventana */
     font-weight: bold;
     color: #3880ff;
     text-align: center;
@@ -123,16 +133,21 @@ ion-button[fill="clear"]:active ion-icon[name="eye"] {
     color: #ff9a3d;
 }
 
-/* Media Queries para dispositivos Tablet y pantallas más grandes */
-
+/* Media Queries para dispositivos móviles y pantallas pequeñas */
 @media only screen and (max-width: 768px) {
     .ecabildo-text {
-        font-size: 50px;
+        font-size: 12vw;
+        /* Ajusta el tamaño de la fuente para pantallas pequeñas */
+    }
+
+    .form-container h2 {
+        font-size: 7vw;
+        /* Ajusta el tamaño del título para pantallas pequeñas */
     }
 
     ion-card {
-        width: 80%;
-        max-width: 600px;
+        width: 90%;
+        max-width: 100%;
     }
 
     .logo-container {
@@ -149,20 +164,44 @@ ion-button[fill="clear"]:active ion-icon[name="eye"] {
     }
 }
 
-/* Media Queries para pantallas más grandes como desktop */
-
-@media only screen and (min-width: 769px) {
+/* Media Queries para dispositivos Tablet y pantallas más grandes */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
     .ecabildo-text {
-        font-size: 80px;
+        font-size: 8vw;
+        /* Ajusta el tamaño de la fuente para tablets */
+    }
+
+    .form-container h2 {
+        font-size: 5vw;
+        /* Ajusta el tamaño del título para tablets */
+    }
+
+    ion-card {
+        width: 80%;
+        max-width: 700px;
+    }
+
+    ion-input,
+    ion-select {
+        font-size: 15px;
+    }
+}
+
+/* Media Queries para pantallas grandes como desktop */
+@media only screen and (min-width: 1025px) {
+    .ecabildo-text {
+        font-size: 6vw;
+        /* Ajusta el tamaño de la fuente para pantallas grandes */
+    }
+
+    .form-container h2 {
+        font-size: 3vw;
+        /* Ajusta el tamaño del título para pantallas grandes */
     }
 
     ion-card {
         width: 60%;
         max-width: 700px;
-    }
-
-    .logo-container {
-        margin-bottom: 30px;
     }
 
     ion-input,

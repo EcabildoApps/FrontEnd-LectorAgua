@@ -1,4 +1,3 @@
-
 ion-content {
   --background: transparent;
   height: 100%;
@@ -6,19 +5,28 @@ ion-content {
 }
 
 .background-container {
-  background-image: url('/assets/img/login.jpg');
+  background-image: url('/assets/img/login2.jpeg');
   background-size: cover;
-  background-position: center;
+  /* La imagen cubre toda el área disponible */
+  background-position: center center;
+  /* Centra la imagen */
   background-repeat: no-repeat;
-  height: 95.4vh;
+  /* No repite la imagen */
+  background-attachment: fixed;
+  /* La imagen permanece fija al hacer scroll */
+  height: 100vh;
+  /* Ocupa el 100% de la altura de la ventana */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* Previene el scroll */
+  /* Evita el scroll */
+  margin: 0;
+  /* Sin márgenes adicionales */
 }
 
+/* Estilos para los elementos */
 .logo-container {
   display: flex;
   justify-content: center;
@@ -27,7 +35,8 @@ ion-content {
 }
 
 .ecabildo-text {
-  font-size: 70px;
+  font-size: 10vw;
+  /* Ajusta el tamaño de la fuente en función del ancho de la ventana */
   font-weight: bold;
   color: #3880ff;
   text-align: center;
@@ -119,15 +128,16 @@ ion-button[fill="clear"]:active ion-icon[name="eye"] {
 }
 
 /* Media Queries para dispositivos Tablet y pantallas más grandes */
-
 @media only screen and (max-width: 768px) {
   .ecabildo-text {
-    font-size: 50px;
+    font-size: 8vw;
+    /* Ajusta el tamaño de la fuente en dispositivos más pequeños */
   }
 
   ion-card {
-    width: 80%;
-    max-width: 600px;
+    width: 90%;
+    /* Asegura que el card ocupe más espacio en pantallas pequeñas */
+    max-width: 100%;
   }
 
   .logo-container {
@@ -145,10 +155,10 @@ ion-button[fill="clear"]:active ion-icon[name="eye"] {
 }
 
 /* Media Queries para pantallas más grandes como desktop */
-
 @media only screen and (min-width: 769px) {
   .ecabildo-text {
-    font-size: 80px;
+    font-size: 5vw;
+    /* Ajusta el tamaño de la fuente en pantallas grandes */
   }
 
   ion-card {
