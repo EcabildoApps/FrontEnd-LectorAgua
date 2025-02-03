@@ -14,14 +14,16 @@ export class AppComponent {
   submenuVisible: boolean = false;
   public isWeb: boolean;
   public load: boolean = false;
+  public userRole: string = '';
 
   constructor(
-    private menuCtrl: MenuController, // Importar IonMenuController
+    private menuCtrl: MenuController,
     private navCtrl: NavController,
     private location: Location
   ) {
     this.isWeb = false;
     this.load = false;
+    this.userRole = localStorage.getItem('userRole')
   }
 
   isSelected(route: string): boolean {
@@ -36,6 +38,7 @@ export class AppComponent {
     console.log('Sesión cerrada');
     localStorage.removeItem('username');
     localStorage.removeItem('rutas');
+    localStorage.removeItem('userRole');
 
     this.navCtrl.navigateRoot('/home');
   }

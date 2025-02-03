@@ -5,25 +5,18 @@ ion-content {
 }
 
 .background-container {
-  background-image: url('/assets/img/login2.jpeg');
+  background-image: var(--background-image);
   background-size: cover;
-  /* La imagen cubre toda el área disponible */
   background-position: center center;
-  /* Centra la imagen */
   background-repeat: no-repeat;
-  /* No repite la imagen */
   background-attachment: fixed;
-  /* La imagen permanece fija al hacer scroll */
   height: 100vh;
-  /* Ocupa el 100% de la altura de la ventana */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* Evita el scroll */
   margin: 0;
-  /* Sin márgenes adicionales */
 }
 
 /* Estilos para los elementos */
@@ -36,7 +29,6 @@ ion-content {
 
 .ecabildo-text {
   font-size: 10vw;
-  /* Ajusta el tamaño de la fuente en función del ancho de la ventana */
   font-weight: bold;
   color: #3880ff;
   text-align: center;

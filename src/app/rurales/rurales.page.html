@@ -1,21 +1,21 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-title>Predio Rural</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Toma Lecturas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <!-- Gota de agua -->
   <div class="logo-container">
-    <ion-icon name="water" color="primary"></ion-icon>
+    <ion-icon name="leaf" color="primary"></ion-icon>
   </div>
+
 
   <!-- Tarjetas en cuadrícula -->
   <div class="grid-container">
-    <ion-card class="custom-card" [routerLink]="('/sincronizar')">
+    <ion-card class="custom-card" [routerLink]="('/sincronizarR')">
       <ion-card-header>
         <ion-card-title>Sincronizar</ion-card-title>
       </ion-card-header>
@@ -26,30 +26,30 @@
 
     <ion-card class="custom-card" [routerLink]="('/busqueda-medidor')">
       <ion-card-header>
-        <ion-card-title>Busqueda Medidor</ion-card-title>
+        <ion-card-title>Busqueda Predio</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-icon name="search" color="secondary"></ion-icon>
       </ion-card-content>
     </ion-card>
 
-    <ion-card class="custom-card" [routerLink]="('/lecturagt')">
+<!--     <ion-card class="custom-card" [routerLink]="('/lecturagt')">
       <ion-card-header>
-        <ion-card-title>Toma Lectura</ion-card-title>
+        <ion-card-title>Inspeccion</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-icon name="clipboard" color="danger"></ion-icon>
       </ion-card-content>
-    </ion-card>
-
+    </ion-card> -->
+<!-- 
     <ion-card class="custom-card" [routerLink]="('/corrigelectura')">
       <ion-card-header>
-        <ion-card-title>Corrige Lectura</ion-card-title>
+        <ion-card-title>Corrige Inspección</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-icon name="create" color="tertiary"></ion-icon>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
 <!--     <ion-card class="custom-card" [routerLink]="('/ajustes')">
       <ion-card-header>
@@ -60,14 +60,14 @@
       </ion-card-content>
     </ion-card> -->
 
-    <ion-card class="custom-card" [routerLink]="('/lec-rapida')">
+    <!-- <ion-card class="custom-card" [routerLink]="('/lec-rapida')">
       <ion-card-header>
         <ion-card-title>Lectura Rápida</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-icon name="barcode" color="primary"></ion-icon>
       </ion-card-content>
-    </ion-card>
-    
+    </ion-card> -->
+
   </div>
 </ion-content>

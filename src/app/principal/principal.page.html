@@ -1,31 +1,36 @@
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Menú Principal</ion-title>
-    <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="logo-container">
-    <ion-icon name="water" size="large" color="primary"></ion-icon>
+    <ion-icon name="business" size="large" color="primary"></ion-icon>
   </div>
 
-  <!-- Agregamos un (click) para aplicar la animación -->
-  <ion-card class="custom-card" (click)="onCardClick()">
+  <!-- Tarjeta Lectura visible solo si el rol no es urbano ni rural -->
+  <ion-card class="custom-card" (click)="onCardClick('lectura', $event)">
     <ion-card-header>
-      <ion-card-title [routerLink]="('/lectura')">Toma Lectura</ion-card-title>
-      <ion-card-subtitle>
-        Permite gestionar lecturas de agua potable.
-      </ion-card-subtitle>
+      <ion-card-title>Lecturas</ion-card-title>
+      <ion-card-subtitle>Permite gestionar lecturas de agua potable.</ion-card-subtitle>
     </ion-card-header>
   </ion-card>
 
-  <div class="permission-message">
-    <ion-icon name="alert-circle" color="dark"></ion-icon>
-    <span>Permiso de escritura no concedido</span>
-  </div>
+  <!-- Tarjeta Predios Urbanos visible solo si el rol es urbano -->
+  <ion-card class="custom-card" (click)="onCardClick('urbano', $event)">
+    <ion-card-header>
+      <ion-card-title>Predios Urbanos</ion-card-title>
+      <ion-card-subtitle>Gestiona predios urbanos.</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+
+  <!-- Tarjeta Predios Rurales visible solo si el rol es rural -->
+  <ion-card class="custom-card" (click)="onCardClick('rural', $event)">
+    <ion-card-header>
+      <ion-card-title>Predios Rurales</ion-card-title>
+      <ion-card-subtitle>Gestiona predios rurales.</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
 
 </ion-content>

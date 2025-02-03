@@ -16,11 +16,14 @@ import { Platform } from '@ionic/angular';
   standalone: false,
 })
 export class HomePage {
-  username: string = ''; // Para almacenar el username ingresado
-  password: string = ''; // Para almacenar la contraseña ingresada
-  passwordVisible: boolean = false; // Para controlar la visibilidad de la contraseña
-  userRole: string = ''; // Para almacenar el rol del usuario
-  isLoggedIn: boolean = false; // Para controlar si el usuario está logueado
+  username: string = '';
+  password: string = '';
+  passwordVisible: boolean = false;
+  userRole: string = '';
+  isLoggedIn: boolean = false;
+
+  imagenLogin: string = '/assets/img/login2.jpeg';
+
 
   constructor(
     private toastController: ToastController,
@@ -32,28 +35,58 @@ export class HomePage {
     this.platform.ready().then(() => {
       if (this.platform.is('android')) {
         console.log('Corriendo en Android');
-        // Configura cosas específicas de Android si es necesario
       } else if (this.platform.is('ios')) {
         console.log('Corriendo en iOS');
-        // Configura cosas específicas de iOS si es necesario
       } else {
         console.log('Corriendo en un navegador web');
-        // Configura cosas para la web si es necesario
       }
     });
   }
+
+  ngOnInit() {
+
+    this.platform.ready().then(() => {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      prefersDark.addEventListener('change', (e) => {
+        const mode = e.matches ? 'dark' : 'light';
+        document.body.setAttribute('color-scheme', mode);
+      });
+
+      // Inicializa el modo de acuerdo con la preferencia del sistema
+      const initialMode = prefersDark.matches ? 'dark' : 'light';
+      document.body.setAttribute('color-scheme', initialMode);
+    });
+    this.loadImageFromServer();
+  }
+
+
+  loadImageFromServer() {
+    const serverUrl = 'http://localhost:3000/api/auth/getimage'; // URL del endpoint
+
+    this.http.get(serverUrl).subscribe(
+      (response: any) => {
+        console.log('Imagen obtenida:', response.imageUrl);  // Verifica la URL de la imagen
+        this.imagenLogin = response.imageUrl; // Asigna la URL a la variable
+      },
+      (error) => {
+        console.error('Error al cargar la imagen desde el servidor', error);
+      }
+    );
+  }
+
+
+
 
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  // Método para mostrar el toast
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 2000,  // Duración en milisegundos (2 segundos)
-      position: 'bottom', // Puedes cambiar la posición (top, middle, bottom)
-      color: 'primary', // Puedes cambiar el color (primary, success, danger, etc.)
+      duration: 2000,
+      position: 'bottom',
+      color: 'primary',
     });
     toast.present();
   }
@@ -83,6 +116,8 @@ export class HomePage {
 
 
   async onSubmit() {
+
+
     if (!this.username || !this.password || !this.userRole) {
       await this.showToast('⚠️ Por favor, complete todos los campos.');
       return;
@@ -109,8 +144,8 @@ export class HomePage {
       const body = {
         username: this.username,
         password: this.password,
-      //  latitude: coordinates.latitude,
-      //  longitude: coordinates.longitude
+        //  latitude: coordinates.latitude,
+        //  longitude: coordinates.longitude
       };
 
       // Configurar los encabezados
@@ -125,12 +160,18 @@ export class HomePage {
           if (response.message === 'Inicio de sesión exitoso.') {
             this.isLoggedIn = true;
             localStorage.setItem('username', this.username);
+            localStorage.setItem('userRole', this.userRole);
 
             const rutas = response.user.RUTA ? [response.user.RUTA] : [];
             localStorage.setItem('rutas', JSON.stringify(rutas));
 
-            await this.showToast(`✅ Bienvenido ${this.username}`);
-            this.router.navigate(['/principal']);
+            if (this.userRole === 'admin') {
+              await this.showToast(`✅ Bienvenido ${this.username}`);
+              this.router.navigate(['/admin']); // Redirige a la página de admin
+            } else {
+              await this.showToast(`✅ Bienvenido ${this.username}`);
+              this.router.navigate(['/principal']); // Redirige a la página principal por defecto
+            }
           } else {
             await this.showToast(`⚠️ Error en el login: ${response.message}`);
           }

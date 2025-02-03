@@ -1,17 +1,4 @@
-.background-container {
-  background-image: url('/assets/img/fondo1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 95vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  /* Previene el scroll */
-}
-
+/* Contenedor de iconos y tarjetas */
 .logo-container {
   display: flex;
   justify-content: center;
@@ -27,17 +14,36 @@
 
 .custom-card {
   margin: 15px auto;
+  background-color: #e7dfec;
   padding: 20px;
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   max-width: 90%;
+  border-color: #5478fd;
+  text-align: center;
+  transition: transform 0.3s ease;
+  /* Transición para el movimiento */
 }
+
+
+.custom-card ion-icon {
+  font-size: 50px;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.custom-card.selected {
+  animation: scaleUp 0.3s ease-in-out;
+}
+
+
 
 .custom-card ion-card-title {
   font-weight: bold;
   font-size: 22px;
-  /* Tamaño de texto más grande */
   margin-bottom: 5px;
 }
 
@@ -46,6 +52,7 @@
   color: #666;
 }
 
+/* Estilo para el mensaje de permiso */
 .permission-message {
   display: flex;
   align-items: center;
@@ -84,7 +91,7 @@
   }
 }
 
-/* ---- Media Queries para Responsividad ---- */
+/* Media Queries para Responsividad */
 
 /* Smartphones pequeños */
 @media (max-width: 480px) {
@@ -166,4 +173,9 @@
     font-size: 20px;
     padding: 20px;
   }
+}
+
+.custom-toast {
+  font-size: 14px;
+  padding-left: 10px; // Ajusta el espacio si es necesario
 }

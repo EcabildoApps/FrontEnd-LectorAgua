@@ -1,0 +1,104 @@
+.background-container {
+    background-image: url('/assets/img/fondo2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Previene el scroll */
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.logo-container ion-icon {
+    font-size: 100px;
+    width: 100px;
+    height: 100px;
+}
+
+/* Tarjetas */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 10px;
+}
+
+.custom-card {
+    text-align: center;
+    background-color: #e7dfec;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-color: #5478fd;
+}
+
+.custom-card ion-card-header {
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.custom-card ion-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.custom-card ion-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+
+/* Tablets (dos columnas, iconos y textos más grandes) */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .logo-container ion-icon {
+        font-size: 100px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .custom-card ion-card-header {
+        font-size: 20px;
+    }
+
+    .custom-card ion-icon {
+        font-size: 50px;
+    }
+}
+
+/* Pantallas grandes (tres columnas) */
+@media (min-width: 1025px) {
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .logo-container ion-icon {
+        font-size: 140px;
+        width: 140px;
+        height: 140px;
+    }
+
+    .custom-card ion-card-header {
+        font-size: 22px;
+    }
+
+    .custom-card ion-icon {
+        font-size: 60px;
+    }
+}

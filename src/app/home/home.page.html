@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="background-container">
+  <div class="background-container" [ngStyle]="{'background-image': 'url(' + imagenLogin + ')'}">
     <div class="logo-container">
       <h1 class="ecabildo-text">E-CABILDO</h1>
     </div>
@@ -40,8 +40,9 @@
             <ion-label>Tipo de Login</ion-label>
             <ion-select [(ngModel)]="userRole" name="userRole" placeholder="Selecciona un rol" required>
               <ion-select-option value="admin">Admin</ion-select-option>
-              <ion-select-option value="lectura_agua">Lectura Agua</ion-select-option>
-              <ion-select-option value="predios">Predios</ion-select-option>
+              <ion-select-option value="lectura">Lectura Agua</ion-select-option>
+              <ion-select-option value="urbano">Predio Urbano</ion-select-option>
+              <ion-select-option value="rural">Predio Rural</ion-select-option>
             </ion-select>
           </ion-item>
 

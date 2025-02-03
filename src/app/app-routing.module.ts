@@ -63,10 +63,34 @@ const routes: Routes = [
   {
     path: 'controlacceso',
     loadChildren: () => import('./controlacceso/controlacceso.module').then( m => m.ControlaccesoPageModule)
-  },  {
+  },
+  {
     path: 'lecturagt',
     loadChildren: () => import('./lecturagt/lecturagt.module').then( m => m.LecturagtPageModule)
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
+  },
+  {
+    path: 'urbanos',
+    loadChildren: () => import('./urbanos/urbanos.module').then( m => m.UrbanosPageModule)
+  },
+  {
+    path: 'rurales',
+    loadChildren: () => import('./rurales/rurales.module').then( m => m.RuralesPageModule)
+  },
+  {
+    path: 'sincronizarR',
+    loadChildren: () => import('./sincronizar-r/sincronizar-r.module').then( m => m.SincronizarRPageModule)
+  },
+  {
+    path: 'sincronizarU',
+    loadChildren: () => import('./sincronizar-u/sincronizar-u.module').then( m => m.SincronizarUPageModule)
+  },
+
+
+
 
 ];
 
