@@ -64,35 +64,38 @@ export class SincronizarPage implements OnInit {
 
     const baseUrl = `http://${dominio}:${puerto}`;
 
-    // URLs para las tablas
     const urlLecturas = `${baseUrl}/api/auth/lecturas?ruta=${this.rutasDisponibles}`;
     const urlCatalogo = `${baseUrl}/api/auth/causas`;
     const urlNovedad = `${baseUrl}/api/auth/novedades`;
 
     try {
-      // Procesar lecturas
-      await this.sincronizarTabla(
-        urlLecturas,
-        'Lecturas',
-        'NRO_CUENTA'
-      );
+      const response = await this.http.get<any>(urlLecturas).toPromise();
 
-      // Procesar catálogos
-      await this.sincronizarTabla(
-        urlCatalogo,
-        'Catálogos',
-        'REN21CODI',
-        false // Evitar sobreescribir
-      );
+      if (response.message && response.message.includes('No se encontraron lecturas')) {
+        await this.showToast('No se encontraron lecturas para la ruta proporcionada.');
+      } else if (response.data) {
+        await this.sincronizarTabla(
+          urlLecturas,
+          'Lecturas',
+          'NRO_CUENTA'
+        );
 
-      // Procesar novedades
-      await this.sincronizarTabla(
-        urlNovedad,
-        'Novedades',
-        'REN21CODI'
-      );
+        // Procesar catálogos
+        await this.sincronizarTabla(
+          urlCatalogo,
+          'Catálogos',
+          'REN21CODI',
+          false // Evitar sobreescribir
+        );
 
-      alert('Sincronización completada con éxito.');
+        // Procesar novedades
+        await this.sincronizarTabla(
+          urlNovedad,
+          'Novedades',
+          'REN21CODI'
+        );
+        alert('Sincronización completada con éxito.');
+      }
     } catch (error) {
       console.error('Error al sincronizar datos:', error);
       alert(

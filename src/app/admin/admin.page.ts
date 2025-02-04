@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { IonicstorageService } from '../services/ionicstorage.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-admin',
@@ -11,13 +13,37 @@ export class AdminPage {
   selectedFile: File | null = null;
   imagenLogin: string = '/assets/img/default-login-image.jpg';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private ionicStorageService: IonicstorageService,
+    private toastController: ToastController
+  ) { }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  guardarImagenLogin() {
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,  // Duración en milisegundos (2 segundos)
+      position: 'bottom', // Puedes cambiar la posición (top, middle, bottom)
+      color: 'primary', // Puedes cambiar el color (primary, success, danger, etc.)
+    });
+    toast.present();
+  }
+
+  async guardarImagenLogin() {
+
+    const dominio = await this.ionicStorageService.rescatar('dominio');
+    const puerto = await this.ionicStorageService.rescatar('port');
+    if (!dominio || !puerto) {
+      await this.showToast('Dominio o puerto no configurados.');
+      return;
+    }
+
+    const baseUrl = `http://${dominio}:${puerto}`;
+
+
     if (!this.selectedFile) {
       alert('Por favor selecciona una imagen');
       return;

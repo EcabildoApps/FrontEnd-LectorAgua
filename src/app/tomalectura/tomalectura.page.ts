@@ -141,6 +141,9 @@ export class TomalecturaPage {
         registroExistente.X_LECTURA = longitude;
         registroExistente.Y_LECTURA = latitude;
 
+        const fechaSolo = new Date().toISOString().split('T')[0];
+        registroExistente.FECHA_LEC = fechaSolo;
+        
         await this.ionicStorageService.agregarConKey('LECTURAS', lecturas);
         await this.presentToast('Lectura guardada correctamente.');
       } else {
