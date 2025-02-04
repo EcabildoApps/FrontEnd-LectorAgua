@@ -53,7 +53,7 @@ export class AdminPage {
     formData.append('image', this.selectedFile, this.selectedFile.name);
 
     // Asegúrate de que la URL esté correcta
-    this.http.post<{ imageUrl: string }>('http://localhost:3000/api/auth/upload', formData).subscribe(
+    this.http.post<{ imageUrl: string }>(`${baseUrl}/api/auth/upload`, formData).subscribe(
       (response) => {
         this.imagenLogin = response.imageUrl;
         alert('Imagen subida correctamente');
