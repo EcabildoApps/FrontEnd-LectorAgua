@@ -21,6 +21,7 @@ export class TomalecturaPage {
   selectedImages: File[] = [];
   image1: string | null = null; // Imagen 1 (base64 o URL)
   image2: string | null = null; // Imagen 2 (base64 o URL)
+  detalle: string = '';
 
   constructor(
     private toastController: ToastController,
@@ -198,7 +199,8 @@ export class TomalecturaPage {
           'image1.jpg',
           'jpg',
           rutaFormateada,
-          this.idCuenta.toString()
+          this.idCuenta.toString(),
+          this.detalle.toString()
         );
       }
 
@@ -210,7 +212,8 @@ export class TomalecturaPage {
           'image2.jpg',
           'jpg',
           rutaFormateada,
-          this.idCuenta.toString()
+          this.idCuenta.toString(),
+          this.detalle.toString()
         );
       }
 

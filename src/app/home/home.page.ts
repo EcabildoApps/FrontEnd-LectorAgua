@@ -159,8 +159,10 @@ export class HomePage {
         async (response: any) => {
           if (response.message === 'Inicio de sesión exitoso.') {
             this.isLoggedIn = true;
+
+            const userRole = response.user.APPROL;
             localStorage.setItem('username', this.username);
-            localStorage.setItem('userRole', this.userRole);
+            localStorage.setItem('userRole', userRole);
 
             const rutas = response.user.RUTA ? [response.user.RUTA] : [];
             localStorage.setItem('rutas', JSON.stringify(rutas));

@@ -32,9 +32,9 @@ export class SincronizarPage implements OnInit {
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 2000,  // Duración en milisegundos (2 segundos)
-      position: 'bottom', // Puedes cambiar la posición (top, middle, bottom)
-      color: 'primary', // Puedes cambiar el color (primary, success, danger, etc.)
+      duration: 2000,
+      position: 'bottom', 
+      color: 'primary', 
     });
     toast.present();
   }
@@ -44,7 +44,7 @@ export class SincronizarPage implements OnInit {
     try {
       const lecturasGuardadas = await this.ionicStorageService.rescatar('LECTURAS');
       if (lecturasGuardadas && lecturasGuardadas.data) {
-        this.lecturas = lecturasGuardadas.data; // Asignar los datos a la variable 'lecturas'
+        this.lecturas = lecturasGuardadas.data;
       } else {
         console.warn('No se encontraron lecturas almacenadas');
       }
@@ -94,13 +94,11 @@ export class SincronizarPage implements OnInit {
           'Novedades',
           'REN21CODI'
         );
-        alert('Sincronización completada con éxito.');
+        await this.showToast('Datos sincronizados correctamente.');
       }
     } catch (error) {
       console.error('Error al sincronizar datos:', error);
-      alert(
-        'Ocurrió un error al sincronizar los datos. Por favor, verifica la conexión al servidor.'
-      );
+      await this.showToast('Ocurrió un error al sincronizar los datos. Por favor, verifica la conexión al servidor.');
     }
   }
 
@@ -161,6 +159,16 @@ export class SincronizarPage implements OnInit {
       await this.showToast('¡Imágenes y Lectura sincronizadas con éxito!');
     } else {
       await this.showToast('Hubo un problema al sincronizar los datos.');
+    }
+  }
+
+  async limpiarLecturas() {
+    try {
+      await this.ionicStorageService.eliminarLecturas();
+      this.lecturas = [];
+      await this.showToast('Lecturas limpiadas correctamente');
+    } catch (error) {
+      await this.showToast('Error al limpiar las lecturas');
     }
   }
 

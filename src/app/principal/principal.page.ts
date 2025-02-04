@@ -17,42 +17,59 @@ export class PrincipalPage {
   constructor(private router: Router, private toastController: ToastController) { }
 
   ngOnInit() {
-    this.userRole = localStorage.getItem('userRole') || 'urbano';
+    this.userRole = localStorage.getItem('userRole') || '';
 
+    // Inicializamos los permisos basados en el rol del usuario
     this.setPermissionsBasedOnRole();
   }
 
   setPermissionsBasedOnRole() {
-    if (this.userRole === 'urbano') {
-      this.showLecturaCard = false;
-      this.showRuralCard = false;
+    // Restricciones de visibilidad de los módulos según el rol
+    if (this.userRole === 'LEC') {
+      this.showUrbanoCard = false;   // No puede ver el módulo de Urbano
+      this.showRuralCard = false;    // No puede ver el módulo de Rural
+      this.showLecturaCard = true;   // Puede ver el módulo de Lectura
+    } else if (this.userRole === 'urbano') {
+      this.showLecturaCard = false;  // No puede ver el módulo de Lectura
+      this.showRuralCard = false;    // No puede ver el módulo de Rural
     } else if (this.userRole === 'rural') {
+      this.showLecturaCard = false;  // No puede ver el módulo de Lectura
+      this.showUrbanoCard = false;   // No puede ver el módulo Urbano
+    } else if (this.userRole === 'admin') {
+      // Los administradores pueden ver todo
+      this.showLecturaCard = true;
+      this.showUrbanoCard = true;
+      this.showRuralCard = true;
+    } else {
+      // Si no hay rol o el rol es inválido, no mostrar nada
       this.showLecturaCard = false;
       this.showUrbanoCard = false;
+      this.showRuralCard = false;
     }
   }
 
   onCardClick(tipo: string, event: Event) {
+    // Verificamos el acceso del usuario a cada módulo
     if (
-      (tipo === 'lectura' && !this.showLecturaCard) ||
+      (tipo === 'LEC' && !this.showLecturaCard) ||
       (tipo === 'urbano' && !this.showUrbanoCard) ||
       (tipo === 'rural' && !this.showRuralCard)
     ) {
-      this.showPermissionToast();
+      this.showPermissionToast();  // Si no tiene acceso, mostramos el mensaje
       return;
     }
 
+    // Seleccionamos la tarjeta que el usuario hizo clic
     const allCards = document.querySelectorAll('.custom-card');
-
     allCards.forEach(card => card.classList.remove('selected'));
 
     const cardElement = event.target as HTMLElement;
-
     cardElement.classList.add('selected');
 
+    // Redirigimos a la pantalla correspondiente dependiendo del tipo
     setTimeout(() => {
       switch (tipo) {
-        case 'lectura':
+        case 'LEC':
           this.router.navigate(['/lectura']);
           break;
         case 'urbano':
@@ -77,5 +94,4 @@ export class PrincipalPage {
     });
     toast.present();
   }
-
 }

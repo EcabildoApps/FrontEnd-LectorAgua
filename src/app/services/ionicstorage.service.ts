@@ -54,6 +54,17 @@ export class IonicstorageService {
     await this.storage.clear();
   }
 
+
+async eliminarLecturas() {
+  try {
+    await this.storage.remove('LECTURAS'); 
+    console.log('Lecturas eliminadas correctamente');
+  } catch (error) {
+    console.error('Error al eliminar las lecturas:', error);
+  }
+}
+
+
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message,
@@ -237,7 +248,7 @@ export class IonicstorageService {
 
 
 
-  async guardarImagenAGUAAPP(byteImg: Blob, pathImg: string, tipoImg: string, ruta: string, idCuenta: string) {
+  async guardarImagenAGUAAPP(byteImg: Blob, pathImg: string, tipoImg: string, ruta: string, idCuenta: string, detalle: string) {
     try {
       const aguaAppImgs = await this.storage.get('AGUAAPP_IMG');
       const aguaAppImgsArray = Array.isArray(aguaAppImgs) ? aguaAppImgs : [];
@@ -251,7 +262,8 @@ export class IonicstorageService {
         PATH_IMG: pathImg,
         TIPO_IMG: tipoImg,
         RUTA: ruta,
-        IDCUENTA: idCuenta
+        IDCUENTA: idCuenta,
+        DETALLE: detalle
       };
 
       aguaAppImgsArray.push(entrada);

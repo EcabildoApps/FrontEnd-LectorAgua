@@ -85,6 +85,7 @@ export class EnviarlocalService {
         formData.append('TIPO_IMG', imagen.TIPO_IMG || 'JPEG');
         formData.append('RUTA', imagen.RUTA || '');
         formData.append('FECHA_REGISTRO', fechaRegistro);
+        formData.append('DETALLE', imagen.DETALLE || '');
 
         // Convertir base64 a Blob si es necesario
         if (imagen.BYTE_IMG) {

@@ -23,7 +23,7 @@ export class AppComponent {
   ) {
     this.isWeb = false;
     this.load = false;
-    this.userRole = localStorage.getItem('userRole')
+    this.userRole = localStorage.getItem('userRole') || '';
   }
 
   isSelected(route: string): boolean {

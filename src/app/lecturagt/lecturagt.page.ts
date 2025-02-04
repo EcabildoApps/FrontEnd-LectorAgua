@@ -40,33 +40,28 @@ export class LecturagtPage implements OnInit {
 
   async cargarRegistros() {
     if (!this.rutaSeleccionada) {
-      this.registros = [];
-      return;
+      await this.presentToast('Por favor, selecciona una ruta primero.');
+      return; // No hacer nada si no se seleccionó una ruta
     }
 
     try {
-      const registrosFiltrados = await this.ionicStorageService.cargarRegistrosConFiltroGeneral(
+      // Llamar al método del servicio para obtener los registros locales
+      this.registros = await this.ionicStorageService.cargarRegistrosConFiltroGeneral(
         this.rutaSeleccionada,
         this.valorFiltro
       );
 
-      // Filtrar los registros para excluir aquellos con X_LECTURA y Y_LECTURA no vacíos
-      this.registros = registrosFiltrados.filter(registro => {
-        return (
-          (registro.X_LECTURA === null || registro.X_LECTURA === undefined) &&
-          (registro.Y_LECTURA === null || registro.Y_LECTURA === undefined)
-        );
-      });
-
+      // Mostrar mensaje si no hay registros
       if (this.registros.length === 0) {
-        await this.presentToast('No se encontraron registros.');
+        await this.presentToast('No se encontraron registros para los filtros seleccionados.');
       }
     } catch (error) {
-      console.error('Error al cargar registros:', error);
+      console.error('Error al cargar registros locales:', error);
       this.registros = [];
-      await this.presentToast('Ocurrió un error al cargar los registros.');
+      await this.presentToast('Ocurrió un error al cargar los registros locales.');
     }
   }
+
 
 
   async presentToast(message: string) {
