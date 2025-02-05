@@ -81,17 +81,29 @@
           </ion-menu-toggle>
         </ng-container>
 
-        <ng-container *ngIf="userRole === 'urbano'">
+        <ng-container *ngIf="userRole === 'URB'">
           <ion-menu-toggle>
-            <ion-item routerLink="/predios" routerDirection="forward" routerLinkActive="selected">
+            <ion-item routerLink="/urbanos" routerDirection="forward" routerLinkActive="selected">
               <ion-icon name="home" slot="start"></ion-icon>
               <ion-label>Predios</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle>
-            <ion-item routerLink="/gestion-predio" routerDirection="forward" routerLinkActive="selected">
+            <ion-item routerLink="/busquedaGg" routerDirection="forward" routerLinkActive="selected">
+              <ion-icon name="search" slot="start"></ion-icon>
+              <ion-label>Busqueda GeoCodigo</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item routerLink="/informacionP" routerDirection="forward" routerLinkActive="selected">
               <ion-icon name="construct" slot="start"></ion-icon>
-              <ion-label>Gestión Predio</ion-label>
+              <ion-label>Identificación Predial</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item routerLink="/infraestructura" routerDirection="forward" routerLinkActive="selected">
+              <ion-icon name="create" slot="start"></ion-icon>
+              <ion-label>Infraestructura Servicios/Terrenos</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ng-container>

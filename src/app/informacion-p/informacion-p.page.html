@@ -1,0 +1,114 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Identificación Predial</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-content>
+      <!-- Identificación Predial -->
+      <ion-grid class="predial-grid">
+        <ion-row class="header-row">
+          <ion-col size="1">Gid</ion-col>
+          <ion-col size="1.5">Prov</ion-col>
+          <ion-col size="1.5">Ctn</ion-col>
+          <ion-col size="1.5">Parrq</ion-col>
+          <ion-col size="1.5">Zona</ion-col>
+          <ion-col size="1">Sect.</ion-col>
+          <ion-col size="1">Mz.</ion-col>
+          <ion-col size="1">Lote</ion-col>
+          <ion-col size="1">Bloq.</ion-col>
+          <ion-col size="1">Piso</ion-col>
+        </ion-row>
+        
+        <ion-row class="data-row">
+          <ion-col size="1"><ion-text>1</ion-text></ion-col>
+          <ion-col size="1.5"><ion-text>18</ion-text></ion-col>
+          <ion-col size="1.5"><ion-text>07</ion-text></ion-col>
+          <ion-col size="1.5"><ion-text>50</ion-text></ion-col>
+          <ion-col size="1.5"><ion-text>1</ion-text></ion-col>
+          <ion-col size="1"><ion-text>1</ion-text></ion-col>
+          <ion-col size="1"><ion-text>001</ion-text></ion-col>
+          <ion-col size="1"><ion-text>001</ion-text></ion-col>
+          <ion-col size="1"><ion-text>0</ion-text></ion-col>
+          <ion-col size="1"><ion-text>0</ion-text></ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <!-- Claves -->
+        <ion-row>
+          <ion-col size="12" size-md="4">
+            <ion-label><ion-icon name="key" color="primary" slot="start"></ion-icon> <strong> Clave Catastral:</strong></ion-label>
+            <ion-text>18075011001001</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="4">
+            <ion-label><ion-icon name="keypad" color="secondary" slot="start"></ion-icon> <strong> Clave Anterior:</strong></ion-label>
+            <ion-text>180750110010010000000000</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="4">
+            <ion-label><ion-icon name="map" color="tertiary" slot="start"></ion-icon> <strong> Clave Geocodigo:</strong></ion-label>
+            <ion-text>18075011001</ion-text>
+          </ion-col>
+        </ion-row>
+
+        <!-- Ubicación -->
+        <ion-row>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="home" color="danger" slot="start"></ion-icon> <strong> Urbanización/Barrio:</strong></ion-label>
+            <ion-text>DARIO GUEVARA</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="location-sharp" color="warning" slot="start"></ion-icon> <strong> Calle Principal:</strong></ion-label>
+            <ion-text>AVENIDA CONFRATERNIDAD</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="home-outline" color="success" slot="start"></ion-icon> <strong> Nro Casa:</strong></ion-label>
+            <ion-text>A903</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="map-outline" color="primary" slot="start"></ion-icon> <strong> Calle Secundaria:</strong></ion-label>
+            <ion-text>JOSE MARIA VELASCO IBARRA</ion-text>
+          </ion-col>
+        </ion-row>
+
+        <!-- Estado y Tipo GIS -->
+        <ion-row>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="globe-outline" color="secondary" slot="start"></ion-icon> <strong> Tipo Gis:</strong></ion-label>
+            <ion-text>Integrado</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="refresh" color="tertiary" slot="start"></ion-icon> <strong>Fec. Act. Avaluo:</strong></ion-label>
+            <ion-text>En actualización</ion-text> <!-- O el valor que necesites -->
+          </ion-col>          
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="build" color="danger" slot="start"></ion-icon> <strong> Estado:</strong></ion-label>
+            <ion-text>Modificado</ion-text>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label><ion-icon name="checkmark-circle" color="success" slot="start"></ion-icon> <strong> Validación:</strong></ion-label>
+            <ion-text>Graficado OK</ion-text>
+          </ion-col>
+        </ion-row>
+
+        <!-- Linderos -->
+        <ion-row>
+          <ion-col>
+            <ion-label>📍 <strong>Linderos:</strong></ion-label>
+            <ion-list>
+              <ion-item>AV. CONFRATERNIDAD</ion-item>
+              <ion-item>CALLE CASPICARA</ion-item>
+              <ion-item>TORRES ELEODORO Y TORRES MORALES ALICIA</ion-item>
+              <ion-item>CALLE VELASCO IBARRA</ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

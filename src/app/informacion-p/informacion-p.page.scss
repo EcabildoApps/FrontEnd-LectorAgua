@@ -1,0 +1,148 @@
+ion-card {
+    margin: 12px;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+}
+
+.predial-grid {
+
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    /* Permite scroll horizontal en pantallas pequeñas */
+}
+
+.header-row {
+    background: #007bff;
+    font-weight: bold;
+    color: white;
+}
+
+.data-row {
+    background: #f9f9f9;
+}
+
+ion-col {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+ion-label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+ion-text {
+    display: block;
+    font-size: 14px;
+    color: #555;
+}
+
+.custom-icon-color {
+    color: #4CAF50;
+    /* Verde */
+}
+
+.custom-icon-danger {
+    color: #F44336;
+    /* Rojo */
+}
+
+.custom-icon-warning {
+    color: #FF9800;
+    /* Naranja */
+}
+
+.custom-icon-info {
+    color: #2196F3;
+    /* Azul */
+}
+
+/* Ajustes responsivos para pantallas pequeñas */
+@media screen and (max-width: 480px) {
+    .predial-grid {
+        font-size: 10px;
+    }
+
+    /* Hacer las columnas más pequeñas en móviles */
+    ion-col {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .header-row ion-col {
+        font-size: 10px;
+        padding: 3px;
+        /* Reducir la fuente en la cabecera */
+    }
+
+    /* Para la tabla en móviles, hacer las columnas más flexibles */
+    .predial-grid ion-col {
+        width: auto;
+        text-align: left;
+    }
+
+
+
+    .header-row ion-col,
+    .data-row ion-col {
+        font-size: 10px;
+        text-align: center;
+        padding: 3px;
+    }
+
+    /* Ajuste de los íconos */
+    ion-icon {
+        font-size: 16px;
+        /* Reducir el tamaño de los iconos en pantallas pequeñas */
+    }
+
+    /* Asegurar que las columnas no desborden */
+    ion-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    ion-col {
+        width: 100%;
+        /* Hacer que cada columna ocupe el 100% del ancho disponible */
+    }
+}
+
+/* Ajustes para tabletas */
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+    .predial-grid {
+        font-size: 13px;
+        /* Un poco más grande que en móviles */
+    }
+
+    /* Las columnas se expanden un poco más en tabletas */
+    ion-col {
+        padding: 8px;
+    }
+
+    /* Iconos más grandes */
+    ion-icon {
+        font-size: 18px;
+        /* Aumentar tamaño de los iconos en tabletas */
+    }
+}
+
+/* Ajustes para pantallas grandes */
+@media screen and (min-width: 1025px) {
+    .predial-grid {
+        font-size: 14px;
+        /* Tamaño de fuente original */
+    }
+
+    /* Mejor distribución en pantallas grandes */
+    ion-col {
+        padding: 10px;
+    }
+}

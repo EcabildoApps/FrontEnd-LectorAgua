@@ -88,6 +88,15 @@ const routes: Routes = [
     path: 'sincronizarU',
     loadChildren: () => import('./sincronizar-u/sincronizar-u.module').then( m => m.SincronizarUPageModule)
   },
+  {
+    path: 'informacionP',
+    loadChildren: () => import('./informacion-p/informacion-p.module').then( m => m.InformacionPPageModule)
+  },  {
+    path: 'infraestructura',
+    loadChildren: () => import('./infraestructura/infraestructura.module').then( m => m.InfraestructuraPageModule)
+  },
+
+
 
 
 
