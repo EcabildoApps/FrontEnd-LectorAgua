@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Predios Urbanos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <!-- Ruta Actual -->
+    <div class="dropdown-container">
+      <ion-item>
+        <ion-label>GeoCodigo Actual:</ion-label>
+        <ion-select [(ngModel)]="rutaSeleccionada" placeholder="Seleccionar código" (ionChange)="cargarRegistros()">
+          <ion-select-option *ngFor="let ruta of rutasDisponibles" [value]="ruta">
+            {{ ruta }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <!-- Filtro de búsqueda -->
+    <ion-item>
+      <ion-input [(ngModel)]="valorFiltro" type="text" placeholder="Ingresa geocodigo o nombre"
+        (input)="cargarRegistros()"></ion-input>
+    </ion-item>
+
+    <!-- Registros -->
+    <div class="record-container" *ngIf="registros.length > 0">
+      <ion-card *ngFor="let registro of registros" (click)="irPredioUrbano(registro.GID)" button>
+        <ion-card-content>
+          <!-- Información relevante -->
+          <p><strong>Clave Catastral:</strong> {{ registro.CLAVE_CATASTRAL }}</p>
+          <p><strong>GID:</strong>{{ registro.GID }} </p>
+          <p><strong>Nombre:</strong> {{ registro.GPROANTE }}</p>
+          <p><strong>Calle Principal:</strong> {{ registro.GCALLEPRI }}</p>
+          <p><strong>Calle Secundaria:</strong> {{ registro.GCALLESECUN }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje de alerta si no se encontraron registros -->
+    <div class="footer" *ngIf="registros.length === 0 && rutaSeleccionada">
+      <ion-text>
+        <p>No se encontraron registros para la ruta seleccionada.</p>
+      </ion-text>
+    </div>
+  </div>
+</ion-content>

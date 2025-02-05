@@ -165,7 +165,9 @@ export class HomePage {
             localStorage.setItem('userRole', userRole);
 
             const rutas = response.user.RUTA ? [response.user.RUTA] : [];
+            const geocodigo = response.user.GEOCODIGO ? [response.user.GEOCODIGO] : [];
             localStorage.setItem('rutas', JSON.stringify(rutas));
+            localStorage.setItem('geocodigo', JSON.stringify(geocodigo));
 
             if (this.userRole === 'admin') {
               await this.showToast(`✅ Bienvenido ${this.username}`);

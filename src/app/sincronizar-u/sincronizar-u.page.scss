@@ -1,0 +1,49 @@
+.background-container {
+    background-image: url('/assets/img/fondo3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Previene el scroll */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    /* Fondo azul */
+
+    .icon-container {
+        margin-bottom: 20px;
+
+        .icon {
+            font-size: 80px;
+            color: #5478fd;
+            /* Azul claro */
+        }
+    }
+
+    .button-container {
+        background-color: #eae3f7;
+        /* Fondo morado claro */
+        border-radius: 20px;
+        padding: 20px;
+        width: 80%;
+
+        ion-button {
+            --border-radius: 10px;
+            --background: #5b3dc4;
+            /* Botones morados */
+            --background-hover: #4a32a3;
+            --color: #ffffff;
+            margin: 10px 0;
+        }
+    }
+}

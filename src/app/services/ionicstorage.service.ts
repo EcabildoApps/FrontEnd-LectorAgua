@@ -55,14 +55,14 @@ export class IonicstorageService {
   }
 
 
-async eliminarLecturas() {
-  try {
-    await this.storage.remove('LECTURAS'); 
-    console.log('Lecturas eliminadas correctamente');
-  } catch (error) {
-    console.error('Error al eliminar las lecturas:', error);
+  async eliminarLecturas() {
+    try {
+      await this.storage.remove('LECTURAS');
+      console.log('Lecturas eliminadas correctamente');
+    } catch (error) {
+      console.error('Error al eliminar las lecturas:', error);
+    }
   }
-}
 
 
   async showToast(message: string) {
@@ -369,5 +369,92 @@ async eliminarLecturas() {
     });
     await toast.present();
   }
+
+
+
+  async obtenerRegistrosPredios() {
+    try {
+      const listado = await this.listar();
+      // Buscar registros con clave 'LECTURAS'
+      const registrosLecturas = listado.find(item => item.k === 'PREDIOS');
+      if (!registrosLecturas) {
+        throw new Error('No se encontraron registros de predios.');
+      }
+
+      // Retornar los registros de 'LECTURAS' (se asume que 'data' es un array dentro de 'v')
+      return registrosLecturas.v.data;
+    } catch (error) {
+      console.error('Error al obtener registros de predios:', error);
+      throw new Error('No se pudieron obtener los registros de predios.');
+    }
+  }
+
+
+  async cargarPrediosConFiltroGeneral(ruta: string, valorFiltro: string = '') {
+    try {
+      const listado = await this.listar();
+      console.log('Listado completo:', listado);
+  
+      const registrosLecturas = listado.filter(item => item.k === 'PREDIOS');
+      console.log('Registros de predios:', registrosLecturas);
+  
+      if (registrosLecturas.length === 0) {
+        throw new Error('No se encontraron registros de predios.');
+      }
+  
+      const datosLecturas = registrosLecturas[0].v.data;
+      console.log('Datos de lecturas:', datosLecturas);
+  
+      let registrosFiltrados = datosLecturas.filter(item => item.GEOCODIGO === ruta);
+      console.log('Registros filtrados por GEOCODIGO:', registrosFiltrados);
+  
+      if (valorFiltro) {
+        registrosFiltrados = registrosFiltrados.filter(item =>
+          (item.GID && item.GID.toString().includes(valorFiltro)) ||
+          (item.CLAVE_CATASTRAL && item.CLAVE_CATASTRAL.toString().includes(valorFiltro))
+        );
+        console.log('Registros después de aplicar filtro adicional:', registrosFiltrados);
+      }
+  
+      return registrosFiltrados;
+    } catch (error) {
+      console.error('Error al cargar registros con filtros locales:', error);
+      throw new Error('Ocurrió un error al cargar los registros locales.');
+    }
+  }
+  
+
+  async guardarOActualizarPredio(predio: any) {
+    try {
+      const predios = await this.storage.get('PREDIOS');
+      const prediosArray = Array.isArray(predios) ? predios : [];
+
+      const predioExistente = prediosArray.find(item => item.IDPREDIOURBANO === predio.IDPREDIOURBANO);
+
+      if (predioExistente) {
+        // Actualizar el predio si existe
+        Object.assign(predioExistente, predio);
+      } else {
+        // Agregar un nuevo predio
+        prediosArray.push(predio);
+      }
+
+      await this.storage.set('PREDIOS', prediosArray);
+
+      this.presentToast('Predio guardado correctamente');
+    } catch (error) {
+      console.error('Error al guardar o actualizar el predio:', error);
+      this.presentToast('Ocurrió un error al guardar o actualizar el predio.');
+    }
+  }
+
+
+
+
+
+
+
+
+
 
 }

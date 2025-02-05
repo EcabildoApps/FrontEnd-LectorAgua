@@ -91,9 +91,18 @@ const routes: Routes = [
   {
     path: 'informacionP',
     loadChildren: () => import('./informacion-p/informacion-p.module').then( m => m.InformacionPPageModule)
-  },  {
+  },
+  {
+    path: 'informacionP/:GID',
+    loadChildren: () => import('./informacion-p/informacion-p.module').then( m => m.InformacionPPageModule)
+  },
+  {
     path: 'infraestructura',
     loadChildren: () => import('./infraestructura/infraestructura.module').then( m => m.InfraestructuraPageModule)
+  },
+  {
+    path: 'lista-purbanos',
+    loadChildren: () => import('./lista-purbanos/lista-purbanos.module').then( m => m.ListaPurbanosPageModule)
   },
 
 
