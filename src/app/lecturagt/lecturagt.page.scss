@@ -100,36 +100,64 @@
     flex-direction: column;
     padding: 10px;
     background-color: #f4f5f8;
+    position: relative;
 }
 
 /* Estilos para los registros en modo de edición */
 .record-container ion-card.edit-mode {
     background-color: #e0e0e0;
-    /* Cambiar color de fondo cuando está en modo de edición */
     border: 1px solid #000;
     cursor: grab;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    /* Animación suave al mover los registros */
 }
 
+/* Registros */
 .record-container ion-card {
     margin-bottom: 15px;
     border: 1px solid #3d7ff3;
     --border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    /* Animación suave al cambiar de posición */
 }
 
+/* Añadir un efecto de "arrastre" suave para cuando las tarjetas son seleccionadas */
+.record-container ion-card:active {
+    opacity: 0.7;
+    /* Reducción de opacidad al arrastrar */
+}
+
+/* Estilo para el contenido de la tarjeta */
 .record-container ion-card-content {
     font-size: 14px;
     line-height: 1.6;
     color: #000;
 }
 
+/* Pie de la página */
 .footer {
     margin-top: 20px;
     display: flex;
     justify-content: center;
 }
 
+/* Botón flotante */
 ion-fab-button {
     --background: #3d7ff3;
-    /* Color azul */
     --color: white;
+}
+
+/* Transición de las tarjetas cuando se arrastran */
+.record-container ion-card {
+    position: relative;
+    transition: transform 0.3s ease-out;
+    /* Animación suave cuando se mueve */
+}
+
+/* Estilo cuando el modo de edición está activado */
+.record-container ion-card.edit-mode {
+    background-color: #e0e0e0;
+    border: 1px solid #000;
+    cursor: grab;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
