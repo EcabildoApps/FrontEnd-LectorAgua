@@ -23,10 +23,6 @@ export class LecturagtPage implements OnInit {
   registros: any[] = [];
   idCuenta: number | null = null;
 
-  dragging: boolean = false;
-  dragIndex: number | null = null;
-  offsetX: number = 0;
-  offsetY: number = 0;
 
   constructor(
     private toastController: ToastController,
@@ -116,29 +112,6 @@ export class LecturagtPage implements OnInit {
     this.cargarRegistros();
   }
 
-  startDrag(event: MouseEvent, index: number) {
-    this.dragging = true;
-    this.dragIndex = index;
-    this.offsetX = event.clientX;
-    this.offsetY = event.clientY;
-  }
 
-  draggingCard(event: MouseEvent) {
-    if (this.dragging && this.dragIndex !== null) {
-      this.offsetX = event.clientX;
-      this.offsetY = event.clientY;
-    }
-  }
-
-  stopDrag() {
-    this.dragging = false;
-    if (this.dragIndex !== null) {
-      // Cambiar la posición de los registros en la lista
-      const draggedItem = this.registros[this.dragIndex];
-      this.registros = this.registros.filter((_, i) => i !== this.dragIndex);
-      this.registros.unshift(draggedItem);  // Colocar el item en la nueva posición
-    }
-    this.dragIndex = null;
-  }
 
 }
