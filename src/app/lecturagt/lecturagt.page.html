@@ -1,13 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Toma Lectura</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-
 <ion-content>
   <div class="container">
     <!-- Ruta Actual -->
@@ -29,8 +19,9 @@
 
     <!-- Registros -->
     <div class="record-container" *ngIf="registros.length > 0">
-      <ion-card *ngFor="let registro of registros; let i = index" class="draggable-item"
-        (mousedown)="onDragStart($event, i)" (click)="irATomaLectura(registro.IDCUENTA)" button>
+      <ion-card *ngFor="let registro of registros; let i = index" (mousedown)="startDrag($event, i)"
+        (mousemove)="draggingCard($event)" (mouseup)="stopDrag()" [class.dragging]="dragging"
+        [style.top.px]="dragging ? offsetY : 0" [style.left.px]="dragging ? offsetX : 0" button>
         <ion-card-content>
           <p><strong>Nro. Sec:</strong> {{ registro.SECTOR }} <strong>Nro. Cuenta:</strong> {{ registro.NRO_CUENTA }}
           </p>

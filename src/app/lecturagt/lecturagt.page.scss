@@ -99,22 +99,40 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+    background-color: #f4f5f8;
 }
 
+/* Estilo para el contenedor de los cards */
 .record-container {
     margin-top: 20px;
+    position: relative;
+    /* Para que el cambio de posición funcione */
 }
 
-.draggable-item {
+/* Estilo para el card arrastrado */
+ion-card.dragging {
+    cursor: grabbing;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    /* Para resaltar el card cuando se mueve */
+}
+
+ion-card {
     margin-bottom: 15px;
     border: 1px solid #3d7ff3;
     --border-radius: 10px;
-    cursor: grab;
-    /* Mostrar cursor como 'agarrar' */
+    position: relative;
 }
 
-.draggable-item.dragging {
-    opacity: 0.5;
-    cursor: grabbing;
-    /* Mostrar cursor como 'agarrado' */
+ion-card-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+
+    p {
+        margin: 5px 0;
+    }
+
+    strong {
+        color: #3d7ff3;
+    }
 }
