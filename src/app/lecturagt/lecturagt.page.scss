@@ -102,37 +102,34 @@
     background-color: #f4f5f8;
 }
 
-/* Estilo para el contenedor de los cards */
-.record-container {
-    margin-top: 20px;
-    position: relative;
-    /* Para que el cambio de posición funcione */
+/* Estilos para los registros en modo de edición */
+.record-container ion-card.edit-mode {
+    background-color: #e0e0e0;
+    /* Cambiar color de fondo cuando está en modo de edición */
+    border: 1px solid #000;
+    cursor: grab;
 }
 
-/* Estilo para el card arrastrado */
-ion-card.dragging {
-    cursor: grabbing;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    /* Para resaltar el card cuando se mueve */
-}
-
-ion-card {
+.record-container ion-card {
     margin-bottom: 15px;
     border: 1px solid #3d7ff3;
     --border-radius: 10px;
-    position: relative;
 }
 
-ion-card-content {
+.record-container ion-card-content {
     font-size: 14px;
     line-height: 1.6;
     color: #000;
+}
 
-    p {
-        margin: 5px 0;
-    }
+.footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
 
-    strong {
-        color: #3d7ff3;
-    }
+ion-fab-button {
+    --background: #3d7ff3;
+    /* Color azul */
+    --color: white;
 }

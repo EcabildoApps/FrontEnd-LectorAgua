@@ -29,7 +29,9 @@
 
     <!-- Registros -->
     <div class="record-container" *ngIf="registros.length > 0">
-      <ion-card *ngFor="let registro of registros" (click)="irATomaLectura(registro.IDCUENTA)" button>
+      <ion-card *ngFor="let registro of registros; let i = index" (click)="irATomaLectura(registro.IDCUENTA)" button
+        [ngClass]="{'edit-mode': isEditing}" [attr.draggable]="isEditing ? 'true' : null"
+        (dragstart)="onDragStart($event, i)" (dragover)="onDragOver($event)" (drop)="onDrop($event, i)">
         <ion-card-content>
           <p><strong>Nro. Sec:</strong> {{ registro.SECTOR }} <strong>Nro. Cuenta:</strong> {{ registro.NRO_CUENTA }}
           </p>
@@ -47,4 +49,11 @@
       </ion-text>
     </div>
   </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="toggleEditMode()">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

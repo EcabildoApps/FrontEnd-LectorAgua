@@ -23,6 +23,7 @@ export class LecturagtPage implements OnInit {
   registros: any[] = [];
   idCuenta: number | null = null;
 
+  isEditing: boolean = false; // Indicador de si estamos en modo edición
 
   constructor(
     private toastController: ToastController,
@@ -106,12 +107,42 @@ export class LecturagtPage implements OnInit {
     }
   }
 
-
   onInputChange() {
     // Cargar los registros con los filtros aplicados
     this.cargarRegistros();
   }
 
+  toggleEditMode() {
+    this.isEditing = !this.isEditing;
+    if (this.isEditing) {
+      this.presentToast('Ahora puedes modificar la posición de los registros.');
+    }
+  }
 
+  dragIndex: number | null = null; // Para almacenar el índice del elemento arrastrado
+
+  // Método que se llama cuando el usuario empieza a arrastrar un item
+  onDragStart(event: DragEvent, index: number) {
+    this.dragIndex = index;
+    event.dataTransfer?.setData('text/plain', index.toString());
+  }
+
+  // Evita el comportamiento por defecto para permitir el "drop"
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  // Método que maneja el "drop" (soltar) del registro en una nueva posición
+  onDrop(event: DragEvent, dropIndex: number) {
+    event.preventDefault();
+
+    if (this.dragIndex === null || this.dragIndex === dropIndex) return;
+
+    const draggedItem = this.registros[this.dragIndex];
+    this.registros.splice(this.dragIndex, 1);
+    this.registros.splice(dropIndex, 0, draggedItem);
+
+    this.dragIndex = null; // Resetea el índice
+  }
 
 }
