@@ -4,6 +4,8 @@ import { ToastController, NavController } from '@ionic/angular';
 import { IonicstorageService } from '../services/ionicstorage.service'; // Asegúrate de tener el servicio de IonicStorage importado
 import { ActivatedRoute } from '@angular/router';
 
+
+
 @Component({
   selector: 'app-lecturagt',
   templateUrl: './lecturagt.page.html',
@@ -19,6 +21,9 @@ export class LecturagtPage implements OnInit {
   rutasDisponibles: string[] = [];
   registros: any[] = [];
   idCuenta: number | null = null;
+
+  currentDragIndex: number | null = null; // Índice del registro que se está arrastrando
+  dragging: boolean = false; // Indicador de si se está arrastrando
 
   constructor(
     private toastController: ToastController,
@@ -107,4 +112,72 @@ export class LecturagtPage implements OnInit {
     // Cargar los registros con los filtros aplicados
     this.cargarRegistros();
   }
+
+  onDragStart(event: MouseEvent, index: number) {
+    this.currentDragIndex = index;
+    this.dragging = true;
+
+    const item = event.target as HTMLElement;
+    item.classList.add('dragging'); // Añadimos una clase para aplicar estilo
+
+    document.addEventListener('mousemove', this.onDragMove.bind(this));
+    document.addEventListener('mouseup', this.onDragEnd.bind(this));
+  }
+
+  // Mueve el elemento mientras se arrastra
+  onDragMove(event: MouseEvent) {
+    if (this.currentDragIndex === null || !this.dragging) return;
+
+    const draggedElement = document.querySelector('.dragging') as HTMLElement;
+    if (draggedElement) {
+      // Actualizamos la posición del elemento mientras lo arrastramos
+      draggedElement.style.position = 'absolute';
+      draggedElement.style.left = `${event.clientX - draggedElement.offsetWidth / 2}px`;
+      draggedElement.style.top = `${event.clientY - draggedElement.offsetHeight / 2}px`;
+    }
+  }
+
+  // Finaliza el arrastre
+  onDragEnd(event: MouseEvent) {
+    if (this.currentDragIndex === null) return;
+
+    const draggedElement = document.querySelector('.dragging') as HTMLElement;
+    if (draggedElement) {
+      draggedElement.classList.remove('dragging');
+      draggedElement.style.position = ''; // Limpiamos la posición
+
+      // Calculamos la nueva posición
+      const newIndex = this.getNewIndex(event.clientY);
+      if (newIndex !== this.currentDragIndex) {
+        // Si la posición ha cambiado, cambiamos el orden
+        const temp = this.registros[this.currentDragIndex];
+        this.registros[this.currentDragIndex] = this.registros[newIndex];
+        this.registros[newIndex] = temp;
+      }
+    }
+
+    // Limpiamos el estado
+    this.dragging = false;
+    this.currentDragIndex = null;
+
+    // Removemos los listeners
+    document.removeEventListener('mousemove', this.onDragMove.bind(this));
+    document.removeEventListener('mouseup', this.onDragEnd.bind(this));
+  }
+
+  // Función para determinar la nueva posición basada en la posición del mouse
+  getNewIndex(clientY: number): number {
+    const cards = document.querySelectorAll('.draggable-item');
+    let newIndex = this.currentDragIndex;
+
+    cards.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      if (clientY < rect.top + rect.height / 2 && clientY > rect.top) {
+        newIndex = index;
+      }
+    });
+
+    return newIndex;
+  }
+
 }

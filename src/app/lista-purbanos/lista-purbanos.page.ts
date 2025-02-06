@@ -16,7 +16,7 @@ export class ListaPurbanosPage implements OnInit {
   rutaSeleccionada: string = '';
   rutasDisponibles: string[] = [];
   registros: any[] = [];
-  GID: number | null = null;
+  PUR01CODI: number | null = null;
 
   constructor(
     private toastController: ToastController,
@@ -32,8 +32,8 @@ export class ListaPurbanosPage implements OnInit {
       this.rutasDisponibles = JSON.parse(rutasGuardadas); // Parseamos las rutas guardadas y las asignamos
     }
 
-    this.GID = Number(this.route.snapshot.paramMap.get('PREDIOS'));
-    console.log('ID PREDIO recibido:', this.GID);
+    this.PUR01CODI = Number(this.route.snapshot.paramMap.get('PREDIOS'));
+    console.log('ID PREDIO recibido:', this.PUR01CODI);
   }
 
   async cargarRegistros() {
@@ -60,8 +60,8 @@ export class ListaPurbanosPage implements OnInit {
     }
   }
 
-  async irPredioUrbano(GID: number) {
-    console.log('ID Predio seleccionada:', GID);
+  async irPredioUrbano(PUR01CODI: number) {
+    console.log('ID Predio seleccionada:', PUR01CODI);
 
     try {
       // Obtener los registros de la clave 'LECTURAS' del almacenamiento
@@ -74,11 +74,11 @@ export class ListaPurbanosPage implements OnInit {
       }
 
       // Buscar el registro con el IDCUENTA proporcionado
-      const registro = datosLecturas.data.find(item => item.GID === GID);
+      const registro = datosLecturas.data.find(item => item.PUR01CODI === PUR01CODI);
 
       if (registro) {
         console.log('Registro encontrado:', registro);
-        this.navCtrl.navigateForward(`/informacionP/${GID}`);
+        this.navCtrl.navigateForward(`/informacionP/${PUR01CODI}`);
       } else {
         console.error('No se encontró ningún registro con el ID proporcionado.');
         await this.presentToast('No se encontró el registro para esta cuenta.');

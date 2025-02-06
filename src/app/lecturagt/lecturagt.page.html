@@ -29,7 +29,8 @@
 
     <!-- Registros -->
     <div class="record-container" *ngIf="registros.length > 0">
-      <ion-card *ngFor="let registro of registros" (click)="irATomaLectura(registro.IDCUENTA)" button>
+      <ion-card *ngFor="let registro of registros; let i = index" class="draggable-item"
+        (mousedown)="onDragStart($event, i)" (click)="irATomaLectura(registro.IDCUENTA)" button>
         <ion-card-content>
           <p><strong>Nro. Sec:</strong> {{ registro.SECTOR }} <strong>Nro. Cuenta:</strong> {{ registro.NRO_CUENTA }}
           </p>

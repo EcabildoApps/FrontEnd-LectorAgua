@@ -93,11 +93,15 @@ const routes: Routes = [
     loadChildren: () => import('./informacion-p/informacion-p.module').then( m => m.InformacionPPageModule)
   },
   {
-    path: 'informacionP/:GID',
+    path: 'informacionP/:PUR01CODI',
     loadChildren: () => import('./informacion-p/informacion-p.module').then( m => m.InformacionPPageModule)
   },
   {
     path: 'infraestructura',
+    loadChildren: () => import('./infraestructura/infraestructura.module').then( m => m.InfraestructuraPageModule)
+  },
+  {
+    path: 'infraestructura/:PUR01CODI',
     loadChildren: () => import('./infraestructura/infraestructura.module').then( m => m.InfraestructuraPageModule)
   },
   {

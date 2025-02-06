@@ -13,7 +13,7 @@ import { EnviarlocalService } from '../services/enviarlocal.service';
 export class SincronizarUPage implements OnInit {
 
   geocodigosDisponibles: string[] = [];
-  predios: any[] = [];  // Variable para almacenar los datos de lecturas
+  predios: any[] = [];
 
 
   constructor(private http: HttpClient,
@@ -52,11 +52,10 @@ export class SincronizarUPage implements OnInit {
     }
   }
 
-
   async obtenerDatos() {
-
     const dominio = await this.ionicStorageService.rescatar('dominio');
     const puerto = await this.ionicStorageService.rescatar('port');
+
     if (!dominio || !puerto) {
       await this.showToast('Dominio o puerto no configurados.');
       return;
@@ -64,28 +63,39 @@ export class SincronizarUPage implements OnInit {
 
     const baseUrl = `http://${dominio}:${puerto}`;
 
-    const urlLecturas = `${baseUrl}/api/auth/prediosUrb?geocodigo=${this.geocodigosDisponibles}`;
+    const urlCatalogos = `${baseUrl}/api/auth/catalogo`;  // Endpoint de catálogos
+    const urlLecturas = `${baseUrl}/api/auth/prediosUrb?geocodigo=${this.geocodigosDisponibles}`;  // Endpoint de predios
 
     try {
-      const response = await this.http.get<any>(urlLecturas).toPromise();
+      // Primero obtenemos los catálogos
+      const responseCatalogos = await this.http.get<any>(urlCatalogos).toPromise();
+      if (responseCatalogos.data) {
+        await this.ionicStorageService.agregarConKey('CATALOGOS', responseCatalogos.data);  // Almacenamos los catálogos en IonicStorage
+        await this.showToast('Catálogos sincronizados correctamente.');
+      } else {
+        await this.showToast('No se encontraron catálogos.');
+      }
 
-      if (response.message && response.message.includes('No se encontraron predios')) {
+      // Luego obtenemos los predios
+      const responsePredios = await this.http.get<any>(urlLecturas).toPromise();
+      if (responsePredios.message && responsePredios.message.includes('No se encontraron predios')) {
         await this.showToast('No se encontraron predios para la ruta proporcionada.');
-      } else if (response.data) {
+      } else if (responsePredios.data) {
         await this.sincronizarTabla(
           urlLecturas,
           'predios',
           'PREDIO'
         );
-
-       
         await this.showToast('Datos sincronizados correctamente.');
       }
+
     } catch (error) {
       console.error('Error al sincronizar datos:', error);
       await this.showToast('Ocurrió un error al sincronizar los datos. Por favor, verifica la conexión al servidor.');
     }
   }
+
+
 
   private async sincronizarTabla(
     url: string,

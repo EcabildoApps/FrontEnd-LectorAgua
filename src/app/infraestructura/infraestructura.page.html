@@ -4,6 +4,10 @@
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title>Infraestructura y Servicios</ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de retroceso (flecha) al final -->
+      <ion-back-button defaultHref="/urbanos"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -19,52 +23,60 @@
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <ion-item>
-            <ion-label position="stacked" class="lb">Ocupación</ion-label>
-            <ion-select>
-              <ion-select-option value="edificado">EDIFICADO</ion-select-option>
+          <ion-item lines="full">
+            <ion-label position="floating">Ocupación</ion-label>
+            <ion-select [(ngModel)]="selectedOcupacion" interface="popover">
+              <ion-select-option *ngFor="let item of ocupacion" [value]="item.REN21CODI">
+                {{ item.REN21DESC }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked" class="lb">Tipo Terreno</ion-label>
-            <ion-select>
-              <ion-select-option value="seco">SECO</ion-select-option>
+            <ion-select [(ngModel)]="selectedTerreno">
+              <ion-select-option *ngFor="let item of terreno" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked" class="lb">Topografía</ion-label>
-            <ion-select>
-              <ion-select-option value="nivel">A NIVEL</ion-select-option>
+            <ion-select [(ngModel)]="selectedTopografia">
+              <ion-select-option *ngFor="let item of topografia" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked" class="lb">Localización</ion-label>
-            <ion-select>
-              <ion-select-option value="esquinero">ESQUINERO</ion-select-option>
+            <ion-select [(ngModel)]="selectedLocaliza">
+              <ion-select-option *ngFor="let item of localiza" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked" class="lb">Forma</ion-label>
-            <ion-select>
-              <ion-select-option value="regular">REGULAR</ion-select-option>
+            <ion-select [(ngModel)]="selectedForma">
+              <ion-select-option *ngFor="let item of forma" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked" class="lb">Vías Uso</ion-label>
-            <ion-select>
-              <ion-select-option value="vehicular">VEHICULAR</ion-select-option>
+            <ion-select [(ngModel)]="selectedViasUso">
+              <ion-select-option *ngFor="let item of viasuso" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked" class="lb">Vías Material</ion-label>
-            <ion-select>
-              <ion-select-option value="asfalto">ASFALTO</ion-select-option>
+            <ion-select [(ngModel)]="selectedViasMate">
+              <ion-select-option *ngFor="let item of viasmate" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-card-content>
@@ -82,42 +94,42 @@
           <ion-item class="services-item">
             <ion-icon name="water-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Agua</ion-label>
-            <ion-checkbox slot="end" checked></ion-checkbox>
+            <ion-checkbox slot="end" [(ngModel)]="aguaDisponible"></ion-checkbox>
           </ion-item>
 
           <!-- E. Eléctrica -->
           <ion-item class="services-item">
             <ion-icon name="flash-outline" slot="start" class="icon"></ion-icon>
             <ion-label>E. Eléctrica</ion-label>
-            <ion-checkbox slot="end" checked></ion-checkbox>
+            <ion-checkbox slot="end" [(ngModel)]="electricaDisponible"></ion-checkbox>
           </ion-item>
 
           <!-- Alcantarillado -->
           <ion-item class="services-item">
             <ion-icon name="rainy-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Alcantarillado</ion-label>
-            <ion-checkbox slot="end" checked></ion-checkbox>
+            <ion-checkbox slot="end" [(ngModel)]="alcantarilladoDisponible"></ion-checkbox>
           </ion-item>
 
           <!-- Aseo Calle -->
           <ion-item class="services-item">
             <ion-icon name="brush-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Aseo Calle</ion-label>
-            <ion-checkbox slot="end" checked></ion-checkbox>
+            <ion-checkbox slot="end" [(ngModel)]="aseoCalleDisponible"></ion-checkbox>
           </ion-item>
 
           <!-- Acera -->
           <ion-item class="services-item">
             <ion-icon name="walk-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Acera</ion-label>
-            <ion-checkbox slot="end" checked></ion-checkbox>
+            <ion-checkbox slot="end" [(ngModel)]="aceraDisponible"></ion-checkbox>
           </ion-item>
 
           <!-- Bordillo -->
           <ion-item class="services-item">
             <ion-icon name="cube-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Bordillo</ion-label>
-            <ion-checkbox slot="end" checked></ion-checkbox>
+            <ion-checkbox slot="end" [(ngModel)]="bordilloDisponible"></ion-checkbox>
           </ion-item>
 
           <!-- Recolección Basura -->
@@ -143,52 +155,25 @@
         <ion-item class="infrastructure-item">
           <ion-icon name="people-outline" slot="start" class="icon"></ion-icon>
           <ion-label>Número de Personas</ion-label>
-          <ion-input value="0" class="input-small"></ion-input>
+          <ion-input [(ngModel)]="selectedNumeroPersonas" class="input-small"></ion-input>
         </ion-item>
 
         <!-- Área T. Documentos -->
         <ion-item class="infrastructure-item">
           <ion-icon name="document-text-outline" slot="start" class="icon"></ion-icon>
           <ion-label>Área T. Documentos</ion-label>
-          <ion-input value="261.75" class="input-small"></ion-input>
+          <ion-input [(ngModel)]="selectedAreaDocumentos" class="input-small"></ion-input>
         </ion-item>
 
         <!-- Frente Principal -->
         <ion-item class="infrastructure-item">
           <ion-icon name="resize-outline" slot="start" class="icon"></ion-icon>
           <ion-label>Frente Principal</ion-label>
-          <ion-input value="10.5" class="input-small"></ion-input>
-        </ion-item>
-
-        <!-- Fondo Relativo -->
-        <ion-item class="infrastructure-item">
-          <ion-icon name="expand-outline" slot="start" class="icon"></ion-icon>
-          <ion-label>Fondo Relativo</ion-label>
-          <ion-input value="25.36" class="input-small"></ion-input>
-        </ion-item>
-
-        <!-- Frente Fondo -->
-        <ion-item class="infrastructure-item">
-          <ion-icon name="grid-outline" slot="start" class="icon"></ion-icon>
-          <ion-label>Frente Fondo</ion-label>
-          <ion-input value="1" class="input-small"></ion-input>
-        </ion-item>
-
-        <!-- Coordenada X -->
-        <ion-item class="infrastructure-item">
-          <ion-icon name="location-outline" slot="start" class="icon"></ion-icon>
-          <ion-label>Coordenada X</ion-label>
-          <ion-input value="773254.46965495" class="input-small"></ion-input>
-        </ion-item>
-
-        <!-- Coordenada Y -->
-        <ion-item class="infrastructure-item">
-          <ion-icon name="location-outline" slot="start" class="icon"></ion-icon>
-          <ion-label>Coordenada Y</ion-label>
-          <ion-input value="965309.4783754" class="input-small"></ion-input>
+          <ion-input [(ngModel)]="selectedFrentePrincipal" class="input-small"></ion-input>
         </ion-item>
       </ion-card-content>
     </ion-card>
+
 
 
   </div>

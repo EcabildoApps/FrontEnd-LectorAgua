@@ -94,3 +94,27 @@
         }
     }
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.record-container {
+    margin-top: 20px;
+}
+
+.draggable-item {
+    margin-bottom: 15px;
+    border: 1px solid #3d7ff3;
+    --border-radius: 10px;
+    cursor: grab;
+    /* Mostrar cursor como 'agarrar' */
+}
+
+.draggable-item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    /* Mostrar cursor como 'agarrado' */
+}

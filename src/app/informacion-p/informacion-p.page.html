@@ -4,8 +4,13 @@
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title>Identificación Predial</ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de retroceso (flecha) al final -->
+      <ion-back-button defaultHref="/urbanos"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content [fullscreen]="true">
   <ion-card ion-card *ngFor="let registro of registros">
@@ -26,7 +31,7 @@
         </ion-row>
 
         <!-- Usamos *ngFor para iterar sobre los predios -->
-        <ion-row class="data-row" *ngFor="let predio of predios">
+        <ion-row class="data-row" *ngFor="let registro of registros">
           <ion-col size="1"><ion-text>{{ registro.GID }}</ion-text></ion-col>
           <ion-col size="1.5"><ion-text>{{ registro.PROVINCIA }}</ion-text></ion-col>
           <ion-col size="1.5"><ion-text>{{ registro.CANTON }}</ion-text></ion-col>
@@ -97,11 +102,13 @@
             <ion-text>{{ registro.GFONDRELA || 'N/A' }}</ion-text>
           </ion-col>
           <ion-col size="12" size-md="3">
-            <ion-label><ion-icon name="refresh" color="tertiary" slot="start"></ion-icon> <strong>Estado:</strong></ion-label>
+            <ion-label><ion-icon name="refresh" color="tertiary" slot="start"></ion-icon>
+              <strong>Estado:</strong></ion-label>
             <ion-text>{{ registro.GFONDRELA || 'N/A' }}</ion-text>
           </ion-col>
           <ion-col size="12" size-md="3">
-            <ion-label><ion-icon name="refresh" color="tertiary" slot="start"></ion-icon> <strong>Validacion:</strong></ion-label>
+            <ion-label><ion-icon name="refresh" color="tertiary" slot="start"></ion-icon>
+              <strong>Validacion:</strong></ion-label>
             <ion-text>{{ registro.GFONDRELA || 'N/A' }}</ion-text>
           </ion-col>
         </ion-row>
@@ -118,7 +125,20 @@
             </ion-list>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="full" color="primary" [routerLink]="['/infraestructura', registro.PUR01CODI]">
+              Ir a Infraestructura
+            </ion-button>
+          </ion-col>
+        </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="mostrarMensaje()">
+      <ion-icon name="construct"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

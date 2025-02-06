@@ -31,7 +31,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes), 
     FormsModule, 
     HttpClientModule,
-    IonicStorageModule.forRoot( )
+    IonicStorageModule.forRoot()
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Network], 
   bootstrap: [AppComponent],

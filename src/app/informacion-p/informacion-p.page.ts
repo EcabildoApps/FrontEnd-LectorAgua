@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { IonicstorageService } from '../services/ionicstorage.service';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-informacion-p',
@@ -11,22 +13,23 @@ import { Router } from '@angular/router';
 })
 export class InformacionPPage implements OnInit {
 
-  predios: any[] = [];  // Esta variable contendrá los predios
-  GID: number = 0;
+  predios: any[] = [];
+  PUR01CODI: number = 0;
   registros: any[] = [];
 
   constructor(private toastController: ToastController,
     private router: Router,
-    private ionicStorageService: IonicstorageService) { }
+    private ionicStorageService: IonicstorageService,
+    private alertController: AlertController) { }
 
   async ngOnInit() {
     try {
       const currentUrl = this.router.url;
       const urlSegments = currentUrl.split('/');
       const idFromUrl = urlSegments[urlSegments.length - 1];
-      this.GID = parseInt(idFromUrl, 10);
+      this.PUR01CODI = parseInt(idFromUrl, 10);
 
-      if (isNaN(this.GID)) {
+      if (isNaN(this.PUR01CODI)) {
         await this.presentToast('Error: El ID de cuenta no es válido.');
         return;
       }
@@ -44,7 +47,7 @@ export class InformacionPPage implements OnInit {
       console.log('Registros de predioS:', registrosLecturas);
 
       // Filtrar registros por ID de cuenta
-      const registrosFiltrados = registrosLecturas.filter(registro => registro.GID === this.GID);
+      const registrosFiltrados = registrosLecturas.filter(registro => registro.PUR01CODI === this.PUR01CODI);
 
       if (registrosFiltrados.length > 0) {
         this.registros = registrosFiltrados;
@@ -68,5 +71,15 @@ export class InformacionPPage implements OnInit {
       color: 'primary',
     });
     toast.present();
+  }
+
+  async mostrarMensaje() {
+    const alert = await this.alertController.create({
+      header: 'Construcción',
+      message: 'Se va a abrir el módulo de construcción.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 }

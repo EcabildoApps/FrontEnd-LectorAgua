@@ -394,20 +394,20 @@ export class IonicstorageService {
     try {
       const listado = await this.listar();
       console.log('Listado completo:', listado);
-  
+
       const registrosLecturas = listado.filter(item => item.k === 'PREDIOS');
       console.log('Registros de predios:', registrosLecturas);
-  
+
       if (registrosLecturas.length === 0) {
         throw new Error('No se encontraron registros de predios.');
       }
-  
+
       const datosLecturas = registrosLecturas[0].v.data;
       console.log('Datos de lecturas:', datosLecturas);
-  
+
       let registrosFiltrados = datosLecturas.filter(item => item.GEOCODIGO === ruta);
       console.log('Registros filtrados por GEOCODIGO:', registrosFiltrados);
-  
+
       if (valorFiltro) {
         registrosFiltrados = registrosFiltrados.filter(item =>
           (item.GID && item.GID.toString().includes(valorFiltro)) ||
@@ -415,14 +415,14 @@ export class IonicstorageService {
         );
         console.log('Registros después de aplicar filtro adicional:', registrosFiltrados);
       }
-  
+
       return registrosFiltrados;
     } catch (error) {
       console.error('Error al cargar registros con filtros locales:', error);
       throw new Error('Ocurrió un error al cargar los registros locales.');
     }
   }
-  
+
 
   async guardarOActualizarPredio(predio: any) {
     try {
@@ -447,6 +447,26 @@ export class IonicstorageService {
       this.presentToast('Ocurrió un error al guardar o actualizar el predio.');
     }
   }
+
+  async obtenerCatalogos() {
+    try {
+      const catalogos = await this.storage.get('CATALOGOS');
+      return catalogos ? catalogos : { // Si no existen catálogos, devolver un objeto vacío con array.
+        forma: [],
+        localiza: [],
+        ocupa: [],
+        terreno: [],
+        topografia: [],
+        viasmate: [],
+        viasuso: []
+      };
+    } catch (error) {
+      console.error('Error al obtener catálogos:', error);
+      throw new Error('No se pudieron obtener los catálogos.');
+    }
+  }
+
+
 
 
 
