@@ -1,16 +1,24 @@
-/* Fondo y Contenedor Principal */
-.background-container {
-    background-image: url('/assets/img/fondo2.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 95vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 16px;
+    height: auto;
 }
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    height: auto;
+}
+
+
+
+/* Otros estilos ya definidos en tu código */
+
 
 /* Logo */
 .logo-container {
@@ -20,7 +28,8 @@
 }
 
 .logo-container ion-icon {
-    font-size: 10vw; /* Ajuste dinámico basado en el tamaño de la pantalla */
+    font-size: 10vw;
+    /* Ajuste dinámico basado en el tamaño de la pantalla */
     width: 10vw;
     height: 10vw;
 }
@@ -28,7 +37,8 @@
 /* Grid de Tarjetas */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(1, 1fr); /* Por defecto, 1 columna en pantallas pequeñas */
+    grid-template-columns: repeat(1, 1fr);
+    /* Por defecto, 1 columna en pantallas pequeñas */
     gap: 15px;
     padding: 10px;
     width: 100%;
@@ -60,37 +70,44 @@
 }
 
 .custom-card ion-icon {
-    font-size: 5vw; /* Ajuste de tamaño de icono basado en el tamaño de la pantalla */
+    font-size: 5vw;
+    /* Ajuste de tamaño de icono basado en el tamaño de la pantalla */
     margin-bottom: 10px;
 }
 
 /* Tablets: 2 columnas */
 @media (min-width: 481px) and (max-width: 1024px) {
     .logo-container ion-icon {
-        font-size: 15vw; /* Tamaño más grande para icono en tablet */
+        font-size: 15vw;
+        /* Tamaño más grande para icono en tablet */
     }
 
     .grid-container {
-        grid-template-columns: repeat(2, 1fr); /* Dos columnas en tablets */
+        grid-template-columns: repeat(2, 1fr);
+        /* Dos columnas en tablets */
     }
 
     .custom-card ion-card-header {
-        font-size: 1.5rem; /* Aumentar el tamaño de los textos */
+        font-size: 1.5rem;
+        /* Aumentar el tamaño de los textos */
     }
 
     .custom-card ion-icon {
-        font-size: 7vw; /* Iconos más grandes en tablets */
+        font-size: 7vw;
+        /* Iconos más grandes en tablets */
     }
 }
 
 /* Pantallas grandes (3 columnas) */
 @media (min-width: 1025px) {
     .grid-container {
-        grid-template-columns: repeat(3, 1fr); /* Tres columnas en pantallas grandes */
+        grid-template-columns: repeat(3, 1fr);
+        /* Tres columnas en pantallas grandes */
     }
 
     .logo-container ion-icon {
-        font-size: 8vw; /* Iconos más pequeños en pantallas grandes */
+        font-size: 8vw;
+        /* Iconos más pequeños en pantallas grandes */
     }
 
     .custom-card ion-card-header {
@@ -98,6 +115,7 @@
     }
 
     .custom-card ion-icon {
-        font-size: 5vw; /* Iconos más pequeños en pantallas grandes */
+        font-size: 5vw;
+        /* Iconos más pequeños en pantallas grandes */
     }
 }

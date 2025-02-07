@@ -1,4 +1,22 @@
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 16px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
 .container {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     padding: 10px;

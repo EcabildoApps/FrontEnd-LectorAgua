@@ -1,67 +1,118 @@
-/* Estilos generales */
+/* Estilo para el contenedor general */
+ion-header {
+  --background: #007bff;
+  --color: white;
+  padding-top: 16px;
+  height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+  --background: #007bff;
+  --color: white;
+  padding-top: 8px;
+  padding-bottom: 16px;
+  height: auto;
+}
+
+
+ion-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+/* Estilos generales para el contenido */
 ion-content {
-    --background: #f4f4f4;
-    padding: 10px;
+  --background: #f8f9fa;
+}
+
+/* Grid de formulario */
+ion-grid {
+  padding: 16px;
+  margin-top: 20px;
+}
+
+/* Diseño responsivo */
+@media (min-width: 768px) {
+  ion-col {
+    padding-left: 16px;
+    padding-right: 16px;
   }
-  
-  h2 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #3d7ff3;
-    background-color: #cce7ff;
-    padding: 10px;
-    margin-top: 15px;
-    border-radius: 5px;
+}
+
+/* Estilo para los inputs de texto y numéricos */
+ion-input {
+  --background: #fff;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Estilo para ion-select */
+ion-select {
+  --background: #f9f9f9;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Estilo para las opciones dentro del ion-select */
+ion-select-option {
+  font-size: 1.2rem;
+}
+
+/* Estilo para ion-label */
+ion-label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Títulos */
+h2 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+/* Estilo para el ion-fab (botón flotante) */
+ion-fab {
+  margin-bottom: 32px;
+}
+
+/* Estilos para el ion-fab-button */
+ion-fab-button {
+  --background: #007bff;
+}
+
+/* Diseño responsive */
+@media (max-width: 767px) {
+  ion-col {
+    padding-left: 8px;
+    padding-right: 8px;
   }
-  
-  /* Estilos de los labels */
+
+  /* Ajuste para el contenido en pantallas más pequeñas */
   ion-label {
     font-size: 1rem;
-    font-weight: bold;
-    color: #333;
   }
-  
-  /* Estilos para los selects y inputs */
+
   ion-select,
   ion-input {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: white;
-    padding: 8px;
     font-size: 1rem;
   }
-  
-  /* Asegurar el tamaño adecuado en tablets y móviles */
-  ion-grid {
-    width: 100%;
+
+  /* El botón flotante se ajusta en pantallas más pequeñas */
+  ion-fab {
+    margin-bottom: 16px;
   }
-  
-  /* Espaciado entre filas */
-  ion-row {
-    margin-bottom: 10px;
-  }
-  
-  /* Ajustes para tablets */
-  @media screen and (min-width: 768px) {
-    h2 {
-      font-size: 1.6rem;
-    }
-    
-    ion-label {
-      font-size: 1.2rem;
-    }
-  
-    ion-select,
-    ion-input {
-      font-size: 1.1rem;
-    }
-  }
-  
-  /* Ajustes para pantallas grandes */
-  @media screen and (min-width: 1024px) {
-    ion-grid {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-  }
-  
+}

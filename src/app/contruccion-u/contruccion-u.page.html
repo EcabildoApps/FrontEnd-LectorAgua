@@ -1,6 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
     <ion-title>Construcción</ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de retroceso (flecha) al final -->
+      <ion-back-button defaultHref="/urbanos"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,7 +29,7 @@
         <ion-input type="number" [(ngModel)]="bloque.bloque"></ion-input>
       </ion-col>
       <ion-col size="3">
-        <ion-label>Año. Construccion</ion-label>
+        <ion-label>Año Const.</ion-label>
         <ion-input type="number" [(ngModel)]="bloque.bloque"></ion-input>
       </ion-col>
     </ion-row>
@@ -175,6 +182,43 @@
         </ion-select>
       </ion-col>
     </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <h2>Instalaciones</h2>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-label>Sanitaria</ion-label>
+        <ion-select [(ngModel)]="acabados.ventanas">
+          <ion-select-option value="06-Hierro">51-Canalizacion Combinado</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label>Nro. Baños</ion-label>
+        <ion-select [(ngModel)]="acabados.closets">
+          <ion-select-option value="01-No tiene">56-Dos Baños</ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-label>Electricas</ion-label>
+        <ion-select [(ngModel)]="acabados.ventanas">
+          <ion-select-option value="06-Hierro">62-Empotradas</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label>Especiales</ion-label>
+        <ion-select [(ngModel)]="acabados.closets">
+          <ion-select-option value="01-No tiene"></ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
 
     <!-- Botón de Guardado -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">

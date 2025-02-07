@@ -1,3 +1,25 @@
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 16px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
+ion-content {
+   margin-top: 20px;
+}
+
+/* Estilo para los ion-cards */
 ion-card {
     margin: 12px;
     padding: 15px;
@@ -6,8 +28,8 @@ ion-card {
     background: #ffffff;
 }
 
+/* Estilo de la tabla */
 .predial-grid {
-
     text-align: center;
     font-size: 14px;
     margin-bottom: 15px;
@@ -30,6 +52,7 @@ ion-col {
     padding: 8px;
 }
 
+/* Estilo de los labels y textos */
 ion-label {
     font-weight: bold;
     color: #333;
@@ -44,33 +67,13 @@ ion-text {
     color: #555;
 }
 
-.custom-icon-color {
-    color: #4CAF50;
-    /* Verde */
-}
-
-.custom-icon-danger {
-    color: #F44336;
-    /* Rojo */
-}
-
-.custom-icon-warning {
-    color: #FF9800;
-    /* Naranja */
-}
-
-.custom-icon-info {
-    color: #2196F3;
-    /* Azul */
-}
-
 /* Ajustes responsivos para pantallas pequeñas */
 @media screen and (max-width: 480px) {
     .predial-grid {
         font-size: 10px;
     }
 
-    /* Hacer las columnas más pequeñas en móviles */
+    /* Ajuste de las columnas en pantallas pequeñas */
     ion-col {
         padding: 5px;
         font-size: 12px;
@@ -79,16 +82,12 @@ ion-text {
     .header-row ion-col {
         font-size: 10px;
         padding: 3px;
-        /* Reducir la fuente en la cabecera */
     }
 
-    /* Para la tabla en móviles, hacer las columnas más flexibles */
     .predial-grid ion-col {
         width: auto;
         text-align: left;
     }
-
-
 
     .header-row ion-col,
     .data-row ion-col {
@@ -97,13 +96,10 @@ ion-text {
         padding: 3px;
     }
 
-    /* Ajuste de los íconos */
     ion-icon {
         font-size: 16px;
-        /* Reducir el tamaño de los iconos en pantallas pequeñas */
     }
 
-    /* Asegurar que las columnas no desborden */
     ion-row {
         display: flex;
         flex-wrap: wrap;
@@ -111,7 +107,6 @@ ion-text {
 
     ion-col {
         width: 100%;
-        /* Hacer que cada columna ocupe el 100% del ancho disponible */
     }
 }
 
@@ -119,18 +114,14 @@ ion-text {
 @media screen and (min-width: 481px) and (max-width: 1024px) {
     .predial-grid {
         font-size: 13px;
-        /* Un poco más grande que en móviles */
     }
 
-    /* Las columnas se expanden un poco más en tabletas */
     ion-col {
         padding: 8px;
     }
 
-    /* Iconos más grandes */
     ion-icon {
         font-size: 18px;
-        /* Aumentar tamaño de los iconos en tabletas */
     }
 }
 
@@ -138,11 +129,62 @@ ion-text {
 @media screen and (min-width: 1025px) {
     .predial-grid {
         font-size: 14px;
-        /* Tamaño de fuente original */
     }
 
-    /* Mejor distribución en pantallas grandes */
     ion-col {
         padding: 10px;
+    }
+}
+
+/* Estilo para el botón flotante */
+ion-fab-button {
+    --background: #3880ff;
+}
+
+/* Estilo de la caja de opciones (ventana emergente) */
+.opciones {
+  display: none;
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  padding: 10px;
+}
+
+
+.opciones.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilo para los botones dentro de la ventana emergente */
+ion-button {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+
+/* Animación para la ventana emergente */
+.opciones.show {
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+.opciones.show {
+    display: block;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translate(-50%, 50%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, 0);
+        opacity: 1;
     }
 }

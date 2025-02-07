@@ -135,10 +135,22 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary" (click)="mostrarMensaje()">
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="mostrarOpciones()">
       <ion-icon name="construct"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <!-- Ventana emergente con los botones -->
+  <div [ngClass]="{ 'opciones': true, 'show': mostrarBotones }">
+    <ion-button expand="full" color="primary" (click)="accion('agregar')">
+      Agregar Construcción
+    </ion-button>
+    <ion-button expand="full" color="success" (click)="accion('actualizar')">
+      Actualizar Construcción
+    </ion-button>
+  </div>
+
 
 </ion-content>

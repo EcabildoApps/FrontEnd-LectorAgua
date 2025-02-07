@@ -16,11 +16,13 @@ export class InformacionPPage implements OnInit {
   predios: any[] = [];
   PUR01CODI: number = 0;
   registros: any[] = [];
+  mostrarBotones: boolean = false;
+
 
   constructor(private toastController: ToastController,
     private router: Router,
     private ionicStorageService: IonicstorageService,
-    private alertController: AlertController) { }
+    private alertController: AlertController,) { }
 
   async ngOnInit() {
     try {
@@ -73,21 +75,21 @@ export class InformacionPPage implements OnInit {
     toast.present();
   }
 
-  async mostrarMensaje() {
-    const alert = await this.alertController.create({
-      header: 'Construcción',
-      message: 'Se va a abrir el módulo de construcción.',
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            this.router.navigate(['/contruccion-u']);
-          }
-        }
-      ]
-    });
-  
-    await alert.present();
+  mostrarOpciones() {
+    this.mostrarBotones = !this.mostrarBotones;
   }
-  
+
+
+  accion(tipo: string) {
+    if (tipo === 'agregar') {
+      this.router.navigate(['/contruccion-u']);
+    } else if (tipo === 'actualizar') {
+      this.router.navigate(['/contruccion-u:id']);
+    }
+
+    // Después de hacer la acción, ocultar los botones nuevamente
+    this.mostrarBotones = false;
+  }
+
+
 }
