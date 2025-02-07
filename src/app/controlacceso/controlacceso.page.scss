@@ -1,11 +1,30 @@
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 16px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
 ion-content {
-    --background: transparent;
-    height: 100%;
+    --background: #f8f9fa;
+        height: 100%;
     overflow: hidden;
 }
 
+
+
 .form-container h2 {
-    color: #3880ff;
+    color: #ffffff;
     font-size: 6vw;
     /* Se ajusta el tamaño en función del ancho de la pantalla */
     font-weight: bold;
@@ -85,13 +104,13 @@ ion-select {
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    color: black;
+    color: rgb(255, 255, 255);
 }
 
 .connect-button ion-icon {
     margin-left: 8px;
     font-size: 20px;
-    color: black;
+    color: rgb(255, 255, 255);
 }
 
 .connect-button:hover {
@@ -106,11 +125,11 @@ ion-select {
 ion-buttons[slot="end"] {
     display: flex;
     align-items: center;
-    color: black;
+    color: rgb(255, 255, 255);
 }
 
 ion-icon[name="lock-closed"] {
-    color: black;
+    color: rgb(255, 255, 255);
     font-size: 24px;
 }
 

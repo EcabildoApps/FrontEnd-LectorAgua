@@ -1,3 +1,20 @@
+/* Estilo para el contenedor general */
+ion-header {
+  --background: #007bff;
+  --color: white;
+  padding-top: 16px;
+  height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+  --background: #007bff;
+  --color: white;
+  padding-top: 8px;
+  padding-bottom: 16px;
+  height: auto;
+}
+
 ion-content {
   --background: transparent;
   height: 100%;
@@ -71,13 +88,13 @@ ion-select {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  color: black;
+  color: rgb(255, 255, 255);
 }
 
 .connect-button ion-icon {
   margin-left: 8px;
   font-size: 20px;
-  color: black;
+  color: rgb(255, 255, 255);
 }
 
 .connect-button:hover {
