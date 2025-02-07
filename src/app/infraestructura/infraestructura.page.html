@@ -125,19 +125,19 @@
             <ion-checkbox slot="end" [(ngModel)]="aceraDisponible"></ion-checkbox>
           </ion-item>
 
-          <!-- Bordillo -->
+          <!-- Recolección Basura -->
           <ion-item class="services-item">
             <ion-icon name="cube-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Bordillo</ion-label>
             <ion-checkbox slot="end" [(ngModel)]="bordilloDisponible"></ion-checkbox>
           </ion-item>
 
-          <!-- Recolección Basura -->
           <ion-item class="services-item">
             <ion-icon name="trash-outline" slot="start" class="icon"></ion-icon>
             <ion-label>Recolección Basura</ion-label>
-            <ion-input value="Sí tiene" class="input-small"></ion-input>
+            <ion-checkbox slot="end" [(ngModel)]="recoleccionBasura"></ion-checkbox>
           </ion-item>
+
         </ion-card-content>
       </ion-card>
 
@@ -172,6 +172,9 @@
           <ion-input [(ngModel)]="selectedFrentePrincipal" class="input-small"></ion-input>
         </ion-item>
       </ion-card-content>
+      <ion-button expand="full" color="primary" (click)="guardarCambios()">
+        Guardar Cambios
+      </ion-button>
     </ion-card>
 
 

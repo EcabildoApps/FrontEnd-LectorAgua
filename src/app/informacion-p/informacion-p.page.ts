@@ -64,6 +64,18 @@ export class InformacionPPage implements OnInit {
     }
   }
 
+  async guardarCambios() {
+    try {
+      for (const registro of this.registros) {
+        await this.ionicStorageService.guardarOActualizarPredio(registro);
+      }
+      await this.presentToast('Cambios guardados correctamente.');
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error);
+      await this.presentToast('Ocurrió un error al guardar los cambios.');
+    }
+  }
+
 
   async presentToast(message: string) {
     const toast = await this.toastController.create({

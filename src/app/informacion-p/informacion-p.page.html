@@ -118,11 +118,26 @@
           <ion-col>
             <ion-label>📍 <strong>Linderos:</strong></ion-label>
             <ion-list>
-              <ion-item>{{ registro.GCALL1 || 'N/A' }}</ion-item>
-              <ion-item>{{ registro.GCALL2 || 'N/A' }}</ion-item>
-              <ion-item>{{ registro.GCALL3 || 'N/A' }}</ion-item>
-              <ion-item>{{ registro.GCALL4 || 'N/A' }}</ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="registro.GCALL1" placeholder="N/A"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="registro.GCALL2" placeholder="N/A"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="registro.GCALL3" placeholder="N/A"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="registro.GCALL4" placeholder="N/A"></ion-input>
+              </ion-item>
             </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="full" color="primary" (click)="guardarCambios()">
+              Guardar y Actualizar
+            </ion-button>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -132,11 +147,12 @@
             </ion-button>
           </ion-col>
         </ion-row>
+
       </ion-grid>
     </ion-card-content>
   </ion-card>
 
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="mostrarOpciones()">
       <ion-icon name="construct"></ion-icon>
     </ion-fab-button>
@@ -147,7 +163,7 @@
     <ion-button expand="full" color="primary" (click)="accion('agregar')">
       Agregar Construcción
     </ion-button>
-    <ion-button expand="full" color="success" (click)="accion('actualizar')">
+    <ion-button expand="full" color="secondary" (click)="accion('actualizar')">
       Actualizar Construcción
     </ion-button>
   </div>

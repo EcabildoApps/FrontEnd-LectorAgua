@@ -426,21 +426,24 @@ export class IonicstorageService {
 
   async guardarOActualizarPredio(predio: any) {
     try {
-      const predios = await this.storage.get('PREDIOS');
-      const prediosArray = Array.isArray(predios) ? predios : [];
-
-      const predioExistente = prediosArray.find(item => item.IDPREDIOURBANO === predio.IDPREDIOURBANO);
-
+      // Obtener la estructura completa de "PREDIOS"
+      const prediosStorage = await this.storage.get('PREDIOS');
+      const prediosData = prediosStorage ? prediosStorage.data : [];
+  
+      // Buscar si el predio ya existe en la lista
+      const predioExistente = prediosData.find(item => item.IDPREDIOURBANO === predio.IDPREDIOURBANO);
+  
       if (predioExistente) {
-        // Actualizar el predio si existe
+        // Actualizar el predio existente
         Object.assign(predioExistente, predio);
       } else {
         // Agregar un nuevo predio
-        prediosArray.push(predio);
+        prediosData.push(predio);
       }
-
-      await this.storage.set('PREDIOS', prediosArray);
-
+  
+      // Guardar la estructura completa de nuevo en el almacenamiento
+      await this.storage.set('PREDIOS', { nombreTabla: 'predios', data: prediosData });
+  
       this.presentToast('Predio guardado correctamente');
     } catch (error) {
       console.error('Error al guardar o actualizar el predio:', error);
