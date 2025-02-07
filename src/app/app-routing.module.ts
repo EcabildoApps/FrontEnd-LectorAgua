@@ -107,7 +107,11 @@ const routes: Routes = [
   {
     path: 'lista-purbanos',
     loadChildren: () => import('./lista-purbanos/lista-purbanos.module').then( m => m.ListaPurbanosPageModule)
+  },  {
+    path: 'contruccion-u',
+    loadChildren: () => import('./contruccion-u/contruccion-u.module').then( m => m.ContruccionUPageModule)
   },
+
 
 
 

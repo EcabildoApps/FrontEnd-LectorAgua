@@ -77,9 +77,17 @@ export class InformacionPPage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Construcción',
       message: 'Se va a abrir el módulo de construcción.',
-      buttons: ['OK']
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.router.navigate(['/contruccion-u']);
+          }
+        }
+      ]
     });
-
+  
     await alert.present();
   }
+  
 }

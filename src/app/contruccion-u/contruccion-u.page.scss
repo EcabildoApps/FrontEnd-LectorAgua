@@ -1,0 +1,67 @@
+/* Estilos generales */
+ion-content {
+    --background: #f4f4f4;
+    padding: 10px;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #3d7ff3;
+    background-color: #cce7ff;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+  }
+  
+  /* Estilos de los labels */
+  ion-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Estilos para los selects y inputs */
+  ion-select,
+  ion-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+    padding: 8px;
+    font-size: 1rem;
+  }
+  
+  /* Asegurar el tamaño adecuado en tablets y móviles */
+  ion-grid {
+    width: 100%;
+  }
+  
+  /* Espaciado entre filas */
+  ion-row {
+    margin-bottom: 10px;
+  }
+  
+  /* Ajustes para tablets */
+  @media screen and (min-width: 768px) {
+    h2 {
+      font-size: 1.6rem;
+    }
+    
+    ion-label {
+      font-size: 1.2rem;
+    }
+  
+    ion-select,
+    ion-input {
+      font-size: 1.1rem;
+    }
+  }
+  
+  /* Ajustes para pantallas grandes */
+  @media screen and (min-width: 1024px) {
+    ion-grid {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  }
+  
