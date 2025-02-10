@@ -12,220 +12,241 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-grid>
+  <form (ngSubmit)="guardarConstruccion()">
 
-    <!-- Bloque y Piso -->
-    <ion-row>
-      <ion-col size="3">
-        <ion-label>Gid Bloque</ion-label>
-        <ion-input type="text" [(ngModel)]="bloque.gid"></ion-input>
-      </ion-col>
-      <ion-col size="3">
-        <ion-label>Nro. Piso</ion-label>
-        <ion-input type="number" [(ngModel)]="bloque.piso"></ion-input>
-      </ion-col>
-      <ion-col size="3">
-        <ion-label>Nro. Bloq.</ion-label>
-        <ion-input type="number" [(ngModel)]="bloque.bloque"></ion-input>
-      </ion-col>
-      <ion-col size="3">
-        <ion-label>Año Const.</ion-label>
-        <ion-input type="number" [(ngModel)]="bloque.bloque"></ion-input>
-      </ion-col>
-    </ion-row>
+    <ion-grid>
 
-    <!-- Estructura de la Edificación -->
-    <ion-row>
-      <ion-col>
-        <h2>Estructura de la Edificación</h2>
-      </ion-col>
-    </ion-row>
+      <!-- Bloque y Piso -->
+      <ion-row>
+        <ion-col size="3">
+          <ion-label>Gid Bloque</ion-label>
+          <ion-input type="text" [(ngModel)]="bloque.gid" name="gid" [ngModelOptions]="{standalone: true}">
+          </ion-input>
+        </ion-col>
+        <ion-col size="3">
+          <ion-label>Nro. Piso</ion-label>
+          <ion-input type="number" [(ngModel)]="bloque.piso" name="piso"
+            [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-col>
+        <ion-col size="3">
+          <ion-label>Nro. Bloq.</ion-label>
+          <ion-input type="number" [(ngModel)]="bloque.bloque" name="bloque"
+            [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-col>
+        <ion-col size="3">
+          <ion-label>Año Const.</ion-label>
+          <ion-input type="number" name="anoConst"></ion-input>
+        </ion-col>
+      </ion-row>
+      <!-- Estructura de la Edificación -->
+      <ion-row>
+        <ion-col>
+          <h2>Estructura de la Edificación</h2>
+        </ion-col>
+      </ion-row>
 
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Estado Const.</ion-label>
-        <ion-select [(ngModel)]="estructura.estado">
-          <ion-select-option value="01-Estable">01-Estable</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Estructura</ion-label>
-        <ion-select [(ngModel)]="estructura.tipo">
-          <ion-select-option value="01-Aporticado">01-Aporticado</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Columnas</ion-label>
-        <ion-select [(ngModel)]="estructura.columnas">
-          <ion-select-option value="02-Hormigón Armado">02-Hormigón Armado</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Vigas</ion-label>
-        <ion-select [(ngModel)]="estructura.vigas">
-          <ion-select-option value="02-Hormigón Armado">02-Hormigón Armado</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Entre Piso</ion-label>
-        <ion-select [(ngModel)]="estructura.entrepiso">
-          <ion-select-option value="02-Hormigón Armado">02-Hormigón Armado</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Paredes</ion-label>
-        <ion-select [(ngModel)]="estructura.paredes">
-          <ion-select-option value="11-Bloque">11-Bloque</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Escaleras</ion-label>
-        <ion-select [(ngModel)]="estructura.escaleras">
-          <ion-select-option value="02-Hormigón Armado">02-Hormigón Armado</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Cubierta</ion-label>
-        <ion-select [(ngModel)]="estructura.cubierta">
-          <ion-select-option value="02-Hormigón Armado">02-Hormigón Armado</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <!-- Acabados Edificación -->
-    <ion-row>
-      <ion-col>
-        <h2>Acabados Edificación</h2>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Tumbados</ion-label>
-        <ion-select [(ngModel)]="acabados.tumbados">
-          <ion-select-option value="17-Arena-Cemento">17-Arena-Cemento</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Puertas</ion-label>
-        <ion-select [(ngModel)]="acabados.puertas">
-          <ion-select-option value="08-Madera Común">08-Madera Común</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Cubre Ventanas</ion-label>
-        <ion-select [(ngModel)]="acabados.cubre_ventanas">
-          <ion-select-option value="01-No tiene">01-No tiene</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Rev. Interior</ion-label>
-        <ion-select [(ngModel)]="acabados.rev_interior">
-          <ion-select-option value="17-Arena-Cemento">17-Arena-Cemento</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Rev. Exterior</ion-label>
-        <ion-select [(ngModel)]="acabados.rev_exterior">
-          <ion-select-option value="01-No tiene">01-No tiene</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Rev. Pisos</ion-label>
-        <ion-select [(ngModel)]="acabados.rev_pisos">
-          <ion-select-option value="17-Arena-Cemento">17-Arena-Cemento</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Rev. Escalera</ion-label>
-        <ion-select [(ngModel)]="acabados.rev_escalera">
-          <ion-select-option value="17-Arena-Cemento">17-Arena-Cemento</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Cubie. Acabados</ion-label>
-        <ion-select [(ngModel)]="acabados.cubie_acabados">
-          <ion-select-option value="17-Arena-Cemento">17-Arena-Cemento</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Ventanas</ion-label>
-        <ion-select [(ngModel)]="acabados.ventanas">
-          <ion-select-option value="06-Hierro">06-Hierro</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Closets</ion-label>
-        <ion-select [(ngModel)]="acabados.closets">
-          <ion-select-option value="01-No tiene">01-No tiene</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <h2>Instalaciones</h2>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Sanitaria</ion-label>
-        <ion-select [(ngModel)]="acabados.ventanas">
-          <ion-select-option value="06-Hierro">51-Canalizacion Combinado</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Nro. Baños</ion-label>
-        <ion-select [(ngModel)]="acabados.closets">
-          <ion-select-option value="01-No tiene">56-Dos Baños</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="6">
-        <ion-label>Electricas</ion-label>
-        <ion-select [(ngModel)]="acabados.ventanas">
-          <ion-select-option value="06-Hierro">62-Empotradas</ion-select-option>
-        </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-label>Especiales</ion-label>
-        <ion-select [(ngModel)]="acabados.closets">
-          <ion-select-option value="01-No tiene"></ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Estado Const.</ion-label>
+          <ion-select [(ngModel)]="estructura.estado" name="estado" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[0]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Estructura</ion-label>
+          <ion-select [(ngModel)]="estructura.tipo" name="tipo" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[1]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
 
 
-    <!-- Botón de Guardado -->
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button color="primary" (click)="guardarConstruccion()">
-        <ion-icon name="save"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Columnas</ion-label>
+          <ion-select [(ngModel)]="estructura.columnas" name="columnas" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[2]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Vigas</ion-label>
+          <ion-select [(ngModel)]="estructura.vigas" name="vigas" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[3]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
 
-  </ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Entre Piso</ion-label>
+          <ion-select [(ngModel)]="estructura.entrepiso" name="entrepiso" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[4]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Paredes</ion-label>
+          <ion-select [(ngModel)]="estructura.paredes" name="paredes" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[5]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Escaleras</ion-label>
+          <ion-select [(ngModel)]="estructura.escaleras" name="escaleras" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[6]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Cubierta</ion-label>
+          <ion-select [(ngModel)]="estructura.cubierta" name="cubierta" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of estructuraCampos[7]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <!-- Acabados Edificación -->
+      <ion-row>
+        <ion-col>
+          <h2>Acabados Edificación</h2>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Tumbados</ion-label>
+          <ion-select [(ngModel)]="acabados.tumbados" name="tumbados" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[0]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Puertas</ion-label>
+          <ion-select [(ngModel)]="acabados.puertas" name="puertas" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[1]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Cubre Ventanas</ion-label>
+          <ion-select [(ngModel)]="acabados.puertas" name="puertas" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[1]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Rev. Interior</ion-label>
+          <ion-select [(ngModel)]="acabados.revInterior" name="revInterior" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[3]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Rev. Exterior</ion-label>
+          <ion-select [(ngModel)]="acabados.revExterior" name="revExterior" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[4]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Rev. Pisos</ion-label>
+          <ion-select [(ngModel)]="acabados.revPisos" name="revPisos" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[5]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Rev. Escalera</ion-label>
+          <ion-select [(ngModel)]="acabados.revEscalera" name="revEscalera" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[6]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Cubie. Acabados</ion-label>
+          <ion-select [(ngModel)]="acabados.cubieAcabados" name="cubieAcabados" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[7]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Ventanas</ion-label>
+          <ion-select [(ngModel)]="acabados.ventanas" name="ventanas" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[8]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Closets</ion-label>
+          <ion-select [(ngModel)]="acabados.closets" name="closets" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of acabadosCampos[9]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <h2>Instalaciones</h2>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Sanitaria</ion-label>
+          <ion-select [(ngModel)]="instalaciones.sanitaria" name="sanitaria" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of instalacionesCampos[0]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Nro. Baños</ion-label>
+          <ion-select [(ngModel)]="instalaciones.banos" name="banos" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of instalacionesCampos[1]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>Electricas</ion-label>
+          <ion-select [(ngModel)]="instalaciones.electrica" name="electrica" [ngModelOptions]="{standalone: true}">
+            <ion-select-option *ngFor="let item of instalacionesCampos[2]?.options || []" [value]="item">{{ item
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>Especiales</ion-label>
+          <ion-select [(ngModel)]="acabados.closets" [ngModelOptions]="{standalone: true}">
+            <ion-select-option value="01-No tiene"></ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-button expand="full" type="submit" color="primary">Guardar Construcción</ion-button>
+    </ion-grid>
+  </form>
+
 </ion-content>

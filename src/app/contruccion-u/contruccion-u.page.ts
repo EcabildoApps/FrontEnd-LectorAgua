@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { IonicstorageService } from '../services/ionicstorage.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contruccion-u',
@@ -15,48 +17,79 @@ export class ContruccionUPage {
     bloque: null
   };
 
-  // Estado inicial de la estructura
+  // Variables para los campos de selección
   estructura: any = {};
-
-  // Estado inicial de los acabados
   acabados: any = {};
-
-  // Estado inicial de instalaciones
   instalaciones: any = {};
 
-  // Opciones para Estructura de la Edificación
-  estructuraCampos = [
-    { label: 'Estado Const.', model: 'estado', options: ['01-Estable', '02-Inestable'] },
-    { label: 'Estructura', model: 'tipo', options: ['01-Aporticado', '02-Otro'] },
-    { label: 'Columnas', model: 'columnas', options: ['02-Hormigón Armado', '03-Acero'] },
-    { label: 'Vigas', model: 'vigas', options: ['02-Hormigón Armado', '03-Acero'] },
-    { label: 'Entre Piso', model: 'entrepiso', options: ['02-Hormigón Armado', '04-Madera'] },
-    { label: 'Paredes', model: 'paredes', options: ['11-Bloque', '12-Ladrillo'] },
-    { label: 'Escaleras', model: 'escaleras', options: ['02-Hormigón Armado', '05-Metal'] },
-    { label: 'Cubierta', model: 'cubierta', options: ['02-Hormigón Armado', '06-Otros'] }
-  ];
+  // Variables para los campos dinámicos
+  estructuraCampos: any[] = [];
+  acabadosCampos: any[] = [];
+  instalacionesCampos: any[] = [];
 
-  // Opciones para Acabados de la Edificación
-  acabadosCampos = [
-    { label: 'Tumbados', model: 'tumbados', options: ['17-Arena-Cemento', '18-Gypsum'] },
-    { label: 'Puertas', model: 'puertas', options: ['08-Madera Común', '09-Metal'] },
-    { label: 'Cubre Ventanas', model: 'cubreVentanas', options: ['01-No tiene', '02-Sí tiene'] },
-    { label: 'Rev. Interior', model: 'revInterior', options: ['17-Arena-Cemento', '19-Otro'] },
-    { label: 'Rev. Exterior', model: 'revExterior', options: ['01-No tiene', '02-Sí tiene'] },
-    { label: 'Rev. Pisos', model: 'revPisos', options: ['17-Arena-Cemento', '20-Cerámica'] },
-    { label: 'Rev. Escalera', model: 'revEscalera', options: ['17-Arena-Cemento', '21-Madera'] },
-    { label: 'Cubie. Acabados', model: 'cubieAcabados', options: ['17-Arena-Cemento', '22-Otro'] },
-    { label: 'Ventanas', model: 'ventanas', options: ['06-Hierro', '07-Aluminio'] },
-    { label: 'Closets', model: 'closets', options: ['01-No tiene', '03-Madera'] }
-  ];
+  constructor(private ionicStorageService: IonicstorageService,
+    private route: ActivatedRoute
+  ) { }
 
-  // Opciones para Instalaciones
-  instalacionesCampos = [
-    { label: 'Sanitaria', model: 'sanitaria', options: ['51-Canalización Combinado', '52-Independiente'] },
-    { label: 'Nro. Baños', model: 'banos', options: ['56-Dos Baños', '57-Tres Baños'] }
-  ];
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      const PUR01CODI = params['PUR01CODI']; // Aquí obtienes el PUR01CODI
+      console.log('PUR01CODI desde la ruta:', PUR01CODI);
+      this.bloque.gid = PUR01CODI;
+      this.cargarDatosDesdeStorage();  // Llamas a la función con PUR01CODI para cargar los datos específicos
+    });
+  }
 
-  // Método para guardar datos (debes personalizarlo según tu lógica)
+  async cargarDatosDesdeStorage() {
+    try {
+      // Cargar registros de construcción desde el almacenamiento
+      const construccionData = await this.ionicStorageService.obtenerRegistrosConstruccion();
+      console.log('Datos de construcción:', construccionData);
+
+
+      if (construccionData) {
+        if (construccionData && construccionData.estestadoCons) {
+          console.log('Estado de construcción:', construccionData.estestadoCons);
+          this.estructuraCampos = [
+            { label: 'Estado Const.', model: 'estado', options: construccionData.estestadoCons ? construccionData.estestadoCons.map(item => item.REN21DESC) : [] },
+            { label: 'Estructura', model: 'tipo', options: construccionData.estructura.map(item => item.REN21DESC) },
+            { label: 'Columnas', model: 'columnas', options: construccionData.columna.map(item => item.REN21DESC) },
+            { label: 'Vigas', model: 'vigas', options: construccionData.vigas.map(item => item.REN21DESC) },
+            { label: 'Entre Piso', model: 'entrepiso', options: construccionData.entrePiso.map(item => item.REN21DESC) },
+            { label: 'Paredes', model: 'paredes', options: construccionData.paredes.map(item => item.REN21DESC) },
+            { label: 'Escaleras', model: 'escaleras', options: construccionData.escalera.map(item => item.REN21DESC) },
+            { label: 'Cubierta', model: 'cubierta', options: construccionData.cubiertaAcabados.map(item => item.REN21DESC) }
+          ];
+        }
+
+        if (construccionData && construccionData.tumbados) {
+          this.acabadosCampos = [
+            { label: 'Tumbados', model: 'tumbados', options: construccionData.tumbados.map(item => item.REN21DESC) },
+            { label: 'Puertas', model: 'puertas', options: construccionData.puerta.map(item => item.REN21DESC) },
+            { label: 'Cubre Ventanas', model: 'cubreVentanas', options: construccionData.cubreVentana.map(item => item.REN21DESC) },
+            { label: 'Rev. Interior', model: 'revInterior', options: construccionData.revInterior.map(item => item.REN21DESC) },
+            { label: 'Rev. Exterior', model: 'revExterior', options: construccionData.revExterior.map(item => item.REN21DESC) },
+            { label: 'Rev. Pisos', model: 'revPisos', options: construccionData.revPisos.map(item => item.REN21DESC) },
+            { label: 'Rev. Escalera', model: 'revEscalera', options: construccionData.revEscalera.map(item => item.REN21DESC) },
+            { label: 'Cubie. Acabados', model: 'cubieAcabados', options: construccionData.revEscalera.map(item => item.REN21DESC) },
+            { label: 'Ventanas', model: 'ventanas', options: construccionData.ventanas.map(item => item.REN21DESC) },
+            { label: 'Closets', model: 'closets', options: construccionData.closet.map(item => item.REN21DESC) }
+          ];
+        }
+
+        if (construccionData && construccionData.insSanitarias) {
+          this.instalacionesCampos = [
+            { label: 'Sanitaria', model: 'sanitaria', options: construccionData.insSanitarias.map(item => item.REN21DESC) },
+            { label: 'Nro. Baños', model: 'banos', options: construccionData.nroBanios.map(item => item.REN21DESC) },
+            { label: 'Electrica', model: 'electrica', options: construccionData.insElectricas.map(item => item.REN21DESC) },
+          ];
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar los datos desde IonicStorage:', error);
+    }
+  }
+  // Método para guardar datos (personaliza según tu lógica)
   guardarConstruccion() {
     console.log('Guardando construcción...', {
       bloque: this.bloque,
@@ -64,6 +97,5 @@ export class ContruccionUPage {
       acabados: this.acabados,
       instalaciones: this.instalaciones
     });
-    // Aquí puedes llamar a tu servicio para guardar los datos en la base de datos
   }
 }

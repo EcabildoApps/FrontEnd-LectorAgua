@@ -4,11 +4,6 @@
     "capacitor": {}
   },
   "type": "angular",
-  "ssl": true,
-  "proxies": [
-    {
-      "path": "/api",
-      "proxyUrl": "http://192.168.1.100:3000"
-    }
-  ]
+  "ssl": true
+
 }

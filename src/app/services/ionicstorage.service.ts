@@ -473,7 +473,17 @@ export class IonicstorageService {
 
 
 
-
+// En tu servicio de almacenamiento
+async obtenerRegistrosConstruccion() {
+  try {
+    const construccionData = await this.storage.get('CONSTRUCCION');
+    console.log('Datos recuperados desde el almacenamiento:', construccionData);
+    return construccionData;
+  } catch (error) {
+    console.error('Error al obtener los registros de construcción:', error);
+    return null;
+  }
+}
 
 
 

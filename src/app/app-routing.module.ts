@@ -112,6 +112,10 @@ const routes: Routes = [
     path: 'contruccion-u',
     loadChildren: () => import('./contruccion-u/contruccion-u.module').then( m => m.ContruccionUPageModule)
   },
+  {
+    path: 'contruccion-u/:PUR01CODI',
+    loadChildren: () => import('./contruccion-u/contruccion-u.module').then( m => m.ContruccionUPageModule)
+  },
 
 
 

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { MenuController } from '@ionic/angular';
+import { Network } from '@ionic-native/network/ngx';
+
 
 
 @Component({
@@ -19,11 +21,21 @@ export class AppComponent {
   constructor(
     private menuCtrl: MenuController,
     private navCtrl: NavController,
-    private location: Location
+    private location: Location,
+    private network: Network
   ) {
     this.isWeb = false;
     this.load = false;
     this.userRole = localStorage.getItem('userRole') || '';
+    this.network.onDisconnect().subscribe(() => {
+      alert('Sin conexión a Internet');
+      console.log('Sin conexión a Internet');
+    });
+
+    this.network.onConnect().subscribe(() => {
+      alert('Conectado a Internet');
+      console.log('Conectado a Internet');
+    });
   }
 
   isSelected(route: string): boolean {

@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy, RouterModule,Routes  } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { Network } from '@ionic-native/network/ngx';
 
 
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 const routes: Routes = [
@@ -31,7 +32,11 @@ const routes: Routes = [
     RouterModule.forRoot(routes), 
     FormsModule, 
     HttpClientModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(), // Mantén esto para producción
+      registrationStrategy: 'registerImmediately' // Registro inmediato
+    })
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Network], 
   bootstrap: [AppComponent],

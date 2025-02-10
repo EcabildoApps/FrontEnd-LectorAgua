@@ -91,12 +91,12 @@ export class InformacionPPage implements OnInit {
     this.mostrarBotones = !this.mostrarBotones;
   }
 
-
   accion(tipo: string) {
     if (tipo === 'agregar') {
-      this.router.navigate(['/contruccion-u']);
+      this.router.navigate(['/contruccion-u']); // Para agregar
     } else if (tipo === 'actualizar') {
-      this.router.navigate(['/contruccion-u:id']);
+      // Para actualizar, pasa el valor de PUR01CODI como parámetro
+      this.router.navigate([`/contruccion-u/${this.PUR01CODI}`]);
     }
 
     // Después de hacer la acción, ocultar los botones nuevamente

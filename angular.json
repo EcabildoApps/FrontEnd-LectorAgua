@@ -23,10 +23,12 @@
               "localforage"
             ],
             "assets": [
+              "src/manifest.webmanifest",
               {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+                
               },
               {
                 "glob": "**/*.svg",
@@ -38,7 +40,9 @@
               "src/global.scss",
               "src/theme/variables.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {

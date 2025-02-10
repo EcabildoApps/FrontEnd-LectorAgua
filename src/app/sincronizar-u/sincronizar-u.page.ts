@@ -64,9 +64,18 @@ export class SincronizarUPage implements OnInit {
     const baseUrl = `http://${dominio}:${puerto}`;
 
     const urlCatalogos = `${baseUrl}/api/auth/catalogo`;  // Endpoint de catálogos
+    const urlConstrucccion = `${baseUrl}/api/auth/construccion`;  // Endpoint de construccion
     const urlLecturas = `${baseUrl}/api/auth/prediosUrb?geocodigo=${this.geocodigosDisponibles}`;  // Endpoint de predios
 
     try {
+      const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
+      if (responseConstruccion.data) {
+        await this.ionicStorageService.agregarConKey('CONSTRUCCION', responseConstruccion.data);  // Almacenamos los catálogos en IonicStorage
+        await this.showToast('Construcción sincronizados correctamente.');
+      } else {
+        await this.showToast('No se encontraron datos.');
+      }
+
       // Primero obtenemos los catálogos
       const responseCatalogos = await this.http.get<any>(urlCatalogos).toPromise();
       if (responseCatalogos.data) {
