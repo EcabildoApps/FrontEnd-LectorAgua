@@ -28,7 +28,6 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
-                
               },
               {
                 "glob": "**/*.svg",
@@ -38,9 +37,12 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss"
+              "src/theme/variables.scss",
+              "node_modules/maplibre-gl/dist/maplibre-gl.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/maplibre-gl/dist/maplibre-gl.js"
+            ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },

@@ -22,33 +22,22 @@ export class UbilecturaPage implements AfterViewInit {
   constructor(private ionicStorageService: IonicstorageService) { }
 
   // Ejecutar después de que la vista esté inicializada
-  async ngAfterViewInit() {
-    await this.cargarLecturas(); // Cargar las lecturas primero
-    await this.obtenerCoordenadasYMostrar(); // Obtener coordenadas y mostrar en mapa
+  ngAfterViewInit() {
+    setTimeout(() => {
+
+      this.obtenerCoordenadasYMostrar();
+    }, 500); // Pequeño retraso para asegurar que el DOM esté listo
   }
 
-  // Obtener las coordenadas desde Ionic Storage y mostrar el mapa
-  async obtenerCoordenadasYMostrar() {
-    try {
-      // Obtener los registros de lecturas desde Ionic Storage
-      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas();
-      // Buscar la coordenada X y Y (en este ejemplo, tomo el primer registro)
-      const lectura = registrosLecturas[0];
-      const xLectura = lectura.X_LECTURA;
-      const yLectura = lectura.Y_LECTURA;
 
-      // Inicializar el mapa después de obtener las coordenadas
-      this.inicializarMapa(xLectura, yLectura);
-    } catch (error) {
-      console.error('Error al obtener las coordenadas:', error);
-    }
-  }
-
-  // Inicializar el mapa con las coordenadas obtenidas
   inicializarMapa(xLectura: number, yLectura: number) {
-    // Crear el mapa
+    if (!xLectura || !yLectura || isNaN(xLectura) || isNaN(yLectura)) {
+      console.error("Coordenadas inválidas:", xLectura, yLectura);
+      return;
+    }
+
     this.map = new maplibregl.Map({
-      container: 'map', // Contenedor del mapa en el HTML
+      container: 'map',
       style: {
         version: 8,
         sources: {
@@ -72,15 +61,48 @@ export class UbilecturaPage implements AfterViewInit {
           }
         ]
       },
-      center: [xLectura, yLectura], // Coordenadas donde se centra el mapa
-      zoom: 15, // Nivel de zoom del mapa (puedes ajustarlo si es necesario)
+      center: [xLectura, yLectura],
+      zoom: 15,
+      maxZoom: 20,
+      minZoom: 3,
     });
 
-    // Eliminar el control de navegación (zoom, rotación)
-    //this.map.addControl(new maplibregl.NavigationControl()); // Elimina esta línea si no quieres los controles de zoom y rotación.
+    this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
-    this.agregarMarcadores(); // Agregar los marcadores en el mapa
+    // Crear un marcador personalizado
+    const markerElement = document.createElement('div');
+    markerElement.innerHTML = '📍';
+    markerElement.style.fontSize = '24px';
+    markerElement.style.position = 'absolute';
+    markerElement.style.left = '50%';
+    markerElement.style.top = '50%';
+    markerElement.style.transform = 'translate(-50%, -50%)';
+    markerElement.style.pointerEvents = 'none'; // Evita que interfiera con eventos del mapa
+
+    this.map.getContainer().appendChild(markerElement);
   }
+
+
+  async obtenerCoordenadasYMostrar() {
+    try {
+      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas();
+
+      if (registrosLecturas.length > 0) {
+        const lectura = registrosLecturas[0];
+        const xLectura = lectura.X_LECTURA;
+        const yLectura = lectura.Y_LECTURA;
+
+        console.log("Coordenadas obtenidas:", xLectura, yLectura); // Para depuración
+
+        this.inicializarMapa(xLectura, yLectura);
+      } else {
+        console.warn("No se encontraron lecturas registradas.");
+      }
+    } catch (error) {
+      console.error('Error al obtener las coordenadas:', error);
+    }
+  }
+
 
   // Agregar marcadores de las lecturas filtradas
   agregarMarcadores() {
@@ -96,17 +118,13 @@ export class UbilecturaPage implements AfterViewInit {
       const lng = lectura.X_LECTURA;
 
       if (lat && lng) {
-        // Crear un marcador con un círculo
-        const el = document.createElement('div');
-        el.style.backgroundColor = '#ff0000'; // Color del círculo
-        el.style.borderRadius = '50%';
-        el.style.width = '30px'; // Ancho del círculo
-        el.style.height = '30px'; // Alto del círculo
-        el.style.cursor = 'pointer';
-
-        // Crear y agregar el marcador
-        const marker = new maplibregl.Marker(el)
-          .setLngLat([lng, lat]) // Establecer las coordenadas
+        // Crear un marcador personalizado
+        const marker = new maplibregl.Marker({
+          draggable: false, // Hacer que el marcador no sea arrastrable
+          pitchAlignment: "viewport", // Evita que desaparezca con el zoom
+          rotationAlignment: "viewport", // Mantiene la orientación estática
+        })
+          .setLngLat([lng, lat]) // Fijar la posición exacta
           .setPopup(new maplibregl.Popup().setHTML(
             `<b>${lectura.CONSUMIDOR}</b><br>${lectura.DIRECCION}`
           )) // Mostrar la dirección al hacer clic
@@ -116,6 +134,7 @@ export class UbilecturaPage implements AfterViewInit {
       }
     });
   }
+
 
   // Cargar lecturas desde Ionic Storage
   async cargarLecturas() {
