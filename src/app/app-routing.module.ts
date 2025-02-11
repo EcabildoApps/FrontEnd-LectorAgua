@@ -115,7 +115,11 @@ const routes: Routes = [
   {
     path: 'contruccion-u/:PUR01CODI',
     loadChildren: () => import('./contruccion-u/contruccion-u.module').then( m => m.ContruccionUPageModule)
+  },  {
+    path: 'ubilectura',
+    loadChildren: () => import('./ubilectura/ubilectura.module').then( m => m.UbilecturaPageModule)
   },
+
 
 
 

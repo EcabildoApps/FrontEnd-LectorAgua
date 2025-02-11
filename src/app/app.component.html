@@ -58,6 +58,12 @@
               <ion-label>Lectura Rápida</ion-label>
             </ion-item>
           </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item routerLink="/ubilectura" routerDirection="forward" routerLinkActive="selected">
+              <ion-icon name="map" slot="start"></ion-icon>
+              <ion-label>Maps</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
         </ng-container>
 
         <ng-container *ngIf="userRole === 'rural'">
