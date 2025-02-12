@@ -12,23 +12,37 @@ import * as maplibregl from 'maplibre-gl';
 })
 
 export class UbilecturaPage implements AfterViewInit {
-
   lecturas: any[] = [];
-  lecturasFiltradas: any[] = [];
-  selectedEstado: string = 'TOMA DE LECTURAS'; // Estado predeterminado
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
 
   constructor(private ionicStorageService: IonicstorageService) { }
 
-  // Ejecutar después de que la vista esté inicializada
   ngAfterViewInit() {
     setTimeout(() => {
-
       this.obtenerCoordenadasYMostrar();
-    }, 500); // Pequeño retraso para asegurar que el DOM esté listo
+    }, 500);
   }
 
+  async obtenerCoordenadasYMostrar() {
+    try {
+      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas();
+
+      if (!registrosLecturas || registrosLecturas.length === 0) {
+        console.warn("No se encontraron lecturas registradas.");
+        return;
+      }
+
+      // Inicializar mapa con la primera lectura
+      const { X_LECTURA, Y_LECTURA } = registrosLecturas[0];
+      this.inicializarMapa(X_LECTURA, Y_LECTURA);
+
+      // Agregar todos los marcadores al mapa
+      this.agregarMarcadores(registrosLecturas);
+    } catch (error) {
+      console.error('Error al obtener las coordenadas:', error);
+    }
+  }
 
   inicializarMapa(xLectura: number, yLectura: number) {
     if (!xLectura || !yLectura || isNaN(xLectura) || isNaN(yLectura)) {
@@ -68,86 +82,29 @@ export class UbilecturaPage implements AfterViewInit {
     });
 
     this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
-
-    // Crear un marcador personalizado
-    const markerElement = document.createElement('div');
-    markerElement.innerHTML = '📍';
-    markerElement.style.fontSize = '24px';
-    markerElement.style.position = 'absolute';
-    markerElement.style.left = '50%';
-    markerElement.style.top = '50%';
-    markerElement.style.transform = 'translate(-50%, -50%)';
-    markerElement.style.pointerEvents = 'none'; // Evita que interfiera con eventos del mapa
-
-    this.map.getContainer().appendChild(markerElement);
   }
 
-
-  async obtenerCoordenadasYMostrar() {
-    try {
-      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas();
-
-      if (registrosLecturas.length > 0) {
-        const lectura = registrosLecturas[0];
-        const xLectura = lectura.X_LECTURA;
-        const yLectura = lectura.Y_LECTURA;
-
-        console.log("Coordenadas obtenidas:", xLectura, yLectura); // Para depuración
-
-        this.inicializarMapa(xLectura, yLectura);
-      } else {
-        console.warn("No se encontraron lecturas registradas.");
-      }
-    } catch (error) {
-      console.error('Error al obtener las coordenadas:', error);
-    }
-  }
-
-
-  // Agregar marcadores de las lecturas filtradas
-  agregarMarcadores() {
+  agregarMarcadores(lecturas: any[]) {
     if (!this.map) return;
 
     // Eliminar marcadores anteriores
     this.markers.forEach(marker => marker.remove());
-    this.markers = []; // Limpiar la lista de marcadores
+    this.markers = [];
 
-    // Agregar los nuevos marcadores al mapa
-    this.lecturasFiltradas.forEach((lectura) => {
+    lecturas.forEach((lectura) => {
       const lat = lectura.Y_LECTURA;
       const lng = lectura.X_LECTURA;
 
       if (lat && lng) {
-        // Crear un marcador personalizado
-        const marker = new maplibregl.Marker({
-          draggable: false, // Hacer que el marcador no sea arrastrable
-          pitchAlignment: "viewport", // Evita que desaparezca con el zoom
-          rotationAlignment: "viewport", // Mantiene la orientación estática
-        })
-          .setLngLat([lng, lat]) // Fijar la posición exacta
+        const marker = new maplibregl.Marker({ draggable: false })
+          .setLngLat([lng, lat])
           .setPopup(new maplibregl.Popup().setHTML(
             `<b>${lectura.CONSUMIDOR}</b><br>${lectura.DIRECCION}`
-          )) // Mostrar la dirección al hacer clic
-          .addTo(this.map); // Añadir al mapa
+          ))
+          .addTo(this.map);
 
-        this.markers.push(marker); // Guardar el marcador
+        this.markers.push(marker);
       }
     });
-  }
-
-
-  // Cargar lecturas desde Ionic Storage
-  async cargarLecturas() {
-    const listado = await this.ionicStorageService.rescatar('LECTURAS');
-    this.lecturas = listado?.data || [];
-    this.filtrarEstado(); // Filtrar las lecturas por estado
-  }
-
-  // Filtrar las lecturas por estado
-  filtrarEstado() {
-    this.lecturasFiltradas = this.lecturas.filter(
-      (lectura) => lectura.ESTADO === this.selectedEstado.toUpperCase()
-    );
-    this.agregarMarcadores(); // Actualizar el mapa con los nuevos marcadores filtrados
   }
 }
