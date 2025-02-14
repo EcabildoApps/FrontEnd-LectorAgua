@@ -486,6 +486,18 @@ async obtenerRegistrosConstruccion() {
 }
 
 
+async obtenerRegistrosAPP_PRE_CONSTRUC() {
+  try {
+    const construccionData = await this.storage.get('APP_PRE_CONSTRUC');
+    console.log('Datos recuperados desde el almacenamiento:', construccionData);
+    return construccionData;
+  } catch (error) {
+    console.error('Error al obtener los registros de construcción:', error);
+    return null;
+  }
+}
+
+
 
 
 

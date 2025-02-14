@@ -13,31 +13,39 @@
 
 <ion-content [fullscreen]="true">
   <form (ngSubmit)="guardarConstruccion()">
+    <ion-item lines="full">
+      <ion-label position="floating">Construcción</ion-label>
+      <ion-select [(ngModel)]="selectedEstadoCons" interface="popover">
+        <ion-select-option *ngFor="let item of estestadoCons" [value]="item.REN21CODI">
+          {{ item.REN21DESC }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
     <ion-grid>
+      <!-- Lista de bloques de construcción -->
+      <ion-list *ngIf="misDatosConstruccion.length > 0">
+        <ion-item *ngFor="let dato of misDatosConstruccion">
+          <ion-row>
+            <ion-col size="3">
+              <ion-label>Gid Bloque</ion-label>
+              <ion-input type="text" [(ngModel)]="dato.gid" name="gid"
+                [ngModelOptions]="{standalone: true}"></ion-input>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label>Nro. Piso</ion-label>
+              <ion-input type="number" [(ngModel)]="dato.piso" name="piso"
+                [ngModelOptions]="{standalone: true}"></ion-input>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label>Nro. Bloq.</ion-label>
+              <ion-input type="number" [(ngModel)]="dato.bloque" name="bloque"
+                [ngModelOptions]="{standalone: true}"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </ion-list>
 
-      <!-- Bloque y Piso -->
-      <ion-row>
-        <ion-col size="3">
-          <ion-label>Gid Bloque</ion-label>
-          <ion-input type="text" [(ngModel)]="bloque.gid" name="gid" [ngModelOptions]="{standalone: true}">
-          </ion-input>
-        </ion-col>
-        <ion-col size="3">
-          <ion-label>Nro. Piso</ion-label>
-          <ion-input type="number" [(ngModel)]="bloque.piso" name="piso"
-            [ngModelOptions]="{standalone: true}"></ion-input>
-        </ion-col>
-        <ion-col size="3">
-          <ion-label>Nro. Bloq.</ion-label>
-          <ion-input type="number" [(ngModel)]="bloque.bloque" name="bloque"
-            [ngModelOptions]="{standalone: true}"></ion-input>
-        </ion-col>
-        <ion-col size="3">
-          <ion-label>Año Const.</ion-label>
-          <ion-input type="number" name="anoConst"></ion-input>
-        </ion-col>
-      </ion-row>
       <!-- Estructura de la Edificación -->
       <ion-row>
         <ion-col>
@@ -47,35 +55,37 @@
 
       <ion-row>
         <ion-col size="6">
-          <ion-label>Estado Const.</ion-label>
-          <ion-select [(ngModel)]="estructura.estado" name="estado" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[0]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-label>Estado Construcción</ion-label>
+          <ion-select [(ngModel)]="selectedEstadoCons" name="estado">
+            <ion-select-option *ngFor="let item of estestadoCons" [value]="item.REN21CODI">
+              {{ item.REN21DESC }}
+            </ion-select-option>
           </ion-select>
         </ion-col>
+
+
+
+
         <ion-col size="6">
           <ion-label>Estructura</ion-label>
-          <ion-select [(ngModel)]="estructura.tipo" name="tipo" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[1]?.options || []" [value]="item">{{ item
+          <ion-select [(ngModel)]="selectedEstructura" name="tipo">
+            <ion-select-option *ngFor="let item of estructura" [value]="item.REN21CODI">{{ item.REN21CODI
               }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
 
-
       <ion-row>
         <ion-col size="6">
           <ion-label>Columnas</ion-label>
-          <ion-select [(ngModel)]="estructura.columnas" name="columnas" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[2]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedColumanas" name="columnas">
+            <ion-select-option *ngFor="let item of columna" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Vigas</ion-label>
-          <ion-select [(ngModel)]="estructura.vigas" name="vigas" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[3]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedVigas" name="vigas">
+            <ion-select-option *ngFor="let item of vigas" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -83,16 +93,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Entre Piso</ion-label>
-          <ion-select [(ngModel)]="estructura.entrepiso" name="entrepiso" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[4]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedEntrePiso" name="entrepiso">
+            <ion-select-option *ngFor="let item of entrePiso" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Paredes</ion-label>
-          <ion-select [(ngModel)]="estructura.paredes" name="paredes" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[5]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedParedes" name="paredes">
+            <ion-select-option *ngFor="let item of paredes" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -100,16 +108,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Escaleras</ion-label>
-          <ion-select [(ngModel)]="estructura.escaleras" name="escaleras" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[6]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedEscalera" name="escaleras">
+            <ion-select-option *ngFor="let item of escalera" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Cubierta</ion-label>
-          <ion-select [(ngModel)]="estructura.cubierta" name="cubierta" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of estructuraCampos[7]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedCubierta" name="cubierta">
+            <ion-select-option *ngFor="let item of estructuraCubierta" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -124,16 +130,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Tumbados</ion-label>
-          <ion-select [(ngModel)]="acabados.tumbados" name="tumbados" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[0]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedTumbados" name="tumbados">
+            <ion-select-option *ngFor="let item of tumbados" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Puertas</ion-label>
-          <ion-select [(ngModel)]="acabados.puertas" name="puertas" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[1]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedPuerta" name="puertas">
+            <ion-select-option *ngFor="let item of puerta" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -141,16 +145,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Cubre Ventanas</ion-label>
-          <ion-select [(ngModel)]="acabados.puertas" name="puertas" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[1]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedCubVentana" name="cubreVentana">
+            <ion-select-option *ngFor="let item of cubreVentana" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Rev. Interior</ion-label>
-          <ion-select [(ngModel)]="acabados.revInterior" name="revInterior" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[3]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedRevInterior" name="revInterior">
+            <ion-select-option *ngFor="let item of revInterior" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -158,16 +160,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Rev. Exterior</ion-label>
-          <ion-select [(ngModel)]="acabados.revExterior" name="revExterior" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[4]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedRevExterior" name="revExterior">
+            <ion-select-option *ngFor="let item of revExterior" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Rev. Pisos</ion-label>
-          <ion-select [(ngModel)]="acabados.revPisos" name="revPisos" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[5]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedRevPisos" name="revPisos">
+            <ion-select-option *ngFor="let item of revPisos" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -175,16 +175,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Rev. Escalera</ion-label>
-          <ion-select [(ngModel)]="acabados.revEscalera" name="revEscalera" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[6]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedRevEscalera" name="revEscalera">
+            <ion-select-option *ngFor="let item of revEscalera" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Cubie. Acabados</ion-label>
-          <ion-select [(ngModel)]="acabados.cubieAcabados" name="cubieAcabados" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[7]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedCubierta" name="cubieAcabados">
+            <ion-select-option *ngFor="let item of cubiertaAcabados" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -192,20 +190,19 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Ventanas</ion-label>
-          <ion-select [(ngModel)]="acabados.ventanas" name="ventanas" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[8]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedVentanas" name="ventanas">
+            <ion-select-option *ngFor="let item of ventanas" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Closets</ion-label>
-          <ion-select [(ngModel)]="acabados.closets" name="closets" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of acabadosCampos[9]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedCloset" name="closets">
+            <ion-select-option *ngFor="let item of closet" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
 
+      <!-- Instalaciones -->
       <ion-row>
         <ion-col>
           <h2>Instalaciones</h2>
@@ -215,16 +212,14 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Sanitaria</ion-label>
-          <ion-select [(ngModel)]="instalaciones.sanitaria" name="sanitaria" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of instalacionesCampos[0]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedInsSanitarias" name="sanitaria">
+            <ion-select-option *ngFor="let item of insSanitarias" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Nro. Baños</ion-label>
-          <ion-select [(ngModel)]="instalaciones.banos" name="banos" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of instalacionesCampos[1]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedNroBanios" name="banos">
+            <ion-select-option *ngFor="let item of nroBanios" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -232,21 +227,24 @@
       <ion-row>
         <ion-col size="6">
           <ion-label>Electricas</ion-label>
-          <ion-select [(ngModel)]="instalaciones.electrica" name="electrica" [ngModelOptions]="{standalone: true}">
-            <ion-select-option *ngFor="let item of instalacionesCampos[2]?.options || []" [value]="item">{{ item
-              }}</ion-select-option>
+          <ion-select [(ngModel)]="selectedInsElectricas" name="electricas">
+            <ion-select-option *ngFor="let item of insElectricas" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="6">
           <ion-label>Especiales</ion-label>
-          <ion-select [(ngModel)]="acabados.closets" [ngModelOptions]="{standalone: true}">
-            <ion-select-option value="01-No tiene"></ion-select-option>
+          <ion-select [(ngModel)]="selectedInsEspeciales" name="especiales">
+            <ion-select-option *ngFor="let item of insEspeciales" [value]="item.REN21CODI">{{ item.REN21CODI }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
 
-      <ion-button expand="full" type="submit" color="primary">Guardar Construcción</ion-button>
+      <!-- Botón de guardar -->
+      <ion-row>
+        <ion-col>
+          <ion-button expand="full" type="submit" color="primary">Guardar Construcción</ion-button>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   </form>
-
 </ion-content>

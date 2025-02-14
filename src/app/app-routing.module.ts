@@ -119,6 +119,10 @@ const routes: Routes = [
     path: 'ubilectura',
     loadChildren: () => import('./ubilectura/ubilectura.module').then( m => m.UbilecturaPageModule)
   },
+  {
+    path: 'consultageo',
+    loadChildren: () => import('./consultageo/consultageo.module').then( m => m.ConsultageoPageModule)
+  },
 
 
 

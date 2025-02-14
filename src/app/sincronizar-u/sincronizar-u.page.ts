@@ -65,7 +65,9 @@ export class SincronizarUPage implements OnInit {
 
     const urlCatalogos = `${baseUrl}/api/auth/catalogo`;  // Endpoint de catálogos
     const urlConstrucccion = `${baseUrl}/api/auth/construccion`;  // Endpoint de construccion
-    const urlLecturas = `${baseUrl}/api/auth/prediosUrb?geocodigo=${this.geocodigosDisponibles}`;  // Endpoint de predios
+    const urlLecturas = `${baseUrl}/api/auth/prediosUrb?geocodigo=${this.geocodigosDisponibles}`;
+    const urlObtenerConstruccion = `${baseUrl}/api/auth/obtenercontruccion?TPPREDIO=PU`;
+
 
     try {
       const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
@@ -83,6 +85,14 @@ export class SincronizarUPage implements OnInit {
         await this.showToast('Catálogos sincronizados correctamente.');
       } else {
         await this.showToast('No se encontraron catálogos.');
+      }
+
+      const responseConstruccio = await this.http.get<any>(urlObtenerConstruccion).toPromise();
+      if (responseConstruccio.data) {
+        await this.ionicStorageService.agregarConKey('APP_PRE_CONSTRUC', responseConstruccio.data); // Almacenamos en IonicStorage
+        await this.showToast('Construcción sincronizada correctamente.');
+      } else {
+        await this.showToast('No se encontraron datos de construcción.');
       }
 
       // Luego obtenemos los predios
