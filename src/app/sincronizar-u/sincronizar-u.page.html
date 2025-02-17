@@ -4,18 +4,22 @@
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title>Sincronizar Predio Urbano</ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de retroceso (flecha) al final -->
+      <ion-back-button defaultHref="/urbanos"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <div class="container">
-      <div class="icon-container">
-        <ion-icon name="leaf" class="icon"></ion-icon>
+  <div class="container">
+    <div class="icon-container">
+      <ion-icon name="leaf" class="icon"></ion-icon>
 
-      </div>
-      <div class="button-container">
-        <ion-button expand="block" color="secondary" (click)="obtenerDatos()">Obtener Información</ion-button>
-        <ion-button expand="block" color="secondary">Actualizar Información</ion-button>
-      </div>
     </div>
+    <div class="button-container">
+      <ion-button expand="block" color="secondary" (click)="obtenerDatos()">Obtener Información</ion-button>
+      <ion-button expand="block" color="secondary">Actualizar Información</ion-button>
+    </div>
+  </div>
 </ion-content>

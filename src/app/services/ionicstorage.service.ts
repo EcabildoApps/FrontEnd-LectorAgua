@@ -429,10 +429,10 @@ export class IonicstorageService {
       // Obtener la estructura completa de "PREDIOS"
       const prediosStorage = await this.storage.get('PREDIOS');
       const prediosData = prediosStorage ? prediosStorage.data : [];
-  
+
       // Buscar si el predio ya existe en la lista
       const predioExistente = prediosData.find(item => item.IDPREDIOURBANO === predio.IDPREDIOURBANO);
-  
+
       if (predioExistente) {
         // Actualizar el predio existente
         Object.assign(predioExistente, predio);
@@ -440,10 +440,10 @@ export class IonicstorageService {
         // Agregar un nuevo predio
         prediosData.push(predio);
       }
-  
+
       // Guardar la estructura completa de nuevo en el almacenamiento
       await this.storage.set('PREDIOS', { nombreTabla: 'predios', data: prediosData });
-  
+
       this.presentToast('Predio guardado correctamente');
     } catch (error) {
       console.error('Error al guardar o actualizar el predio:', error);
@@ -469,14 +469,14 @@ export class IonicstorageService {
     }
   }
 
-  
+
   async obtenerCatalogosConstru() {
     try {
       const catalogos = await this.storage.get('CONSTRUCCION');
       return catalogos ? catalogos : {
         closet: [],
         columna: [],
-        cubiertaAcabados: [], 
+        cubiertaAcabados: [],
         cubreVentana: [],
         entrePiso: [],
         escalera: [],
@@ -502,7 +502,7 @@ export class IonicstorageService {
       throw new Error('No se pudieron obtener las construcciones.');
     }
   }
-  
+
   async obtenerRegistrosAPP_PRE_CONSTRUC() {
     try {
       const construccionData = await this.storage.get('APP_PRE_CONSTRUC');
@@ -515,20 +515,48 @@ export class IonicstorageService {
   }
 
 
-// En tu servicio de almacenamiento
-async obtenerRegistrosConstruccion() {
-  try {
-    const construccionData = await this.storage.get('CONSTRUCCION');
-    console.log('Datos recuperados desde el almacenamiento:', construccionData);
-    return construccionData;
-  } catch (error) {
-    console.error('Error al obtener los registros de construcción:', error);
-    return null;
+  // En tu servicio de almacenamiento
+  async obtenerRegistrosConstruccion() {
+    try {
+      const construccionData = await this.storage.get('CONSTRUCCION');
+      console.log('Datos recuperados desde el almacenamiento:', construccionData);
+      return construccionData;
+    } catch (error) {
+      console.error('Error al obtener los registros de construcción:', error);
+      return null;
+    }
   }
-}
 
 
 
+
+  async guardarOActualizarConstruccion(predio: any) {
+    try {
+      // Obtener la estructura completa de "PREDIOS"
+      const prediosStorage = await this.storage.get('APP_PRE_CONSTRUC');
+      const prediosData = prediosStorage ? prediosStorage.data : [];
+
+      // Buscar si el predio ya existe en la lista
+      const predioExistente = prediosData.find(item => item.PUR01CODI === predio.PUR01CODI
+      );
+
+      if (predioExistente) {
+        // Actualizar el predio existente
+        Object.assign(predioExistente, predio);
+      } else {
+        // Agregar un nuevo predio
+        prediosData.push(predio);
+      }
+
+      // Guardar la estructura completa de nuevo en el almacenamiento
+      await this.storage.set('APP_PRE_CONSTRUC', { nombreTabla: 'app_pre_construc', data: prediosData });
+
+      this.presentToast('Construccion guardado correctamente');
+    } catch (error) {
+      console.error('Error al guardar o actualizar el predio:', error);
+      this.presentToast('Ocurrió un error al guardar o actualizar la construccion.');
+    }
+  }
 
 
 }

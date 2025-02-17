@@ -280,7 +280,7 @@ export class ContruccionUPage implements OnInit {
 
 
   }
-  
+
   setSelectorValue(predio: any, predioKey: string, modelKey: string, catalogo: any[]) {
     const catalogoItem = catalogo.find(item => item.REN21SUBF === predio[predioKey]);
     if (catalogoItem) {
@@ -312,28 +312,47 @@ export class ContruccionUPage implements OnInit {
     toast.present();
   }
 
-  async guardarConstruccion() {
+
+  async guardarCambios() {
     try {
       const predio = this.predios[0];
-      predio.GESTADOCONS = this.getValorCatalogo(this.selectedEstadoCons, 'estestadoCons').subf;
 
-      //await this.ionicStorageService.guardguardarOActualizarPredioar('APP_PER_CONSTRUC', datosConstruccion);
-      await this.presentToast('Construcción guardada correctamente.');
+      // Obtener el valor de REN21SUBF
+      predio.GESTADOCONS = this.getValorCatalogo(this.selectedEstadoCons, 'estestadoCon').subf;
+      predio.GESTRUCTURA = this.getValorCatalogo(this.selectedEstructura, 'estructur').subf;
+      predio.GESTCOLU = this.getValorCatalogo(this.selectedColumanas, 'column').subf;
+      predio.GESTVIGAS = this.getValorCatalogo(this.selectedVigas, 'viga').subf;
+      predio.GESTEPISO = this.getValorCatalogo(this.selectedEntrePiso, 'entrePis').subf;
+      predio.GESTPARE = this.getValorCatalogo(this.selectedParedes, 'parede').subf;
+      predio.GESCALERAS = this.getValorCatalogo(this.selectedEscalera, 'escaler').subf;
+      predio.GESTCUBIER = this.getValorCatalogo(this.selectedCubierta, 'estructuraCubiert').subf;
+      predio.GACATUMB = this.getValorCatalogo(this.selectedTumbados, 'tumbado').subf;
+      predio.GACAPUER = this.getValorCatalogo(this.selectedPuerta, 'puert').subf;
+      predio.GCUBRVENT = this.getValorCatalogo(this.selectedCubVentana, 'cubreVentan').subf;
+      predio.GREVINTERIOR = this.getValorCatalogo(this.selectedRevInterior, 'revInterio').subf;
+      predio.GREVINTERIOR = this.getValorCatalogo(this.selectedRevExterior, 'revExterio').subf;
+      predio.GACAPISOS = this.getValorCatalogo(this.selectedRevPisos, 'revPisos').subf;
+      predio.GREVESCA = this.getValorCatalogo(this.selectedRevEscalera, 'revEscaler').subf;
+      predio.GCUBIACAB = this.getValorCatalogo(this.selectedCubiertaAcabados, 'cubiertaAcabado').subf;
+      predio.GESTRUCTURA = this.getValorCatalogo(this.selectedVentanas, 'ventana').subf;
+      predio.GCLOSER = this.getValorCatalogo(this.selectedCloset, 'close').subf;
+      predio.GISANI = this.getValorCatalogo(this.selectedInsSanitarias, 'insSanitaria').subf;
+      predio.GINBANIOS = this.getValorCatalogo(this.selectedNroBanios, 'nroBanio').subf;
+      predio.GCUBRVENT = this.getValorCatalogo(this.selectedInsElectricas, 'insElectrica').subf;
+      // predio.GIESPECIA = this.getValorCatalogo(this.selectedInsEspeciales, 'insEspeciales').subf;
+
+
+      // Guardar los valores en Ionic Storage
+      await this.ionicStorageService.guardarOActualizarConstruccion(predio);
+
+      // Mostrar mensaje de éxito
+      await this.presentToast('Cambios guardados correctamente.');
     } catch (error) {
-      console.error('Error al guardar la construcción:', error);
-      await this.presentToast('Ocurrió un error al guardar la construcción.');
+      console.error('Error al guardar los cambios:', error);
+      await this.presentToast('Ocurrió un error al guardar los cambios.');
     }
   }
 
-
-  /*   guardarConstruccion() {
-      console.log('Guardando construcción...', {
-        bloque: this.bloque,
-        estructura: this.estructura,
-        acabados: this.acabados,
-        instalaciones: this.instalaciones
-      });
-    } */
 
 
 }

@@ -12,7 +12,7 @@
 </ion-header>
 
 <ion-content>
-  <form (ngSubmit)="guardarConstruccion()">
+
 
     <ion-list>
       <ion-item *ngFor="let dato of misDatosConstruccion">
@@ -255,7 +255,7 @@
       <!-- Botón de guardar -->
     </div>
     <ion-item>
-      <ion-button expand="full" type="submit" color="primary">Guardar Construcción</ion-button>
+      <ion-button expand="full" type="submit" color="primary" (click)="guardarCambios()">Guardar Construcción</ion-button>
     </ion-item>
-  </form>
+
 </ion-content>
