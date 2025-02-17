@@ -469,8 +469,50 @@ export class IonicstorageService {
     }
   }
 
-
-
+  
+  async obtenerCatalogosConstru() {
+    try {
+      const catalogos = await this.storage.get('CONSTRUCCION');
+      return catalogos ? catalogos : {
+        closet: [],
+        columna: [],
+        cubiertaAcabados: [], 
+        cubreVentana: [],
+        entrePiso: [],
+        escalera: [],
+        estestadoCons: [],
+        estructura: [],
+        estructuraCubierta: [],
+        insElectricas: [],
+        insEspeciales: [],
+        insSanitarias: [],
+        nroBanios: [],
+        paredes: [],
+        puerta: [],
+        revEscalera: [],
+        revExterior: [],
+        revInterior: [],
+        revPisos: [],
+        tumbados: [],
+        ventanas: [],
+        vigas: []
+      };
+    } catch (error) {
+      console.error('Error al obtener construcciones:', error);
+      throw new Error('No se pudieron obtener las construcciones.');
+    }
+  }
+  
+  async obtenerRegistrosAPP_PRE_CONSTRUC() {
+    try {
+      const construccionData = await this.storage.get('APP_PRE_CONSTRUC');
+      console.log('Datos recuperados desde el almacenamiento:', construccionData);
+      return construccionData;
+    } catch (error) {
+      console.error('Error al obtener los registros de construcción:', error);
+      return null;
+    }
+  }
 
 
 // En tu servicio de almacenamiento
@@ -484,19 +526,6 @@ async obtenerRegistrosConstruccion() {
     return null;
   }
 }
-
-
-async obtenerRegistrosAPP_PRE_CONSTRUC() {
-  try {
-    const construccionData = await this.storage.get('APP_PRE_CONSTRUC');
-    console.log('Datos recuperados desde el almacenamiento:', construccionData);
-    return construccionData;
-  } catch (error) {
-    console.error('Error al obtener los registros de construcción:', error);
-    return null;
-  }
-}
-
 
 
 

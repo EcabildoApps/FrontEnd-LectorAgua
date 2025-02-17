@@ -87,12 +87,18 @@ export class SincronizarUPage implements OnInit {
         await this.showToast('No se encontraron catálogos.');
       }
 
+ 
+
       const responseConstruccio = await this.http.get<any>(urlObtenerConstruccion).toPromise();
-      if (responseConstruccio.data) {
-        await this.ionicStorageService.agregarConKey('APP_PRE_CONSTRUC', responseConstruccio.data); // Almacenamos en IonicStorage
-        await this.showToast('Construcción sincronizada correctamente.');
-      } else {
-        await this.showToast('No se encontraron datos de construcción.');
+      if (responseConstruccio.message && responseConstruccio.message.includes('No se encontraron construcción')) {
+        await this.showToast('No se encontraron predios para la ruta proporcionada.');
+      } else if (responseConstruccio.data) {
+        await this.sincronizarTabla(
+          urlObtenerConstruccion,
+          'app_pre_construc',
+          'APP_PRE_CONSTRUC'
+        );
+        await this.showToast('Datos sincronizados correctamente.');
       }
 
       // Luego obtenemos los predios
