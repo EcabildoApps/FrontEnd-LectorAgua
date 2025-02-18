@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Predio Rural</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
+    <ion-title>Predio Rural</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -32,6 +32,17 @@
         <ion-icon name="search" color="secondary"></ion-icon>
       </ion-card-content>
     </ion-card>
+
+    
+    <ion-card class="custom-card" [routerLink]="('/listaprurales')">
+      <ion-card-header>
+        <ion-card-title>Identificación Predial</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-icon name="clipboard" color="danger"></ion-icon>
+      </ion-card-content>
+    </ion-card>
+
 
 <!--     <ion-card class="custom-card" [routerLink]="('/lecturagt')">
       <ion-card-header>

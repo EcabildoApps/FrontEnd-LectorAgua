@@ -4,6 +4,10 @@
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title>Sincronizar Predio Rural</ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de retroceso (flecha) al final -->
+      <ion-back-button defaultHref="/rurales"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -15,7 +19,7 @@
       </div>
       <div class="button-container">
         <ion-button expand="block" color="secondary" (click)="obtenerDatos()">Obtener Información</ion-button>
-        <ion-button expand="block" color="secondary" (click)="actualizarLecturas()">Actualizar Información</ion-button>
+        <ion-button expand="block" color="secondary">Actualizar Información</ion-button>
       </div>
     </div>
 </ion-content>

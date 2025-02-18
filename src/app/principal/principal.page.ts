@@ -33,7 +33,7 @@ export class PrincipalPage {
       this.showLecturaCard = false;  // No puede ver el módulo de Lectura
       this.showRuralCard = false;    // No puede ver el módulo de Rural
       this.showUrbanoCard = true;    // Puede ver el módulo de Urbano
-    } else if (this.userRole === 'rural') {
+    } else if (this.userRole === 'RUR') {
       this.showLecturaCard = false;  // No puede ver el módulo de Lectura
       this.showUrbanoCard = false;   // No puede ver el módulo Urbano
     } else if (this.userRole === 'admin') {
@@ -54,7 +54,7 @@ export class PrincipalPage {
     if (
       (tipo === 'LEC' && !this.showLecturaCard) ||
       (tipo === 'URB' && !this.showUrbanoCard) ||
-      (tipo === 'rural' && !this.showRuralCard)
+      (tipo === 'RUR' && !this.showRuralCard)
     ) {
       this.showPermissionToast();  // Si no tiene acceso, mostramos el mensaje
       return;
@@ -76,7 +76,7 @@ export class PrincipalPage {
         case 'URB':
           this.router.navigate(['/urbanos']);
           break;
-        case 'rural':
+        case 'RUR':
           this.router.navigate(['/rurales']);
           break;
         default:

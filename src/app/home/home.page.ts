@@ -166,8 +166,11 @@ export class HomePage {
 
             const rutas = response.user.RUTA ? [response.user.RUTA] : [];
             const geocodigo = response.user.GEOCODIGO ? [response.user.GEOCODIGO] : [];
+            const poligono = response.user.GEOCODIGO ? [response.user.GEOCODIGO] : [];
+
             localStorage.setItem('rutas', JSON.stringify(rutas));
             localStorage.setItem('geocodigo', JSON.stringify(geocodigo));
+            localStorage.setItem('poligono', JSON.stringify(poligono));
 
             if (this.userRole === 'admin') {
               await this.showToast(`✅ Bienvenido ${this.username}`);

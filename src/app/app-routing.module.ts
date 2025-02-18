@@ -123,6 +123,10 @@ const routes: Routes = [
     path: 'consultageo',
     loadChildren: () => import('./consultageo/consultageo.module').then( m => m.ConsultageoPageModule)
   },
+  {
+    path: 'listaprurales',
+    loadChildren: () => import('./listaprurales/listaprurales.module').then( m => m.ListapruralesPageModule)
+  },
 
 
 

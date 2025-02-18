@@ -558,5 +558,38 @@ export class IonicstorageService {
     }
   }
 
+  async cargarPrediosRURConFiltroGeneral(ruta: string, valorFiltro: string = '') {
+    try {
+      const listado = await this.listar();
+      console.log('Listado completo:', listado);
+
+      const registrosLecturas = listado.filter(item => item.k === 'PREDIOSRUR');
+      console.log('Registros de predios:', registrosLecturas);
+
+      if (registrosLecturas.length === 0) {
+        throw new Error('No se encontraron registros de predios.');
+      }
+
+      const datosLecturas = registrosLecturas[0].v.data;
+      console.log('Datos de lecturas:', datosLecturas);
+
+      let registrosFiltrados = datosLecturas.filter(item => item.POLIGONO === ruta);
+      console.log('Registros filtrados por GEOCODIGO:', registrosFiltrados);
+
+      if (valorFiltro) {
+        registrosFiltrados = registrosFiltrados.filter(item =>
+          (item.GID && item.GID.toString().includes(valorFiltro)) ||
+          (item.CLAVE_CATASTRAL && item.CLAVE_CATASTRAL.toString().includes(valorFiltro))
+        );
+        console.log('Registros después de aplicar filtro adicional:', registrosFiltrados);
+      }
+
+      return registrosFiltrados;
+    } catch (error) {
+      console.error('Error al cargar registros con filtros locales:', error);
+      throw new Error('Ocurrió un error al cargar los registros locales.');
+    }
+  }
+
 
 }

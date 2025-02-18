@@ -316,42 +316,61 @@ export class ContruccionUPage implements OnInit {
   async guardarCambios() {
     try {
       const predio = this.predios[0];
+      let cambiosRealizados = false;
+      const cambios = {}; // Solo almacena los cambios válidos
 
-      // Obtener el valor de REN21SUBF
-      predio.GESTADOCONS = this.getValorCatalogo(this.selectedEstadoCons, 'estestadoCon').subf;
-      predio.GESTRUCTURA = this.getValorCatalogo(this.selectedEstructura, 'estructur').subf;
-      predio.GESTCOLU = this.getValorCatalogo(this.selectedColumanas, 'column').subf;
-      predio.GESTVIGAS = this.getValorCatalogo(this.selectedVigas, 'viga').subf;
-      predio.GESTEPISO = this.getValorCatalogo(this.selectedEntrePiso, 'entrePis').subf;
-      predio.GESTPARE = this.getValorCatalogo(this.selectedParedes, 'parede').subf;
-      predio.GESCALERAS = this.getValorCatalogo(this.selectedEscalera, 'escaler').subf;
-      predio.GESTCUBIER = this.getValorCatalogo(this.selectedCubierta, 'estructuraCubiert').subf;
-      predio.GACATUMB = this.getValorCatalogo(this.selectedTumbados, 'tumbado').subf;
-      predio.GACAPUER = this.getValorCatalogo(this.selectedPuerta, 'puert').subf;
-      predio.GCUBRVENT = this.getValorCatalogo(this.selectedCubVentana, 'cubreVentan').subf;
-      predio.GREVINTERIOR = this.getValorCatalogo(this.selectedRevInterior, 'revInterio').subf;
-      predio.GREVINTERIOR = this.getValorCatalogo(this.selectedRevExterior, 'revExterio').subf;
-      predio.GACAPISOS = this.getValorCatalogo(this.selectedRevPisos, 'revPisos').subf;
-      predio.GREVESCA = this.getValorCatalogo(this.selectedRevEscalera, 'revEscaler').subf;
-      predio.GCUBIACAB = this.getValorCatalogo(this.selectedCubiertaAcabados, 'cubiertaAcabado').subf;
-      predio.GESTRUCTURA = this.getValorCatalogo(this.selectedVentanas, 'ventana').subf;
-      predio.GCLOSER = this.getValorCatalogo(this.selectedCloset, 'close').subf;
-      predio.GISANI = this.getValorCatalogo(this.selectedInsSanitarias, 'insSanitaria').subf;
-      predio.GINBANIOS = this.getValorCatalogo(this.selectedNroBanios, 'nroBanio').subf;
-      predio.GCUBRVENT = this.getValorCatalogo(this.selectedInsElectricas, 'insElectrica').subf;
-      // predio.GIESPECIA = this.getValorCatalogo(this.selectedInsEspeciales, 'insEspeciales').subf;
+      const actualizarSiCambio = (campo, valorSeleccionado, categoria) => {
+        const nuevoValor = this.getValorCatalogo(valorSeleccionado, categoria)?.subf;
 
+        console.log(`Campo: ${campo}, Valor Actual: ${predio[campo]}, Nuevo Valor: ${nuevoValor}`);
 
-      // Guardar los valores en Ionic Storage
+        if (nuevoValor && nuevoValor !== predio[campo]) {
+          cambios[campo] = nuevoValor;
+          cambiosRealizados = true;
+        }
+      };
+
+      actualizarSiCambio('GESTADOCONS', this.selectedEstadoCons, 'estestadoCons');
+      actualizarSiCambio('GESTRUCTURA', this.selectedEstructura, 'estructura');
+      actualizarSiCambio('GESTCOLU', this.selectedColumanas, 'columna');
+      actualizarSiCambio('GESTVIGAS', this.selectedVigas, 'vigas');
+      actualizarSiCambio('GESTEPISO', this.selectedEntrePiso, 'entrePiso');
+      actualizarSiCambio('GESTPARE', this.selectedParedes, 'paredes');
+      actualizarSiCambio('GESCALERAS', this.selectedEscalera, 'escalera');
+      actualizarSiCambio('GESTCUBIER', this.selectedCubierta, 'estructuraCubierta');
+      actualizarSiCambio('GACATUMB', this.selectedTumbados, 'tumbados');
+      actualizarSiCambio('GACAPUER', this.selectedPuerta, 'puerta');
+      actualizarSiCambio('GCUBRVENT', this.selectedCubVentana, 'cubreVentana');
+      actualizarSiCambio('GREVINTERIOR', this.selectedRevInterior, 'revInterior');
+      actualizarSiCambio('GREVINTERIOR', this.selectedRevExterior, 'revExterior');
+      actualizarSiCambio('GACAPISOS', this.selectedRevPisos, 'revPisos');
+      actualizarSiCambio('GREVESCA', this.selectedRevEscalera, 'revEscalera');
+      actualizarSiCambio('GCUBIACAB', this.selectedCubiertaAcabados, 'cubiertaAcabados');
+      actualizarSiCambio('GESTRUCTURA', this.selectedVentanas, 'ventanas');
+      actualizarSiCambio('GCLOSER', this.selectedCloset, 'closet');
+      actualizarSiCambio('GISANI', this.selectedInsSanitarias, 'insSanitarias');
+      actualizarSiCambio('GINBANIOS', this.selectedNroBanios, 'nroBanios');
+      actualizarSiCambio('GCUBRVENT', this.selectedInsElectricas, 'insElectricas');
+
+      if (!cambiosRealizados) {
+        await this.presentToast('No se realizaron cambios.');
+        return;
+      }
+
+      // Aplicar solo los cambios sin borrar los datos originales
+      for (const key in cambios) {
+        predio[key] = cambios[key];
+      }
+
       await this.ionicStorageService.guardarOActualizarConstruccion(predio);
 
-      // Mostrar mensaje de éxito
       await this.presentToast('Cambios guardados correctamente.');
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
       await this.presentToast('Ocurrió un error al guardar los cambios.');
     }
   }
+
 
 
 
