@@ -3,15 +3,14 @@ import { ToastController } from '@ionic/angular';
 import { IonicstorageService } from '../services/ionicstorage.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-contruccion-u',
-  templateUrl: './contruccion-u.page.html',
-  styleUrls: ['./contruccion-u.page.scss'],
-  standalone: false
+  selector: 'app-contruccion-r',
+  templateUrl: './contruccion-r.page.html',
+  styleUrls: ['./contruccion-r.page.scss'],
+  standalone: false,
 })
-export class ContruccionUPage implements OnInit {
+export class ContruccionRPage implements OnInit {
 
   geocodigosDisponibles: string[] = [];
   misDatosConstruccion: any[] = [];
@@ -68,7 +67,8 @@ export class ContruccionUPage implements OnInit {
   selectedInsElectricas: string;
   //  selectedInsEspeciales: string;
 
-
+  isEditMode: boolean = false;
+  codigo: string;
 
   constructor(
     private http: HttpClient,
@@ -77,21 +77,53 @@ export class ContruccionUPage implements OnInit {
     private route: ActivatedRoute,
   ) { }
 
-  ngOnInit() {
-    this.predioId = +this.route.snapshot.paramMap.get('PUR01CODI');
 
-    const rutasGuardadas = localStorage.getItem('geocodigo');
-    if (rutasGuardadas) {
-      this.geocodigosDisponibles = JSON.parse(rutasGuardadas);
-    }
+  validarCampos(): boolean {
+    const camposObligatorios = [
+      this.selectedEstadoCons, this.selectedEstructura, this.selectedColumanas,
+      this.selectedVigas, this.selectedEntrePiso, this.selectedParedes,
+      this.selectedEscalera, this.selectedCubierta, this.selectedTumbados,
+      this.selectedPuerta, this.selectedCubVentana, this.selectedRevInterior,
+      this.selectedRevExterior, this.selectedRevPisos, this.selectedRevEscalera,
+      this.selectedCubiertaAcabados, this.selectedVentanas, this.selectedCloset,
+      this.selectedInsSanitarias, this.selectedNroBanios, this.selectedInsElectricas
+    ];
 
-    this.obtenerPredios();
-    this.obtenerCatalogos(); // Asegurarse de obtener los catálogos
-
-
-    console.log('Predios predioId:', this.predioId);
+    // Comprobar que todos los campos estén seleccionados (no nulos ni vacíos)
+    return camposObligatorios.every(campo => campo);
   }
 
+  ngOnInit() {
+    // Obtener el código desde queryParams o paramMap
+    this.predioId = +this.route.snapshot.paramMap.get('PUR01CODI');
+    this.codigo = this.route.snapshot.queryParamMap.get('PRU01CODI'); // Capturar código del queryParam
+
+
+    console.log('ID desde paramMap:', this.predioId);
+    console.log('ID desde queryParamMap:', this.codigo);
+
+    // Determinar si estamos en modo edición o agregando
+    this.isEditMode = this.predioId ? true : false;
+    console.log('Código recibido:', this.codigo || this.predioId);
+
+    if (this.isEditMode) {
+      console.log('Modo edición activado.');
+      this.obtenerPredios();
+    } else {
+      // Si se está agregando una nueva construcción
+      this.misDatosConstruccion = [{
+        PUR01CODI: Number(this.codigo),
+        PISO: null,
+        BLOQUE: null,
+      }];
+    }
+
+    this.obtenerCatalogos();
+  }
+
+  isValid(dato: any): boolean {
+    return !dato.BLOQUE || !dato.PISO;
+  }
 
 
   async showToast(message: string) {
@@ -107,11 +139,13 @@ export class ContruccionUPage implements OnInit {
   async obtenerPredios() {
     try {
       const lecturasGuardadas = await this.ionicStorageService.rescatar('APP_PRE_CONSTRUC');
+      console.log('Datos de APP_PRE_CONSTRUC:', lecturasGuardadas);
 
       if (lecturasGuardadas && lecturasGuardadas.data) {
         this.predios = lecturasGuardadas.data;
 
         const predioSeleccionado = this.predios.find(predio => predio.PUR01CODI === this.predioId);
+
         if (predioSeleccionado) {
           console.log('Predio seleccionado:', predioSeleccionado);
           this.misDatosConstruccion = [{
@@ -224,9 +258,14 @@ export class ContruccionUPage implements OnInit {
       return;
     }
 
-    const predio = this.predios[0];  // Usar el primer predio de la lista (que es el seleccionado)
-    
+    console.log('Datos de predios:', this.predios);
 
+    const predio = this.predios.find(p => p.PUR01CODI === this.predioId); 
+    if (!predio) {
+      console.warn('No se encontró el predio con PUR01CODI = 503');
+      return;
+    }
+    
     this.misDatosConstruccion = [predio];
     this.catalogos = datosGuardados;
     this.close = this.catalogos.closet || [];
@@ -293,14 +332,20 @@ export class ContruccionUPage implements OnInit {
 
   getValorCatalogo(codigo: string, tipoCatalogo: string): { subf: string } {
     const catalogo = this.catalogos[tipoCatalogo];
-    if (catalogo) {
-      const opcion = catalogo.find((item: any) => item.REN21CODI.toString() === codigo.toString());
-      if (opcion) {
-        return { subf: opcion.REN21SUBF };  // Devuelve la descripción y el REN21SUBF
-      }
+    if (!catalogo || !Array.isArray(catalogo)) {
+      console.warn(`El catálogo ${tipoCatalogo} no está definido o no es un array.`);
+      return { subf: '' };
     }
-    return { subf: '' };  // Si no se encuentra el código, retorna un objeto vacío
+
+    const opcion = catalogo.find((item: any) => item.REN21CODI && item.REN21CODI.toString() === codigo?.toString());
+    if (opcion) {
+      return { subf: opcion.REN21SUBF };
+    }
+
+    console.warn(`No se encontró el código ${codigo} en el catálogo ${tipoCatalogo}`);
+    return { subf: '' };
   }
+
 
 
   async presentToast(message: string) {
@@ -313,24 +358,59 @@ export class ContruccionUPage implements OnInit {
     toast.present();
   }
 
-
   async guardarCambios() {
     try {
-      const predio = this.predios[0];
+      // Verificar si misDatosConstruccion tiene datos
+      if (!this.misDatosConstruccion || this.misDatosConstruccion.length === 0) {
+        await this.presentToast('No hay datos disponibles para guardar.');
+        return;
+      }
+
+      const predio = this.misDatosConstruccion[0]; // Asegúrate de que predio existe y tiene datos
+
+      // Verificar si predio tiene las propiedades BLOQUE y PISO definidas
+      if (!predio || !predio.BLOQUE || !predio.PISO) {
+        await this.presentToast('El número de bloque y el número de piso son obligatorios.');
+        return;
+      }
+
+      console.log('Predio a guardar:', predio.BLOQUE, predio.PISO);
       let cambiosRealizados = false;
       const cambios = {}; // Solo almacena los cambios válidos
 
+      // Función para actualizar un campo si el valor seleccionado ha cambiado
       const actualizarSiCambio = (campo, valorSeleccionado, categoria) => {
+        if (!valorSeleccionado) {
+          console.warn(`Valor seleccionado para ${campo} es inválido.`);
+          return;
+        }
+
         const nuevoValor = this.getValorCatalogo(valorSeleccionado, categoria)?.subf;
-
-        console.log(`Campo: ${campo}, Valor Actual: ${predio[campo]}, Nuevo Valor: ${nuevoValor}`);
-
-        if (nuevoValor && nuevoValor !== predio[campo]) {
+        if (nuevoValor && nuevoValor !== this.misDatosConstruccion[0][campo]) {
           cambios[campo] = nuevoValor;
           cambiosRealizados = true;
         }
       };
 
+      // Verificar si todos los campos obligatorios están llenos
+      const camposObligatorios = [
+        this.selectedEstadoCons, this.selectedEstructura, this.selectedColumanas,
+        this.selectedVigas, this.selectedEntrePiso, this.selectedParedes,
+        this.selectedEscalera, this.selectedCubierta, this.selectedTumbados,
+        this.selectedPuerta, this.selectedCubVentana, this.selectedRevInterior,
+        this.selectedRevExterior, this.selectedRevPisos, this.selectedRevEscalera,
+        this.selectedCubiertaAcabados, this.selectedVentanas, this.selectedCloset,
+        this.selectedInsSanitarias, this.selectedNroBanios, this.selectedInsElectricas
+      ];
+
+      for (let campo of camposObligatorios) {
+        if (!campo) {
+          await this.presentToast('Por favor, complete todos los campos obligatorios.');
+          return;
+        }
+      }
+
+      // Aquí realizas la actualización de todos los campos
       actualizarSiCambio('GESTADOCONS', this.selectedEstadoCons, 'estestadoCons');
       actualizarSiCambio('GESTRUCTURA', this.selectedEstructura, 'estructura');
       actualizarSiCambio('GESTCOLU', this.selectedColumanas, 'columna');
@@ -353,6 +433,7 @@ export class ContruccionUPage implements OnInit {
       actualizarSiCambio('GINBANIOS', this.selectedNroBanios, 'nroBanios');
       actualizarSiCambio('GCUBRVENT', this.selectedInsElectricas, 'insElectricas');
 
+      // Verificar si se realizaron cambios
       if (!cambiosRealizados) {
         await this.presentToast('No se realizaron cambios.');
         return;
@@ -363,16 +444,20 @@ export class ContruccionUPage implements OnInit {
         predio[key] = cambios[key];
       }
 
+      if (predio.PUR01CODI) {
+        predio.PUR01CODI = Number(predio.PUR01CODI);
+      }
+
+      // Guardar o actualizar la construcción en el almacenamiento
       await this.ionicStorageService.guardarOActualizarConstruccion(predio);
 
+      // Mostrar mensaje de éxito
       await this.presentToast('Cambios guardados correctamente.');
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
       await this.presentToast('Ocurrió un error al guardar los cambios.');
     }
   }
-
-
 
 
 }

@@ -48,10 +48,10 @@ export class SincronizarRPage implements OnInit {
 
     const baseUrl = `http://${dominio}:${puerto}`;
 
-  //  const urlCatalogos = `${baseUrl}/api/auth/catalogo`;  // Endpoint de catálogos
+    const urlCatalogos = `${baseUrl}/api/auth/catalogoRur`;  // Endpoint de catálogos
     //const urlConstrucccion = `${baseUrl}/api/auth/construccion`;  // Endpoint de construccion
     const urlLecturas = `${baseUrl}/api/auth/prediosRur?poligono=${this.geocodigosDisponibles}`;
- //  const urlObtenerConstruccion = `${baseUrl}/api/auth/obtenercontruccion?TPPREDIO=PU`;
+    const urlObtenerConstruccion = `${baseUrl}/api/auth/obtenercontruccion?TPPREDIO=PR`;
 
 
     try {
@@ -64,17 +64,17 @@ export class SincronizarRPage implements OnInit {
       }
  */
       // Primero obtenemos los catálogos
-/*       const responseCatalogos = await this.http.get<any>(urlCatalogos).toPromise();
+      const responseCatalogos = await this.http.get<any>(urlCatalogos).toPromise();
       if (responseCatalogos.data) {
-        await this.ionicStorageService.agregarConKey('CATALOGOS', responseCatalogos.data);  // Almacenamos los catálogos en IonicStorage
+        await this.ionicStorageService.agregarConKey('CATALOGOSRUR', responseCatalogos.data);  // Almacenamos los catálogos en IonicStorage
         await this.showToast('Catálogos sincronizados correctamente.');
       } else {
         await this.showToast('No se encontraron catálogos.');
       }
 
- */
 
-/*       const responseConstruccio = await this.http.get<any>(urlObtenerConstruccion).toPromise();
+
+      const responseConstruccio = await this.http.get<any>(urlObtenerConstruccion).toPromise();
       if (responseConstruccio.message && responseConstruccio.message.includes('No se encontraron construcción')) {
         await this.showToast('No se encontraron predios para la ruta proporcionada.');
       } else if (responseConstruccio.data) {
@@ -85,7 +85,7 @@ export class SincronizarRPage implements OnInit {
         );
         await this.showToast('Datos sincronizados correctamente.');
       }
- */
+
       // Luego obtenemos los predios
       const responsePredios = await this.http.get<any>(urlLecturas).toPromise();
       if (responsePredios.message && responsePredios.message.includes('No se encontraron predios')) {

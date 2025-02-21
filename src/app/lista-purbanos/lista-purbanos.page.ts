@@ -72,10 +72,10 @@ export class ListaPurbanosPage implements OnInit {
         await this.presentToast('No se encontraron predios almacenadas.');
         return;
       }
-
+      console.log('Datos de predios:', datosLecturas);
       // Buscar el registro con el IDCUENTA proporcionado
       const registro = datosLecturas.data.find(item => item.PUR01CODI === PUR01CODI);
-
+      
       if (registro) {
         console.log('Registro encontrado:', registro);
         this.navCtrl.navigateForward(`/informacionP/${PUR01CODI}`);

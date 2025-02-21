@@ -1,0 +1,183 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Infraestructura y Servicios</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/rurales"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <div class="grid-container">
+      <!-- Tipología del Predio -->
+      <ion-card class="responsive-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="home-outline"></ion-icon> Topología del Predio
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-label position="floating">Poblac. Cercana</ion-label>
+            <ion-select [(ngModel)]="selectedPoblacerca" interface="popover">
+              <ion-select-option *ngFor="let item of poblacerca" [value]="item.REN21CODI">
+                {{ item.REN21DESC }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Orden de Via</ion-label>
+            <ion-select [(ngModel)]="selectedOrdenvia">
+              <ion-select-option *ngFor="let item of ordenvia" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Servicios -->
+      <ion-card class="responsive-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="settings-outline"></ion-icon> Servicios
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- Agua -->
+          <ion-item class="services-item">
+            <ion-icon name="water-outline" slot="start" class="icon"></ion-icon>
+            <ion-label>Agua</ion-label>
+            <ion-checkbox slot="end" [(ngModel)]="aguaDisponible"></ion-checkbox>
+          </ion-item>
+
+          <!-- E. Eléctrica -->
+          <ion-item class="services-item">
+            <ion-icon name="flash-outline" slot="start" class="icon"></ion-icon>
+            <ion-label>E. Eléctrica</ion-label>
+            <ion-checkbox slot="end" [(ngModel)]="electricaDisponible"></ion-checkbox>
+          </ion-item>
+
+          <!-- Alcantarillado -->
+          <ion-item class="services-item">
+            <ion-icon name="rainy-outline" slot="start" class="icon"></ion-icon>
+            <ion-label>Alcantarillado</ion-label>
+            <ion-checkbox slot="end" [(ngModel)]="alcantarilladoDisponible"></ion-checkbox>
+          </ion-item>
+
+          <!-- Aseo Calle -->
+          <ion-item class="services-item">
+            <ion-icon name="brush-outline" slot="start" class="icon"></ion-icon>
+            <ion-label>Telefono</ion-label>
+            <ion-checkbox slot="end" [(ngModel)]="telefonoDisponible"></ion-checkbox>
+          </ion-item>
+
+          <!-- Acera -->
+          <ion-item class="services-item">
+            <ion-icon name="walk-outline" slot="start" class="icon"></ion-icon>
+            <ion-label>Transporte Publico</ion-label>
+            <ion-checkbox slot="end" [(ngModel)]="transporteDisponible"></ion-checkbox>
+          </ion-item>
+
+
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <div class="grid-container">
+      <!-- Infraestructura -->
+      <ion-card class="responsive-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="build-outline"></ion-icon> Superficie
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-label position="floating">ZonaInfluencia</ion-label>
+            <ion-select [(ngModel)]="selectedZonaInfluencia" interface="popover">
+              <ion-select-option *ngFor="let item of zonainfluencia" [value]="item.REN21CODI">
+                {{ item.REN21DESC }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Clase Tierra</ion-label>
+            <ion-select [(ngModel)]="selectedClaseTierra">
+              <ion-select-option *ngFor="let item of clasetierra" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Uso predio</ion-label>
+            <ion-select [(ngModel)]="selectedUsoPredio">
+              <ion-select-option *ngFor="let item of usopredio" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="responsive-card">
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Topografia</ion-label>
+            <ion-select [(ngModel)]="selectedTopo">
+              <ion-select-option *ngFor="let item of topo" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Forma</ion-label>
+            <ion-select [(ngModel)]="selectedForma">
+              <ion-select-option *ngFor="let item of forma" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Drenaje</ion-label>
+            <ion-select [(ngModel)]="selectedDrenaje">
+              <ion-select-option *ngFor="let item of drenaje" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Tipo Riesgo</ion-label>
+            <ion-select [(ngModel)]="selectedTipoRiego">
+              <ion-select-option *ngFor="let item of tiporiego" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Riego</ion-label>
+            <ion-select [(ngModel)]="selectedRiego">
+              <ion-select-option *ngFor="let item of riego" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Erosion</ion-label>
+            <ion-select [(ngModel)]="selectedErosion">
+              <ion-select-option *ngFor="let item of erosion" [value]="item.REN21CODI">{{ item.REN21DESC
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+
+    <ion-button expand="full" color="primary" (click)="guardarCambios()">
+      Guardar Cambios
+    </ion-button>
+
+  </div>
+</ion-content>

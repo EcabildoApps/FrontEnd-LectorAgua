@@ -1,0 +1,237 @@
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 20px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
+ion-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo general para el contenido */
+ion-content {
+    --background: #f8f9fa;
+    padding: 16px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+ion-list {
+    --background: #f8f9fa;
+    /* Fondo más claro para la lista */
+    margin: 0;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Estilos para los formularios (padding y márgenes) */
+form {
+    margin-top: 20px;
+}
+
+/* Grid para organizar los items en columnas */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Dos columnas */
+    gap: 16px;
+    margin-top: 16px;
+}
+
+/* Ajuste de ion-items para el layout en columnas */
+ion-item {
+    --background: white;
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    /* Esto permite que los elementos se ajusten según el espacio disponible */
+    justify-content: space-between;
+    /* Asegura que los elementos se distribuyan con el último a la derecha */
+}
+
+ion-item .ion-label {
+    width: 100%;
+}
+
+ion-item .ion-col {
+    width: 100%;
+}
+
+ion-item ion-input,
+ion-item ion-select {
+    width: 100%;
+}
+
+/* Diseño responsivo */
+@media (max-width: 767px) {
+
+    /* Para pantallas pequeñas, usamos una sola columna */
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Ajuste de padding en items en pantallas pequeñas */
+    ion-item {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    ion-input,
+    ion-select {
+        font-size: 1rem;
+    }
+
+    ion-row {
+        flex-direction: column;
+    }
+
+    ion-col {
+        width: 100%;
+    }
+
+    ion-button {
+        font-size: 1.1rem;
+        padding: 10px;
+    }
+}
+
+/* Estilos generales para los inputs de texto y numéricos */
+ion-input {
+    --background: #fff;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+
+ion-input:focus {
+    border-color: #007bff;
+}
+
+/* Estilo para ion-select */
+ion-select {
+    --background: #f9f9f9;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+ion-select:focus {
+    border-color: #007bff;
+}
+
+/* Estilo para los títulos de secciones */
+h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+/* Estilo para los botones de submit */
+ion-button {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    width: 100%;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+/* Estilo para ion-item con GID Bloque */
+ion-item[size="6"] {
+    background-color: #28a745;
+    /* Fondo verde */
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    color: white;
+    /* Texto en blanco */
+    font-weight: bold;
+    /* Texto en negrita */
+}
+
+/* Estilo para el ion-label */
+ion-label {
+    font-size: 1.2rem;
+    margin-right: 16px;
+    color: white;
+    /* Color blanco para el texto */
+    flex: 1;
+}
+
+/* Estilo para ion-col que contiene el valor */
+ion-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px;
+}
+
+ion-input {
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+ion-item ion-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: rgb(15, 15, 15);
+    margin-top: 5px;
+}
+
+ion-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+/* Asegurar que los campos de entrada se alineen correctamente */
+ion-col:last-child {
+    display: flex;
+    justify-content: flex-end;
+    /* Coloca el contenido al final */
+    width: 100%;
+}
+
+/* Estilo para ion-text (el dato que se muestra) */
+ion-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    /* Asegura que el texto del dato esté en negrita */
+    color: rgb(15, 15, 15);
+    /* Texto en blanco */
+}

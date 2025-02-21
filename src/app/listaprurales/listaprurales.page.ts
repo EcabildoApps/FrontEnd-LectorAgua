@@ -18,7 +18,7 @@ export class ListapruralesPage implements OnInit {
   rutaSeleccionada: string = '';
   rutasDisponibles: string[] = [];
   registros: any[] = [];
-  PUR01CODI: number | null = null;
+  PRU01CODI: number | null = null;
 
   constructor(
     private toastController: ToastController,
@@ -34,8 +34,8 @@ export class ListapruralesPage implements OnInit {
       this.rutasDisponibles = JSON.parse(rutasGuardadas); // Parseamos las rutas guardadas y las asignamos
     }
 
-    this.PUR01CODI = Number(this.route.snapshot.paramMap.get('PREDIOSRUR'));
-    console.log('ID PREDIORUR recibido:', this.PUR01CODI);
+    this.PRU01CODI = Number(this.route.snapshot.paramMap.get('PREDIOSRUR'));
+    console.log('ID PREDIORUR recibido:', this.PRU01CODI);
   }
 
   async cargarRegistros() {
@@ -61,9 +61,8 @@ export class ListapruralesPage implements OnInit {
       await this.presentToast('Ocurrió un error al cargar los registros de predios.');
     }
   }
-
-  async irPredioRural(PUR01CODI: number) {
-    console.log('ID Predio seleccionada:', PUR01CODI);
+  async irPredioRural(PRU01CODI: number) {
+    console.log('ID Predio seleccionada:', PRU01CODI);
 
     try {
       // Obtener los registros de la clave 'LECTURAS' del almacenamiento
@@ -74,13 +73,13 @@ export class ListapruralesPage implements OnInit {
         await this.presentToast('No se encontraron predios almacenadas.');
         return;
       }
-
+      console.log('Datos de predios:', datosLecturas);
       // Buscar el registro con el IDCUENTA proporcionado
-      const registro = datosLecturas.data.find(item => item.PUR01CODI === PUR01CODI);
-
+      const registro = datosLecturas.data.find(item => item.PRU01CODI === PRU01CODI);
+      
       if (registro) {
         console.log('Registro encontrado:', registro);
-        this.navCtrl.navigateForward(`/informacionP/${PUR01CODI}`);
+        this.navCtrl.navigateForward(`/informacionPr/${PRU01CODI}`);
       } else {
         console.error('No se encontró ningún registro con el ID proporcionado.');
         await this.presentToast('No se encontró el registro para esta cuenta.');
@@ -90,6 +89,7 @@ export class ListapruralesPage implements OnInit {
       await this.presentToast('Ocurrió un error al buscar el registro de lectura.');
     }
   }
+
 
   onInputChange() {
     // Cargar los registros con los filtros aplicados

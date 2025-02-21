@@ -389,6 +389,24 @@ export class IonicstorageService {
     }
   }
 
+  async obtenerRegistrosPrediosRural() {
+    try {
+      const listado = await this.listar();
+      // Buscar registros con clave 'LECTURAS'
+      const registrosLecturas = listado.find(item => item.k === 'PREDIOSRUR');
+      if (!registrosLecturas) {
+        throw new Error('No se encontraron registros de predios.');
+      }
+
+      // Retornar los registros de 'LECTURAS' (se asume que 'data' es un array dentro de 'v')
+      return registrosLecturas.v.data;
+    } catch (error) {
+      console.error('Error al obtener registros de predios:', error);
+      throw new Error('No se pudieron obtener los registros de predios.');
+    }
+  }
+
+
 
   async cargarPrediosConFiltroGeneral(ruta: string, valorFiltro: string = '') {
     try {
@@ -450,6 +468,35 @@ export class IonicstorageService {
       this.presentToast('Ocurrió un error al guardar o actualizar el predio.');
     }
   }
+
+
+  async guardarOActualizarPredioRur(predio: any) {
+    try {
+      // Obtener la estructura completa de "PREDIOS"
+      const prediosStorage = await this.storage.get('PREDIOSRUR');
+      const prediosData = prediosStorage ? prediosStorage.data : [];
+
+      // Buscar si el predio ya existe en la lista
+      const predioExistente = prediosData.find(item => item.IDPREDIOURBANO === predio.IDPREDIOURBANO);
+
+      if (predioExistente) {
+        // Actualizar el predio existente
+        Object.assign(predioExistente, predio);
+      } else {
+        // Agregar un nuevo predio
+        prediosData.push(predio);
+      }
+
+      // Guardar la estructura completa de nuevo en el almacenamiento
+      await this.storage.set('PREDIOSRUR', { nombreTabla: 'prediosrur', data: prediosData });
+
+      this.presentToast('Predio guardado correctamente');
+    } catch (error) {
+      console.error('Error al guardar o actualizar el predio:', error);
+      this.presentToast('Ocurrió un error al guardar o actualizar el predio.');
+    }
+  }
+
 
   async obtenerCatalogos() {
     try {
@@ -574,7 +621,7 @@ export class IonicstorageService {
       console.log('Datos de lecturas:', datosLecturas);
 
       let registrosFiltrados = datosLecturas.filter(item => item.POLIGONO === ruta);
-      console.log('Registros filtrados por GEOCODIGO:', registrosFiltrados);
+      console.log('Registros filtrados por POLIGONO:', registrosFiltrados);
 
       if (valorFiltro) {
         registrosFiltrados = registrosFiltrados.filter(item =>

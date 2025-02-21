@@ -1,0 +1,221 @@
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 20px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
+
+/* Contenedor para alinear las tarjetas en dos columnas */
+.grid-container {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* Diseño para pantallas más grandes (tabletas y escritorio) */
+@media (min-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+}
+
+/* Diseño para móviles */
+@media (max-width: 767px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilos generales de las tarjetas */
+.responsive-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    background: #fff;
+}
+
+.lb {
+    font-size: 1.6rem;
+}
+
+.infrastructure-item ion-icon.icon {
+    font-size: 1.8rem;
+    color: #007bff;
+}
+
+.infrastructure-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.infrastructure-item ion-label {
+    flex: 1;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Input estilizado */
+.infrastructure-item ion-input {
+    flex: 1;
+    --background: #f9f9f9;
+    --padding-start: 12px;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 4px 8px;
+    text-align: left;
+}
+
+.services-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+/* Iconos de servicios */
+.services-item ion-icon.icon {
+    font-size: 1.8rem;
+    color: #007bff;
+}
+
+/* Estilo del label */
+.services-item ion-label {
+    flex: 1;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Checkbox personalizado */
+.services-item ion-checkbox {
+    --checkbox-size: 24px;
+    --checkbox-border-radius: 5px;
+    --checkbox-background: #ffffff;
+    --checkbox-color-checked: #007bff;
+}
+
+/* Input estilizado */
+.services-item ion-input {
+    flex: 1;
+    --background: #f9f9f9;
+    --padding-start: 12px;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 4px 8px;
+}
+
+/* Mejor apariencia de los títulos */
+ion-card-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+ion-card-title ion-icon {
+    margin-right: 8px;
+    font-size: 1.6rem;
+    color: #007bff;
+}
+
+ion-item {
+    display: flex;
+    align-items: center;
+    /* Alineación vertical */
+    justify-content: space-between;
+    /* Separar label y select */
+    flex-wrap: nowrap;
+    /* Evitar que se desborden a una nueva línea */
+    gap: 16px;
+    /* Espacio entre los elementos */
+}
+
+ion-item ion-label {
+    flex: 1;
+    /* Ocupa espacio proporcional */
+    font-size: 1.4rem;
+
+    color: #555;
+    text-align: left;
+    /* Alineación a la izquierda */
+}
+
+ion-item ion-select {
+    flex: 2;
+    /* Ocupa más espacio que el label */
+    text-align: right;
+    /* Alineación del texto dentro del select */
+    max-width: 60%;
+    /* Limitar el ancho del select */
+    font-size: 1.2rem;
+    /* Tamaño del texto */
+    --placeholder-color: #666;
+    --background: #f9f9f9;
+    border-radius: 8px;
+    margin-left: 100px;
+}
+
+
+ion-select-option {
+    font-size: 1.2rem;
+    /* Cambia el tamaño del texto dentro de las opciones */
+}
+
+
+/* Estilo para inputs */
+ion-input {
+    --background: #fff;
+    --padding-start: 12px;
+    border: 1px solid #ccc;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.input-small {
+    width: auto;
+    flex-grow: 1;
+    /* Hace que el input ocupe el espacio restante */
+}
+
+ion-item ion-label {
+    margin-bottom: 5px;
+}
+
+ion-item>ion-input {
+    --padding-start: 12px;
+}
+
+/* Checkboxes personalizados */
+ion-checkbox {
+    --checkbox-background: #ffffff;
+    --checkbox-border-radius: 5px;
+    --checkbox-size: 24px;
+    --checkbox-color-checked: #007bff;
+}
+
+/* Espaciado entre elementos */
+ion-item:not(:last-child) {
+    margin-bottom: 10px;
+}
