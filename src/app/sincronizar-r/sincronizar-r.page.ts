@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IonicstorageService } from '../services/ionicstorage.service';
 import { ToastController } from '@ionic/angular';
+import { EnviarlocalService } from '../services/enviarlocal.service';
 
 @Component({
   selector: 'app-sincronizar-r',
@@ -16,7 +17,8 @@ export class SincronizarRPage implements OnInit {
 
   constructor(private http: HttpClient,
     private ionicStorageService: IonicstorageService,
-    private toastController: ToastController) { }
+    private toastController: ToastController,
+    private enviarlocalService: EnviarlocalService) { }
 
   ngOnInit() {
     const rutasGuardadas = localStorage.getItem('poligono');
@@ -36,7 +38,7 @@ export class SincronizarRPage implements OnInit {
   }
 
 
- 
+
   async obtenerDatos() {
     const dominio = await this.ionicStorageService.rescatar('dominio');
     const puerto = await this.ionicStorageService.rescatar('port');
@@ -55,14 +57,14 @@ export class SincronizarRPage implements OnInit {
 
 
     try {
-   /*    const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
-      if (responseConstruccion.data) {
-        await this.ionicStorageService.agregarConKey('CONSTRUCCION', responseConstruccion.data);  // Almacenamos los catálogos en IonicStorage
-        await this.showToast('Construcción sincronizados correctamente.');
-      } else {
-        await this.showToast('No se encontraron datos.');
-      }
- */
+      /*    const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
+         if (responseConstruccion.data) {
+           await this.ionicStorageService.agregarConKey('CONSTRUCCION', responseConstruccion.data);  // Almacenamos los catálogos en IonicStorage
+           await this.showToast('Construcción sincronizados correctamente.');
+         } else {
+           await this.showToast('No se encontraron datos.');
+         }
+    */
       // Primero obtenemos los catálogos
       const responseCatalogos = await this.http.get<any>(urlCatalogos).toPromise();
       if (responseCatalogos.data) {
@@ -149,4 +151,16 @@ export class SincronizarRPage implements OnInit {
       console.warn(`No se encontraron datos para ${nombreTabla}.`);
     }
   }
+
+
+  async actualizarPredioR() {
+    const sincronizado =  this.enviarlocalService.enviarPRuralAlServidor();
+
+    if (sincronizado) {
+      await this.showToast(' Predios Rurales sincronizadas con éxito!');
+    } else {
+      await this.showToast('Hubo un problema al sincronizar los datos.');
+    }
+  }
+
 }

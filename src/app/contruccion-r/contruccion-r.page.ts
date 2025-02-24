@@ -69,6 +69,9 @@ export class ContruccionRPage implements OnInit {
 
   isEditMode: boolean = false;
   codigo: string;
+  PRU01CODI: number = 0;
+  registros: any[] = [];
+
 
   constructor(
     private http: HttpClient,
@@ -118,7 +121,9 @@ export class ContruccionRPage implements OnInit {
       }];
     }
 
+    this.cargarRegistrosPrediosRur();
     this.obtenerCatalogos();
+
   }
 
   isValid(dato: any): boolean {
@@ -260,12 +265,12 @@ export class ContruccionRPage implements OnInit {
 
     console.log('Datos de predios:', this.predios);
 
-    const predio = this.predios.find(p => p.PUR01CODI === this.predioId); 
+    const predio = this.predios.find(p => p.PUR01CODI === this.predioId);
     if (!predio) {
       console.warn('No se encontró el predio con PUR01CODI = 503');
       return;
     }
-    
+
     this.misDatosConstruccion = [predio];
     this.catalogos = datosGuardados;
     this.close = this.catalogos.closet || [];
@@ -358,41 +363,63 @@ export class ContruccionRPage implements OnInit {
     toast.present();
   }
 
-  async guardarCambios() {
+  async cargarRegistrosPrediosRur() {
+    this.codigo = this.route.snapshot.queryParamMap.get('PRU01CODI'); // Capturar código del queryParam
+
     try {
-      // Verificar si misDatosConstruccion tiene datos
+      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosPrediosRural(); // Usamos el nuevo método
+
+      console.log('Registros de predioS:', registrosLecturas);
+
+      // Filtrar registros por ID de cuenta
+      const registrosFiltrados = registrosLecturas.filter(registro => registro.PRU01CODI.toString() === this.codigo);
+
+      if (registrosFiltrados.length > 0) {
+        this.registros = registrosFiltrados;
+        console.log('Registros filtrados:', this.registros);
+      } else {
+        this.registros = [];
+        await this.presentToast('No se encontraron registros para el ID de cuenta proporcionado.');
+      }
+    } catch (error) {
+      console.error('Error al cargar los registros:', error);
+      await this.presentToast('Ocurrió un error al cargar los registros.');
+    }
+  }
+
+  async guardarCambios() {
+    this.codigo = this.route.snapshot.queryParamMap.get('PRU01CODI');
+
+    try {
       if (!this.misDatosConstruccion || this.misDatosConstruccion.length === 0) {
         await this.presentToast('No hay datos disponibles para guardar.');
         return;
       }
 
-      const predio = this.misDatosConstruccion[0]; // Asegúrate de que predio existe y tiene datos
 
-      // Verificar si predio tiene las propiedades BLOQUE y PISO definidas
+      const predio = this.misDatosConstruccion[0]; // Primer registro de construcción
+
       if (!predio || !predio.BLOQUE || !predio.PISO) {
         await this.presentToast('El número de bloque y el número de piso son obligatorios.');
         return;
       }
 
-      console.log('Predio a guardar:', predio.BLOQUE, predio.PISO);
+      console.log('Guardando predio:', predio.BLOQUE, predio.PISO);
+
       let cambiosRealizados = false;
-      const cambios = {}; // Solo almacena los cambios válidos
+      const cambios: any = {}; // Objeto para almacenar los cambios
 
-      // Función para actualizar un campo si el valor seleccionado ha cambiado
-      const actualizarSiCambio = (campo, valorSeleccionado, categoria) => {
-        if (!valorSeleccionado) {
-          console.warn(`Valor seleccionado para ${campo} es inválido.`);
-          return;
-        }
-
-        const nuevoValor = this.getValorCatalogo(valorSeleccionado, categoria)?.subf;
-        if (nuevoValor && nuevoValor !== this.misDatosConstruccion[0][campo]) {
+      // Función para actualizar un campo si el valor cambió
+      const actualizarSiCambio = (campo: string, valor: any, categoria: string) => {
+        if (!valor) return;
+        const nuevoValor = this.getValorCatalogo(valor, categoria)?.subf;
+        if (nuevoValor && nuevoValor !== predio[campo]) {
           cambios[campo] = nuevoValor;
           cambiosRealizados = true;
         }
       };
 
-      // Verificar si todos los campos obligatorios están llenos
+      // Verificar que todos los campos requeridos tengan valor
       const camposObligatorios = [
         this.selectedEstadoCons, this.selectedEstructura, this.selectedColumanas,
         this.selectedVigas, this.selectedEntrePiso, this.selectedParedes,
@@ -403,14 +430,12 @@ export class ContruccionRPage implements OnInit {
         this.selectedInsSanitarias, this.selectedNroBanios, this.selectedInsElectricas
       ];
 
-      for (let campo of camposObligatorios) {
-        if (!campo) {
-          await this.presentToast('Por favor, complete todos los campos obligatorios.');
-          return;
-        }
+      if (camposObligatorios.includes(null) || camposObligatorios.includes(undefined)) {
+        await this.presentToast('Por favor, complete todos los campos obligatorios.');
+        return;
       }
 
-      // Aquí realizas la actualización de todos los campos
+      // Actualizar campos según selección
       actualizarSiCambio('GESTADOCONS', this.selectedEstadoCons, 'estestadoCons');
       actualizarSiCambio('GESTRUCTURA', this.selectedEstructura, 'estructura');
       actualizarSiCambio('GESTCOLU', this.selectedColumanas, 'columna');
@@ -423,35 +448,138 @@ export class ContruccionRPage implements OnInit {
       actualizarSiCambio('GACAPUER', this.selectedPuerta, 'puerta');
       actualizarSiCambio('GCUBRVENT', this.selectedCubVentana, 'cubreVentana');
       actualizarSiCambio('GREVINTERIOR', this.selectedRevInterior, 'revInterior');
-      actualizarSiCambio('GREVINTERIOR', this.selectedRevExterior, 'revExterior');
+      actualizarSiCambio('GREVEXTERIOR', this.selectedRevExterior, 'revExterior');
       actualizarSiCambio('GACAPISOS', this.selectedRevPisos, 'revPisos');
       actualizarSiCambio('GREVESCA', this.selectedRevEscalera, 'revEscalera');
       actualizarSiCambio('GCUBIACAB', this.selectedCubiertaAcabados, 'cubiertaAcabados');
-      actualizarSiCambio('GESTRUCTURA', this.selectedVentanas, 'ventanas');
       actualizarSiCambio('GCLOSER', this.selectedCloset, 'closet');
       actualizarSiCambio('GISANI', this.selectedInsSanitarias, 'insSanitarias');
       actualizarSiCambio('GINBANIOS', this.selectedNroBanios, 'nroBanios');
       actualizarSiCambio('GCUBRVENT', this.selectedInsElectricas, 'insElectricas');
 
-      // Verificar si se realizaron cambios
       if (!cambiosRealizados) {
         await this.presentToast('No se realizaron cambios.');
         return;
       }
 
-      // Aplicar solo los cambios sin borrar los datos originales
-      for (const key in cambios) {
-        predio[key] = cambios[key];
-      }
+      // Aplicar cambios a predio
+      Object.assign(predio, cambios);
 
       if (predio.PUR01CODI) {
         predio.PUR01CODI = Number(predio.PUR01CODI);
       }
 
-      // Guardar o actualizar la construcción en el almacenamiento
-      await this.ionicStorageService.guardarOActualizarConstruccion(predio);
+      console.log('Predio actualizado:', predio);
 
-      // Mostrar mensaje de éxito
+      // Buscar en PREDIOSRUR el predio correspondiente
+      await this.cargarRegistrosPrediosRur();
+
+      // Buscar en PREDIOSRUR el predio correspondiente
+      const predioRural = this.registros.find(p => p.PRU01CODI === Number(this.codigo));
+
+      console.log('Predio rural encontrado:', predioRural);
+      console.log('Código obtenido del queryParam:', this.codigo);
+
+      if (predioRural) {
+        // Completar los datos de predio con PREDIOSRUR
+        Object.keys(predioRural).forEach(key => {
+          if (predio[key] === null || predio[key] === undefined) {
+            predio[key] = predioRural[key];
+          }
+        });
+
+        // Asegurar que se asignen PUR01CODI y PRU01CODI
+        predio.PUR01CODI = predioRural.PUR01CODI || predio.PUR01CODI;
+      }
+
+      const fechaActual = new Date();
+      const fechaFormato = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}-${String(fechaActual.getDate()).padStart(2, '0')} ${String(fechaActual.getHours()).padStart(2, '0')}:${String(fechaActual.getMinutes()).padStart(2, '0')}:${String(fechaActual.getSeconds()).padStart(2, '0')}`;
+
+
+
+
+      // Formato final para APP_PRE_CONSTRUC
+      const datosGuardados = {
+        PUR01CODI: predio.PUR01CODI,
+        PISO: predio.PISO,
+        BLOQUE: predio.BLOQUE,
+        GESTADOCONS: predio.GESTADOCONS,
+        GESTRUCTURA: predio.GESTRUCTURA,
+        GESTCOLU: predio.GESTCOLU,
+        GESTVIGAS: predio.GESTVIGAS,
+        GESTEPISO: predio.GESTEPISO,
+        GESTPARE: predio.GESTPARE,
+        GESCALERAS: predio.GESCALERAS,
+        GESTCUBIER: predio.GESTCUBIER,
+        GACATUMB: predio.GACATUMB,
+        GACAPUER: predio.GACAPUER,
+        GCUBRVENT: predio.GCUBRVENT,
+        GREVINTERIOR: predio.GREVINTERIOR,
+        GACAPISOS: predio.GACAPISOS,
+        GREVESCA: predio.GREVESCA,
+        GCUBIACAB: predio.GCUBIACAB,
+        GCLOSER: predio.GCLOSER,
+        GISANI: predio.GISANI,
+        GINBANIOS: predio.GINBANIOS,
+
+        AREABLGIS: predioRural?.AREABLGIS || 0,
+        CANTON: predioRural?.CANTON || null,
+        CLAVE_CATASTRAL: predioRural?.CLAVE_CATASTRAL || null,
+        GACAENLU: predioRural?.GACAENLU || null,
+        GACAENLU1: predioRural?.GACAENLU1 || null,
+        GACAPISOS1: predioRural?.GACAPISOS1 || null,
+        GACAPUER1: predioRural?.GACAPUER1 || null,
+        GACATUMB1: predioRural?.GACATUMB1 || null,
+        GACAVENTA: predioRural?.GACAVENTA || null,
+        GACAVENTA1: predioRural?.GACAVENTA1 || null,
+        GACONS: predioRural?.GACONS || null,
+        GANIOC: predioRural?.GANIOC || null,
+        GAREAL: predioRural?.GAREAL || null,
+        GAREPAR: predioRural?.GAREPAR || null,
+        GCLOSER1: predioRural?.GCLOSER1 || null,
+        GCUBIACAB1: predioRural?.GCUBIACAB1 || null,
+        GCUBRVENT1: predioRural?.GCUBRVENT1 || null,
+        GESCALERA1: predioRural?.GESCALERA1 || null,
+        GESTADO: predioRural?.GESTADO || null,
+        GESTCOLU1: predioRural?.GESTCOLU1 || null,
+        GESTCUBIER1: predioRural?.GESTCUBIER1 || null,
+        GESTEPISO1: predioRural?.GESTEPISO1 || null,
+        GESTPARE1: predioRural?.GESTPARE1 || null,
+        GESTVIGAS1: predioRural?.GESTVIGAS1 || null,
+
+        GFCRE: fechaFormato || null,
+        GID: predioRural?.GID || null,
+        GIDLOTE: predioRural?.GIDLOTE || 0,
+        GIELEC: predioRural?.GIELEC || null,
+        GIESPE: predioRural?.GIESPE || null,
+        GLCRE: predioRural?.GLCRE || null,
+        GPORREPARA: predioRural?.GPORREPARA || null,
+        GREVESCA1: predioRural?.GREVESCA1 || null,
+        GREVINTERIOR1: predioRural?.GREVINTERIOR1 || null,
+        IDPREDIOCONST: predioRural?.IDPREDIOCONST || null,
+        IDPREDIOLOCALMENTE: predioRural?.IDPREDIOLOCALMENTE || null,
+        MANZANA: predioRural?.MANZANA || null,
+        MARCA: predioRural?.MARCA || null,
+        NPREDIO: predioRural?.NPREDIO || null,
+        OBS: predioRural?.OBS || null,
+        PARROQUIA: predioRural?.PARROQUIA || null,
+        PROVINCIA: predioRural?.PROVINCIA || null,
+        PUR05CODI: predioRural?.PUR05CODI || null,
+        SECTOR: predioRural?.SECTOR || null,
+        TPPREDIO: predioRural?.TPPREDIO || null,
+        VALIDO: predioRural?.VALIDO || null,
+        ZONA: predioRural?.ZONA || null,
+
+
+
+      };
+
+
+      console.log('Guardando en APP_PRE_CONSTRUC:', datosGuardados);
+
+      // Guardar o actualizar en almacenamiento local
+      await this.ionicStorageService.guardarOActualizarConstruccion(datosGuardados);
+
       await this.presentToast('Cambios guardados correctamente.');
     } catch (error) {
       console.error('Error al guardar los cambios:', error);

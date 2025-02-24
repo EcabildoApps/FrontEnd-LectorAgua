@@ -6,6 +6,7 @@ import { IonicstorageService } from '../services/ionicstorage.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { Network } from '@capacitor/network';
 import { Platform } from '@ionic/angular';
+import { RolService } from '../services/rol.service';
 
 
 
@@ -30,7 +31,8 @@ export class HomePage {
     private http: HttpClient,
     private router: Router,
     private storageService: IonicstorageService,
-    private platform: Platform
+    private platform: Platform,
+    private rolService: RolService,
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is('android')) {
@@ -60,8 +62,10 @@ export class HomePage {
   }
 
 
-  loadImageFromServer() {
-    const serverUrl = 'http://localhost:3000/api/auth/getimage'; // URL del endpoint
+  async loadImageFromServer() {
+    const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18';
+    const puerto = await this.storageService.rescatar('port') || '3000';
+    const serverUrl = `http://${dominio}:${puerto}/api/auth/getimage`;
 
     this.http.get(serverUrl).subscribe(
       (response: any) => {
@@ -91,30 +95,6 @@ export class HomePage {
     toast.present();
   }
 
-
-  /* async getCoordinates() {
-    try {
-      // Solicitar permisos de ubicación
-      const permission = await Geolocation.requestPermissions();
-      if (permission.location !== 'granted') {
-        console.error('Permiso de ubicación no concedido');
-        this.showToast('Permiso de ubicación denegado');
-        return null;
-      }
-
-      const position = await Geolocation.getCurrentPosition();
-      return {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      };
-    } catch (error) {
-      console.error('Error al obtener las coordenadas', error);
-      return null;
-    }
-  } */
-
-
-
   async onSubmit() {
 
 
@@ -124,28 +104,15 @@ export class HomePage {
     }
 
     try {
-      // Obtener la IP y el puerto desde el almacenamiento
-      const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18'; // IP predeterminada
+      const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18';
       const puerto = await this.storageService.rescatar('port') || '3000';
 
-      // Obtener coordenadas del dispositivo
-      /* const coordinates = await this.getCoordinates();
 
-      if (!coordinates) {
-        await this.showToast('📍 No se pudo obtener la ubicación.');
-        return;
-      } */
-
-      // Construcción de la URL
       const baseUrl = `http://${dominio}:${puerto}/api/auth/login`;
-
-      // Formatear los datos como x-www-form-urlencoded
 
       const body = {
         username: this.username,
         password: this.password,
-        //  latitude: coordinates.latitude,
-        //  longitude: coordinates.longitude
       };
 
       // Configurar los encabezados
@@ -161,8 +128,10 @@ export class HomePage {
             this.isLoggedIn = true;
 
             const userRole = response.user.APPROL;
-            localStorage.setItem('username', this.username);
-            localStorage.setItem('userRole', userRole);
+            await this.storageService.agregarConKey('username', this.username);
+            await this.rolService.guardar('userRole', userRole);
+            this.userRole = userRole;
+            this.updateRole();
 
             const rutas = response.user.RUTA ? [response.user.RUTA] : [];
             const geocodigo = response.user.GEOCODIGO ? [response.user.GEOCODIGO] : [];
@@ -173,9 +142,9 @@ export class HomePage {
             localStorage.setItem('poligono', JSON.stringify(poligono));
 
             if (this.userRole === 'admin') {
-              await this.showToast(`✅ Bienvenido ${this.username}`);
+              await this.showToast(`✅ Bienvenido Admin ${this.username}`);
               this.router.navigate(['/admin']); // Redirige a la página de admin
-            } else {
+            } else if (this.userRole === userRole) {
               await this.showToast(`✅ Bienvenido ${this.username}`);
               this.router.navigate(['/principal']); // Redirige a la página principal por defecto
             }
@@ -212,6 +181,12 @@ export class HomePage {
   openControlAcceso() {
     // Navegar a la página de control de acceso
     this.router.navigate(['/controlacceso']);
+  }
+  updateRole() {
+    this.storageService.rescatar('userRole').then(role => {
+      console.log('Rol guardado en storage:', role);
+    });
+
   }
 
 }

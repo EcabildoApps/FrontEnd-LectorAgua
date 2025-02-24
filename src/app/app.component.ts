@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { MenuController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
-
-
+import { IonicstorageService } from './services/ionicstorage.service';
+import { RolService } from './services/rol.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,21 +13,18 @@ import { Network } from '@ionic-native/network/ngx';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   submenuVisible: boolean = false;
-  public isWeb: boolean;
-  public load: boolean = false;
   public userRole: string = '';
 
   constructor(
     private menuCtrl: MenuController,
     private navCtrl: NavController,
     private location: Location,
-    private network: Network
+    private network: Network,
+    private storageService: IonicstorageService,
+    private roleService: RolService
   ) {
-    this.isWeb = false;
-    this.load = false;
-    this.userRole = localStorage.getItem('userRole') || '';
     this.network.onDisconnect().subscribe(() => {
       alert('Sin conexión a Internet');
       console.log('Sin conexión a Internet');
@@ -36,7 +34,17 @@ export class AppComponent {
       alert('Conectado a Internet');
       console.log('Conectado a Internet');
     });
+
+
   }
+
+
+  ngOnInit() {
+    this.roleService.userRole$.subscribe((role) => {
+      this.userRole = role; // Now it's a string, and can be compared
+    });
+  }
+
 
   isSelected(route: string): boolean {
     return this.location.path() === route;
@@ -48,19 +56,29 @@ export class AppComponent {
 
   cerrarSesion() {
     console.log('Sesión cerrada');
-    localStorage.removeItem('username');
+    this.storageService.eliminar('username');
+    this.roleService.eliminar('userRole');
     localStorage.removeItem('rutas');
-    localStorage.removeItem('userRole');
-
     this.navCtrl.navigateRoot('/home');
   }
 
-  // 🔹 Cierra el menú si se hace clic fuera de él
   cerrarMenuSiEstaAbierto() {
     this.menuCtrl.isOpen().then((isOpen) => {
       if (isOpen) {
         this.menuCtrl.close();
       }
     });
+  }
+
+  get showLecturaMenu() {
+    return this.userRole === 'LEC' || this.userRole === 'admin';
+  }
+
+  get showUrbanoMenu() {
+    return this.userRole === 'URB' || this.userRole === 'admin';
+  }
+
+  get showRuralMenu() {
+    return this.userRole === 'RUR' || this.userRole === 'admin';
   }
 }

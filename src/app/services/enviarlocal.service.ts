@@ -59,6 +59,53 @@ export class EnviarlocalService {
     }
   }
 
+  async enviarPRuralAlServidor() {
+    try {
+      const dominio = await this.ionicStorageService.rescatar('dominio');
+      const puerto = await this.ionicStorageService.rescatar('port');
+      const apiUrl = `http://${dominio}:${puerto}/api/auth/prediosRur`;
+
+      const lecturasStorage = await this.ionicStorageService.rescatar('APP_PRE_CONSTRUC');
+
+      if (!lecturasStorage?.data?.length) {
+        this.mostrarToast('No hay predio rural para enviar.', 'warning');
+        return;
+      }
+
+      console.log('Predio rural a enviar:', lecturasStorage.data);
+
+      const lecturasExitosas = [];
+      const lecturasFallidas = [];
+
+      for (const lectura of lecturasStorage.data) {
+        try {
+          await this.http.post(apiUrl, lectura).toPromise();
+          lecturasExitosas.push(lectura);
+        } catch (error) {
+          console.error('Error al enviar predio rural:', lectura, error);
+          lecturasFallidas.push(lectura);
+        }
+      }
+
+      if (lecturasExitosas.length > 0) {
+        // Filtrar las lecturas enviadas con éxito y actualizar el almacenamiento
+        lecturasStorage.data = lecturasStorage.data.filter(
+          (lectura) => !lecturasExitosas.includes(lectura)
+        );
+        await this.ionicStorageService.agregarConKey('APP_PRE_CONSTRUC', lecturasStorage);
+        this.mostrarToast('Predios rurales enviadas correctamente.', 'success');
+      }
+
+      if (lecturasFallidas.length > 0) {
+        this.mostrarToast(`${lecturasFallidas.length} predios rurales no pudieron enviarse.`, 'warning');
+      }
+    } catch (error) {
+      console.error('Error en el proceso de envío de predios rurales:', error);
+      this.mostrarToast('Error al enviar predios rurales. Verifica la conexión.', 'danger');
+    }
+  }
+
+
 
 
   async sincronizarImagenes() {

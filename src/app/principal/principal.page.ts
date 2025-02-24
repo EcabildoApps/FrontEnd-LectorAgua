@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { IonicstorageService } from '../services/ionicstorage.service';
 
 @Component({
   selector: 'app-principal',
@@ -14,10 +15,12 @@ export class PrincipalPage {
   public showUrbanoCard: boolean = true;
   public showRuralCard: boolean = true;
 
-  constructor(private router: Router, private toastController: ToastController) { }
+  constructor(private router: Router,
+    private toastController: ToastController,
+    private storageService: IonicstorageService) { }
 
-  ngOnInit() {
-    this.userRole = localStorage.getItem('userRole') || '';
+  async ngOnInit() {
+    this.userRole = await this.storageService.rescatar('userRole') || '';
 
     // Inicializamos los permisos basados en el rol del usuario
     this.setPermissionsBasedOnRole();

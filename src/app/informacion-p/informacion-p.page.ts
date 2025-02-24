@@ -93,15 +93,14 @@ export class InformacionPPage implements OnInit {
 
   accion(tipo: string) {
     if (tipo === 'agregar') {
-      this.router.navigate(['/contruccion-u']); // Para agregar
+      // Aquí pasas el pru01codi al navegar a la página de agregar
+      this.router.navigate(['/contruccion-u/'], { queryParams: { PUR01CODI: this.PUR01CODI } });
     } else if (tipo === 'actualizar') {
       // Para actualizar, pasa el valor de PUR01CODI como parámetro
       this.router.navigate([`/contruccion-u/${this.PUR01CODI}`]);
     }
-
+  
     // Después de hacer la acción, ocultar los botones nuevamente
     this.mostrarBotones = false;
   }
-
-
 }
