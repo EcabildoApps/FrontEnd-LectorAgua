@@ -120,9 +120,6 @@ export class TomalecturaPage {
     }
   }
 
-
-
-
   async guardarLectura(registro: any) {
     try {
       const lecturas = await this.ionicStorageService.rescatar('LECTURAS') || { data: [] };

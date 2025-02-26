@@ -18,7 +18,8 @@ export class SincronizarUPage implements OnInit {
 
   constructor(private http: HttpClient,
     private ionicStorageService: IonicstorageService,
-    private toastController: ToastController) { }
+    private toastController: ToastController,
+    private enviarlocalService: EnviarlocalService) { }
 
   ngOnInit() {
     const rutasGuardadas = localStorage.getItem('geocodigo');
@@ -162,6 +163,17 @@ export class SincronizarUPage implements OnInit {
       console.log(`${nombreTabla} sincronizadas con éxito.`);
     } else {
       console.warn(`No se encontraron datos para ${nombreTabla}.`);
+    }
+  }
+
+  
+  async actualizarPredioR() {
+    const sincronizado =  this.enviarlocalService.enviarPUrbanoAlServidor();
+
+    if (sincronizado) {
+      await this.showToast(' Predios Rurales sincronizadas con éxito!');
+    } else {
+      await this.showToast('Hubo un problema al sincronizar los datos.');
     }
   }
 }

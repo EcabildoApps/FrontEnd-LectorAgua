@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { IonicstorageService } from '../services/ionicstorage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -78,6 +78,7 @@ export class ContruccionRPage implements OnInit {
     private ionicStorageService: IonicstorageService,
     private toastController: ToastController,
     private route: ActivatedRoute,
+    private router: Router,
   ) { }
 
 
@@ -144,35 +145,52 @@ export class ContruccionRPage implements OnInit {
   async obtenerPredios() {
     try {
       const lecturasGuardadas = await this.ionicStorageService.rescatar('APP_PRE_CONSTRUC');
-      console.log('Datos de APP_PRE_CONSTRUC:', lecturasGuardadas);
 
       if (lecturasGuardadas && lecturasGuardadas.data) {
         this.predios = lecturasGuardadas.data;
+
+        if (!this.predioId) {
+          console.warn('El ID del predio no está definido');
+          await this.showToast('ID de predio no válido.');
+          return;
+        }
 
         const predioSeleccionado = this.predios.find(predio => predio.PUR01CODI === this.predioId);
 
         if (predioSeleccionado) {
           console.log('Predio seleccionado:', predioSeleccionado);
+
+          // Datos de construcción
           this.misDatosConstruccion = [{
             PUR01CODI: predioSeleccionado.PUR01CODI,
             PISO: predioSeleccionado.PISO,
             BLOQUE: predioSeleccionado.BLOQUE,
           }];
 
+          // Aquí ya hemos encontrado el predio, así que establecemos los valores
           console.log('Datos de construcción:', this.misDatosConstruccion);
-
           this.setValoresFormulario();
+
         } else {
-          console.warn('No se encontró el predio con el ID:', this.predioId);
-          await this.showToast('No se encontró el predio.');
+          console.warn('Predio no encontrado con el ID:', this.predioId);
+
+          // Mostrar el mensaje y redirigir a la pantalla de agregar
+          await this.showToast('Predio no registrado. Agregue uno nuevo.');
+          this.router.navigate(['/contruccion-r'], {
+            queryParams: { PUR01CODI: this.predioId }
+          });
         }
+
       } else {
-        console.warn('No hay predios almacenados.');
+        console.warn('No hay predios almacenados en la aplicación.');
+        await this.showToast('No hay predios registrados.');
       }
     } catch (error) {
-      console.error('Error al recuperar predios:', error);
+      console.error('Error al recuperar los predios:', error);
+      await this.showToast('Ocurrió un error al obtener los predios.');
     }
   }
+
 
 
 
@@ -580,6 +598,7 @@ export class ContruccionRPage implements OnInit {
       // Guardar o actualizar en almacenamiento local
       await this.ionicStorageService.guardarOActualizarConstruccion(datosGuardados);
 
+      this.router.navigate([`/informacionPr${this.PRU01CODI}`]);
       await this.presentToast('Cambios guardados correctamente.');
     } catch (error) {
       console.error('Error al guardar los cambios:', error);

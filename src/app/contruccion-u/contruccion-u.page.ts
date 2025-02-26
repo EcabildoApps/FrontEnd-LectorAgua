@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { IonicstorageService } from '../services/ionicstorage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -78,6 +78,7 @@ export class ContruccionUPage implements OnInit {
     private ionicStorageService: IonicstorageService,
     private toastController: ToastController,
     private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -114,13 +115,12 @@ export class ContruccionUPage implements OnInit {
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 2000,
+      duration: 5000,
       position: 'bottom',
       color: 'primary',
     });
     toast.present();
   }
-
   async obtenerPredios() {
     try {
       const lecturasGuardadas = await this.ionicStorageService.rescatar('APP_PRE_CONSTRUC');
@@ -128,29 +128,48 @@ export class ContruccionUPage implements OnInit {
       if (lecturasGuardadas && lecturasGuardadas.data) {
         this.predios = lecturasGuardadas.data;
 
+        if (!this.predioId) {
+          console.warn('El ID del predio no está definido');
+          await this.showToast('ID de predio no válido.');
+          return;
+        }
+
         const predioSeleccionado = this.predios.find(predio => predio.PUR01CODI === this.predioId);
+
         if (predioSeleccionado) {
           console.log('Predio seleccionado:', predioSeleccionado);
+
+          // Datos de construcción
           this.misDatosConstruccion = [{
             PUR01CODI: predioSeleccionado.PUR01CODI,
             PISO: predioSeleccionado.PISO,
             BLOQUE: predioSeleccionado.BLOQUE,
           }];
 
+          // Aquí ya hemos encontrado el predio, así que establecemos los valores
           console.log('Datos de construcción:', this.misDatosConstruccion);
-
           this.setValoresFormulario();
+
         } else {
-          console.warn('No se encontró el predio con el ID:', this.predioId);
-          await this.showToast('No se encontró el predio.');
+          console.warn('Predio no encontrado con el ID:', this.predioId);
+
+          // Mostrar el mensaje y redirigir a la pantalla de agregar
+          await this.showToast('Predio no registrado. Agregue uno nuevo.');
+          this.router.navigate(['/contruccion-u'], {
+            queryParams: { PUR01CODI: this.predioId }
+          });
         }
+
       } else {
-        console.warn('No hay predios almacenados.');
+        console.warn('No hay predios almacenados en la aplicación.');
+        await this.showToast('No hay predios registrados.');
       }
     } catch (error) {
-      console.error('Error al recuperar predios:', error);
+      console.error('Error al recuperar los predios:', error);
+      await this.showToast('Ocurrió un error al obtener los predios.');
     }
   }
+
 
 
 
@@ -349,7 +368,7 @@ export class ContruccionUPage implements OnInit {
         console.log('Registros filtrados:', this.registros);
       } else {
         this.registros = [];
-        await this.presentToast('No se encontraron registros para el ID de cuenta proporcionado.');
+        await this.presentToast('No se encontraron registros');
       }
     } catch (error) {
       console.error('Error al cargar los registros:', error);

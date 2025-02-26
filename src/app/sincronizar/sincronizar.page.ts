@@ -33,8 +33,8 @@ export class SincronizarPage implements OnInit {
     const toast = await this.toastController.create({
       message,
       duration: 2000,
-      position: 'bottom', 
-      color: 'primary', 
+      position: 'bottom',
+      color: 'primary',
     });
     toast.present();
   }
@@ -165,10 +165,12 @@ export class SincronizarPage implements OnInit {
   async limpiarLecturas() {
     try {
       await this.ionicStorageService.eliminarLecturas();
+      await this.ionicStorageService.eliminarImagenes();
       this.lecturas = [];
-      await this.showToast('Lecturas limpiadas correctamente');
+
+      await this.showToast('Lecturas e imagenes limpiadas correctamente');
     } catch (error) {
-      await this.showToast('Error al limpiar las lecturas');
+      await this.showToast('Error al limpiar las lecturas e imagenes.');
     }
   }
 

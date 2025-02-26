@@ -64,6 +64,15 @@ export class IonicstorageService {
     }
   }
 
+  async eliminarImagenes() {
+    try {
+      await this.storage.remove('AGUAAPP_IMG');
+      console.log('Imagenes eliminadas correctamente');
+    } catch (error) {
+      console.error('Error al eliminar las imagenes:', error);
+    }
+  }
+
 
   async showToast(message: string) {
     const toast = await this.toastController.create({
