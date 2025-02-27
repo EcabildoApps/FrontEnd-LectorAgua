@@ -20,7 +20,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "allowedCommonJsDependencies": [
-              "localforage"
+              "localforage",
+              "http"
             ],
             "assets": [
               "src/manifest.webmanifest",

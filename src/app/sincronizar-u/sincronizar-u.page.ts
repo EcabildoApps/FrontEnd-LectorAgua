@@ -42,14 +42,14 @@ export class SincronizarUPage implements OnInit {
 
   async obtenerPredios() {
     try {
-      const lecturasGuardadas = await this.ionicStorageService.rescatar('PREDIO_URBANO');
+      const lecturasGuardadas = await this.ionicStorageService.rescatar('PREDIOS');
       if (lecturasGuardadas && lecturasGuardadas.data) {
         this.predios = lecturasGuardadas.data;
       } else {
-        console.warn('No se encontraron lecturas almacenadas');
+        console.warn('No se encontraron predios urbanos almacenadas');
       }
     } catch (error) {
-      console.error('Error al recuperar lecturas:', error);
+      console.error('Error al recuperar predios urbanos:', error);
     }
   }
 
@@ -70,6 +70,7 @@ export class SincronizarUPage implements OnInit {
     const urlObtenerConstruccion = `${baseUrl}/api/auth/obtenercontruccion?TPPREDIO=PU`;
 
 
+
     try {
       const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
       if (responseConstruccion.data) {
@@ -88,7 +89,7 @@ export class SincronizarUPage implements OnInit {
         await this.showToast('No se encontraron catálogos.');
       }
 
- 
+
 
       const responseConstruccio = await this.http.get<any>(urlObtenerConstruccion).toPromise();
       if (responseConstruccio.message && responseConstruccio.message.includes('No se encontraron construcción')) {
@@ -142,8 +143,8 @@ export class SincronizarUPage implements OnInit {
 
       // Definir la clave basada en el tipo de tabla
       let keyValue: string;
-      if (nombreTabla === 'Urbanos') {
-        keyValue = 'PREDIO_URBANO'; // Clave para lecturas
+      if (nombreTabla === 'predios') {
+        keyValue = 'PREDIOS'; // Clave para lecturas
       } else {
         keyValue = nombreTabla.toUpperCase(); // Usar el nombre de la tabla si no se encuentra en los casos anteriores
       }
@@ -166,9 +167,10 @@ export class SincronizarUPage implements OnInit {
     }
   }
 
-  
+
   async actualizarPredioR() {
-    const sincronizado =  this.enviarlocalService.enviarPUrbanoAlServidor();
+    const sincronizado = this.enviarlocalService.enviarPUrbanoAlServidor();
+    this.enviarlocalService.enviarPUrbanoAlServidorpredios();
 
     if (sincronizado) {
       await this.showToast(' Predios Rurales sincronizadas con éxito!');

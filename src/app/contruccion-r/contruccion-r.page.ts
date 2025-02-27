@@ -285,7 +285,7 @@ export class ContruccionRPage implements OnInit {
 
     const predio = this.predios.find(p => p.PUR01CODI === this.predioId);
     if (!predio) {
-      console.warn('No se encontró el predio con PUR01CODI = 503');
+      console.warn('No se encontró el predio con PUR01CODI');
       return;
     }
 
@@ -397,7 +397,6 @@ export class ContruccionRPage implements OnInit {
         console.log('Registros filtrados:', this.registros);
       } else {
         this.registros = [];
-        await this.presentToast('No se encontraron registros para el ID de cuenta proporcionado.');
       }
     } catch (error) {
       console.error('Error al cargar los registros:', error);
@@ -406,7 +405,18 @@ export class ContruccionRPage implements OnInit {
   }
 
   async guardarCambios() {
-    this.codigo = this.route.snapshot.queryParamMap.get('PRU01CODI');
+    this.predioId = +this.route.snapshot.paramMap.get('PUR01CODI');
+
+    
+      const registrosLecturas = await this.ionicStorageService.obtenerRegistrosPrediosRural(); // Usamos el nuevo método
+
+      console.log('Registros de predioS:', registrosLecturas);
+
+      // Filtrar registros por ID de cuenta
+      const registrosFiltrados = registrosLecturas.filter(registro => registro.PRU01CODI === this.predioId);
+
+
+
 
     try {
       if (!this.misDatosConstruccion || this.misDatosConstruccion.length === 0) {
@@ -487,16 +497,20 @@ export class ContruccionRPage implements OnInit {
         predio.PUR01CODI = Number(predio.PUR01CODI);
       }
 
+      this.registros = registrosFiltrados;
+  
+
+
       console.log('Predio actualizado:', predio);
 
+      console.log('Registros de prediosddd:', this.registros);
+      console.log('Código obtenido del queryParam:', this.predioId);
       // Buscar en PREDIOSRUR el predio correspondiente
-      await this.cargarRegistrosPrediosRur();
+      const predioRural = this.registros.find(p => p.PRU01CODI === this.predioId);
 
-      // Buscar en PREDIOSRUR el predio correspondiente
-      const predioRural = this.registros.find(p => p.PRU01CODI === Number(this.codigo));
 
       console.log('Predio rural encontrado:', predioRural);
-      console.log('Código obtenido del queryParam:', this.codigo);
+      console.log('Código obtenido del queryParam:', this.predioId);
 
       if (predioRural) {
         // Completar los datos de predio con PREDIOSRUR
@@ -512,9 +526,6 @@ export class ContruccionRPage implements OnInit {
 
       const fechaActual = new Date();
       const fechaFormato = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}-${String(fechaActual.getDate()).padStart(2, '0')} ${String(fechaActual.getHours()).padStart(2, '0')}:${String(fechaActual.getMinutes()).padStart(2, '0')}:${String(fechaActual.getSeconds()).padStart(2, '0')}`;
-
-
-
 
       // Formato final para APP_PRE_CONSTRUC
       const datosGuardados = {
@@ -566,7 +577,7 @@ export class ContruccionRPage implements OnInit {
         GESTVIGAS1: predioRural?.GESTVIGAS1 || null,
 
         GFCRE: fechaFormato || null,
-        GID: predioRural?.GID || null,
+        GID: predio.PUR01CODI || null,
         GIDLOTE: predioRural?.GIDLOTE || 0,
         GIELEC: predioRural?.GIELEC || null,
         GIESPE: predioRural?.GIESPE || null,

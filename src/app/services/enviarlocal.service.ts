@@ -105,24 +105,77 @@ export class EnviarlocalService {
     }
   }
 
+  async enviarPRuralAlServidorpredios() {
+    try {
+      const dominio = await this.ionicStorageService.rescatar('dominio');
+      const puerto = await this.ionicStorageService.rescatar('port');
+      const apiurlP = `http://${dominio}:${puerto}/api/auth/guardarPRur`;
+  
+      const prediosUstorage = await this.ionicStorageService.rescatar('PREDIOSRUR');
+  
+ 
+  
+      if (!prediosUstorage?.data?.length) {
+        this.mostrarToast('No hay predio rural para enviar.', 'warning');
+        return;
+      }
+      
+      console.log('Predio rural - información a enviar:', prediosUstorage.data);
+     
+      const prediosExitosos = [];
+      const prediosFallidos = [];
+  
+      // Enviar los predios rural
+      for (const predio of prediosUstorage.data) {
+        try {
+          await this.http.post(apiurlP, predio).toPromise();
+          prediosExitosos.push(predio);
+        } catch (error) {
+          console.error('Error al enviar predio rural:', predio, error);
+          prediosFallidos.push(predio);
+        }
+      }
+
+  
+      // Actualizar el almacenamiento para los predios rural
+      if (prediosExitosos.length > 0) {
+        prediosUstorage.data = prediosUstorage.data.filter(
+          (predio) => !prediosExitosos.includes(predio)
+        );
+        await this.ionicStorageService.agregarConKey('PREDIOSRUR', prediosUstorage);
+        this.mostrarToast('Predios rural enviados correctamente.', 'success');
+      }
+  
+      if (prediosFallidos.length > 0) {
+        this.mostrarToast(`${prediosFallidos.length} predios rural no pudieron enviarse.`, 'warning');
+      }
+  
+    } catch (error) {
+      console.error('Error en el proceso de envío de predios rural:', error);
+      this.mostrarToast('Error al enviar predios rural. Verifica la conexión.', 'danger');
+    }
+  }
+
   async enviarPUrbanoAlServidor() {
     try {
       const dominio = await this.ionicStorageService.rescatar('dominio');
       const puerto = await this.ionicStorageService.rescatar('port');
       const apiUrl = `http://${dominio}:${puerto}/api/auth/prediosUrb`;
-
+  
       const lecturasStorage = await this.ionicStorageService.rescatar('APP_PRE_CONSTRUC');
-
+  
       if (!lecturasStorage?.data?.length) {
         this.mostrarToast('No hay predio urbano para enviar.', 'warning');
         return;
       }
-
+  
       console.log('Predio urbano a enviar:', lecturasStorage.data);
-
+  
       const lecturasExitosas = [];
       const lecturasFallidas = [];
 
+  
+      // Enviar las lecturas
       for (const lectura of lecturasStorage.data) {
         try {
           await this.http.post(apiUrl, lectura).toPromise();
@@ -132,25 +185,78 @@ export class EnviarlocalService {
           lecturasFallidas.push(lectura);
         }
       }
-
+  
+      // Actualizar el almacenamiento para las lecturas
       if (lecturasExitosas.length > 0) {
-        // Filtrar las lecturas enviadas con éxito y actualizar el almacenamiento
         lecturasStorage.data = lecturasStorage.data.filter(
           (lectura) => !lecturasExitosas.includes(lectura)
         );
         await this.ionicStorageService.agregarConKey('APP_PRE_CONSTRUC', lecturasStorage);
-        this.mostrarToast('Predios urbano enviadas correctamente.', 'success');
+        this.mostrarToast('Predios urbano enviados correctamente.', 'success');
       }
-
+  
       if (lecturasFallidas.length > 0) {
         this.mostrarToast(`${lecturasFallidas.length} predios urbano no pudieron enviarse.`, 'warning');
       }
+  
     } catch (error) {
-      console.error('Error en el proceso de envío de predios urbano:', error);
-      this.mostrarToast('Error al enviar predios urbano. Verifica la conexión.', 'danger');
+      console.error('Error en el proceso de envío de predios urbanos:', error);
+      this.mostrarToast('Error al enviar predios urbanos. Verifica la conexión.', 'danger');
     }
   }
+  
 
+  async enviarPUrbanoAlServidorpredios() {
+    try {
+      const dominio = await this.ionicStorageService.rescatar('dominio');
+      const puerto = await this.ionicStorageService.rescatar('port');
+      const apiurlP = `http://${dominio}:${puerto}/api/auth/guardarPUrb`;
+  
+      const prediosUstorage = await this.ionicStorageService.rescatar('PREDIOS');
+  
+ 
+  
+      if (!prediosUstorage?.data?.length) {
+        this.mostrarToast('No hay predio urbano para enviar.', 'warning');
+        return;
+      }
+      
+      console.log('Predio urbano - información a enviar:', prediosUstorage.data);
+     
+      const prediosExitosos = [];
+      const prediosFallidos = [];
+  
+      // Enviar los predios urbanos
+      for (const predio of prediosUstorage.data) {
+        try {
+          await this.http.post(apiurlP, predio).toPromise();
+          prediosExitosos.push(predio);
+        } catch (error) {
+          console.error('Error al enviar predio urbano:', predio, error);
+          prediosFallidos.push(predio);
+        }
+      }
+
+  
+      // Actualizar el almacenamiento para los predios urbanos
+      if (prediosExitosos.length > 0) {
+        prediosUstorage.data = prediosUstorage.data.filter(
+          (predio) => !prediosExitosos.includes(predio)
+        );
+        await this.ionicStorageService.agregarConKey('PREDIOS', prediosUstorage);
+        this.mostrarToast('Predios urbanos enviados correctamente.', 'success');
+      }
+  
+      if (prediosFallidos.length > 0) {
+        this.mostrarToast(`${prediosFallidos.length} predios urbanos no pudieron enviarse.`, 'warning');
+      }
+  
+    } catch (error) {
+      console.error('Error en el proceso de envío de predios urbanos:', error);
+      this.mostrarToast('Error al enviar predios urbanos. Verifica la conexión.', 'danger');
+    }
+  }
+  
 
 
 

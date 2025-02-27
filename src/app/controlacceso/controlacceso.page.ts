@@ -48,9 +48,11 @@ export class ControlaccesoPage {
       await this.storageService.agregarConKey('dominio', this.newDomain);
       await this.storageService.agregarConKey('port', this.newPort);
 
-      await this.showToast(`Configuración guardada: Dominio: ${this.newDomain}, Puerto: ${this.newPort}`);
-
+      const novedades = `http://${this.newDomain}:${this.newPort}/api/auth/novedades`;
+      await this.showToast(`Carga de novedades: ${novedades}`);
+      
       // Actualizamos la vista para mostrar el nuevo dominio y puerto
+      await this.showToast(`Configuración guardada: Dominio: ${this.newDomain}, Puerto: ${this.newPort}`);
       this.loadConfig();
       this.router.navigate(['/home']);
     } else {

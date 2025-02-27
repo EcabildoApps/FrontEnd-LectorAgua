@@ -51,20 +51,20 @@ export class SincronizarRPage implements OnInit {
     const baseUrl = `http://${dominio}:${puerto}`;
 
     const urlCatalogos = `${baseUrl}/api/auth/catalogoRur`;  // Endpoint de catálogos
-    //const urlConstrucccion = `${baseUrl}/api/auth/construccion`;  // Endpoint de construccion
+    const urlConstrucccion = `${baseUrl}/api/auth/construccion`;  // Endpoint de construccion
     const urlLecturas = `${baseUrl}/api/auth/prediosRur?poligono=${this.geocodigosDisponibles}`;
     const urlObtenerConstruccion = `${baseUrl}/api/auth/obtenercontruccion?TPPREDIO=PR`;
 
 
     try {
-      /*    const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
-         if (responseConstruccion.data) {
-           await this.ionicStorageService.agregarConKey('CONSTRUCCION', responseConstruccion.data);  // Almacenamos los catálogos en IonicStorage
-           await this.showToast('Construcción sincronizados correctamente.');
-         } else {
-           await this.showToast('No se encontraron datos.');
-         }
-    */
+      const responseConstruccion = await this.http.get<any>(urlConstrucccion).toPromise();
+      if (responseConstruccion.data) {
+        await this.ionicStorageService.agregarConKey('CONSTRUCCION', responseConstruccion.data);  // Almacenamos los catálogos en IonicStorage
+        await this.showToast('Construcción sincronizados correctamente.');
+      } else {
+        await this.showToast('No se encontraron datos.');
+      }
+
       // Primero obtenemos los catálogos
       const responseCatalogos = await this.http.get<any>(urlCatalogos).toPromise();
       if (responseCatalogos.data) {
@@ -96,7 +96,7 @@ export class SincronizarRPage implements OnInit {
         await this.sincronizarTabla(
           urlLecturas,
           'prediosrur',
-          'PREDIO_RURAL'
+          'PREDIOSRUR'
         );
         await this.showToast('Datos sincronizados correctamente.');
       }
@@ -128,8 +128,8 @@ export class SincronizarRPage implements OnInit {
 
       // Definir la clave basada en el tipo de tabla
       let keyValue: string;
-      if (nombreTabla === 'Urbanos') {
-        keyValue = 'PREDIO_URBANO'; // Clave para lecturas
+      if (nombreTabla === 'prediosrur') {
+        keyValue = 'PREDIOSRUR'; // Clave para lecturas
       } else {
         keyValue = nombreTabla.toUpperCase(); // Usar el nombre de la tabla si no se encuentra en los casos anteriores
       }
@@ -154,8 +154,8 @@ export class SincronizarRPage implements OnInit {
 
 
   async actualizarPredioR() {
-    const sincronizado =  this.enviarlocalService.enviarPRuralAlServidor();
-
+    const sincronizado = this.enviarlocalService.enviarPRuralAlServidorpredios();
+    this.enviarlocalService.enviarPRuralAlServidor();
     if (sincronizado) {
       await this.showToast(' Predios Rurales sincronizadas con éxito!');
     } else {
