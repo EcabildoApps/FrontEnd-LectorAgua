@@ -124,7 +124,6 @@ export class HomePage {
       // Enviar la solicitud POST
       this.http.post(baseUrl, body, { headers }).subscribe(
         async (response: any) => {
-          alert('Response: ' + response);
           if (response.message === 'Inicio de sesión exitoso.') {
             this.isLoggedIn = true;
 
