@@ -25,13 +25,13 @@
       <p><strong>Dirección:</strong> {{ registro.DIRECCION }}</p>
       <ion-separator></ion-separator>
       <p><strong>Secuencia:</strong> {{ registro.SEQUENCIA }}</p>
-      <input type="number" [(ngModel)]="registro.LECT_ACTUAL" placeholder="Ingrese la lectura" />
+      <input type="number" [(ngModel)]="registro.LECT_ACTUAL" placeholder="Ingrese la lectura" required />
       <ion-separator></ion-separator>
 
       <!-- Causa -->
       <ion-item>
         <ion-label>Causa</ion-label>
-        <ion-select [(ngModel)]="registro.TIPOCAUSA" placeholder="Selecciona una causa">
+        <ion-select [(ngModel)]="registro.TIPOCAUSA" placeholder="Selecciona una causa" required>
           <ion-select-option *ngFor="let causa of causas" [value]="causa.REN21SUBF">
             {{ causa.REN21DESC }}
           </ion-select-option>
@@ -41,7 +41,7 @@
       <!-- Novedad -->
       <ion-item>
         <ion-label>Novedad</ion-label>
-        <ion-select [(ngModel)]="registro.TIPONOVEDAD" placeholder="Selecciona una novedad">
+        <ion-select [(ngModel)]="registro.TIPONOVEDAD" placeholder="Selecciona una novedad" required>
           <ion-select-option *ngFor="let novedad of novedades" [value]="novedad.REN21SUBF">
             {{ novedad.REN21DESC }}
           </ion-select-option>
