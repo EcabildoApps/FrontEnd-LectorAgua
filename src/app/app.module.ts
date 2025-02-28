@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { Network } from '@ionic-native/network/ngx';
 
+import { HTTP } from '@ionic-native/http/ngx';
 
 
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -38,7 +39,7 @@ const routes: Routes = [
       registrationStrategy: 'registerImmediately' // Registro inmediato
     })
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Network], 
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Network, HTTP], 
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

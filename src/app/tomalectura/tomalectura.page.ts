@@ -54,15 +54,17 @@ export class TomalecturaPage {
       const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas(); // Usamos el nuevo método
       console.log('Registros de Lecturas:', registrosLecturas);
 
-      // Filtrar registros por ID de cuenta
-      const registrosFiltrados = registrosLecturas.filter(registro => registro.IDCUENTA === this.idCuenta);
+      // Filtrar registros por ID de cuenta y que no estén marcados como 'realizada'
+      const registrosFiltrados = registrosLecturas.filter(registro =>
+        registro.IDCUENTA === this.idCuenta && registro.estado !== '1'
+      );
 
       if (registrosFiltrados.length > 0) {
         this.registros = registrosFiltrados;
         console.log('Registros filtrados:', this.registros);
       } else {
         this.registros = [];
-        await this.presentToast('No se encontraron registros para el ID de cuenta proporcionado.');
+        await this.presentToast('No se encontraron registros pendientes para el ID de cuenta proporcionado.');
       }
     } catch (error) {
       console.error('Error al cargar los registros:', error);
@@ -120,30 +122,42 @@ export class TomalecturaPage {
     }
   }
 
+
   async guardarLectura(registro: any) {
     try {
+      // Recuperar las lecturas guardadas
       const lecturas = await this.ionicStorageService.rescatar('LECTURAS') || { data: [] };
 
       console.log('Lectura recibida:', registro);
 
+      // Buscar si el registro ya existe
       const index = lecturas.data.findIndex(item => item.NRO_CUENTA === registro.NRO_CUENTA);
 
       if (index !== -1) {
         const registroExistente = lecturas.data[index];
-        const position = await Geolocation.getCurrentPosition();
-        const { latitude, longitude } = position.coords;
-
+         const position = await Geolocation.getCurrentPosition();
+         const { latitude, longitude } = position.coords;
+        // Actualizar la lectura
         registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
         registroExistente.TIPOCAUSA = registro.TIPOCAUSA || '';
         registroExistente.TIPONOVEDAD = registro.TIPONOVEDAD || '';
-        registroExistente.X_LECTURA = longitude;
-        registroExistente.Y_LECTURA = latitude;
+         registroExistente.X_LECTURA = longitude;
+         registroExistente.Y_LECTURA = latitude;
+        
 
+        // Obtener la fecha actual
         const fechaSolo = new Date().toISOString().split('T')[0];
         registroExistente.FECHA_LEC = fechaSolo;
-        
+
+        // Marcar la lectura como realizada
+        registroExistente.ESTADO = '1';
+
+        // Guardar la lectura actualizada
         await this.ionicStorageService.agregarConKey('LECTURAS', lecturas);
         await this.presentToast('Lectura guardada correctamente.');
+
+        // Avanzar al siguiente registro
+        this.avanzarSiguienteRegistro(index, lecturas.data);
       } else {
         await this.presentToast('No se encontró el registro con el número de cuenta proporcionado.');
       }
@@ -152,6 +166,28 @@ export class TomalecturaPage {
       await this.presentToast('Hubo un error al guardar la lectura.');
     }
   }
+
+  async avanzarSiguienteRegistro(currentIndex: number, lecturasData: any[]) {
+    try {
+      // Buscar el siguiente registro que no esté marcado como 'realizada'
+      const siguienteRegistro = lecturasData.find((registro, index) => {
+        return index > currentIndex && registro.ESTADO !== '1'; // Aseguramos que el estado no esté marcado como 'realizada'
+      });
+
+      if (siguienteRegistro) {
+        // Navegar automáticamente al siguiente registro
+        this.router.navigate([`/tomalectura/${siguienteRegistro.IDCUENTA}`]);
+      } else {
+        await this.presentToast('No hay más registros pendientes.');
+      }
+    } catch (error) {
+      console.error('Error al avanzar al siguiente registro:', error);
+      await this.presentToast('Ocurrió un error al avanzar al siguiente registro.');
+    }
+  }
+
+
+
 
 
   async guardarImagenes() {

@@ -52,9 +52,12 @@ export class CorrigelecturaPage implements OnInit {
         this.valorFiltro
       );
 
+      // Filtrar registros que no estén marcados como 'realizada' (ESTADO !== '1')
+      this.registros = this.registros.filter(registro => registro.ESTADO == '1');
+
       // Mostrar mensaje si no hay registros
       if (this.registros.length === 0) {
-        await this.presentToast('No se encontraron registros para los filtros seleccionados.');
+        await this.presentToast('No se encontraron registros pendientes.');
       }
     } catch (error) {
       console.error('Error al cargar registros locales:', error);
@@ -62,6 +65,7 @@ export class CorrigelecturaPage implements OnInit {
       await this.presentToast('Ocurrió un error al cargar los registros locales.');
     }
   }
+
 
 
 

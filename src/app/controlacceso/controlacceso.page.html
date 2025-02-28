@@ -8,8 +8,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="background-container">
+  <div class="background-container" [ngStyle]="{'background-image': 'url(' + imagenLogin + ')'}">
     <div class="form-container">
+      <ion-button expand="block" (click)="testConnection()">Probar Conexión</ion-button>
+
       <h2>CONFIGURACION DOMINIO/PUERTO</h2>
 
       <ion-item>

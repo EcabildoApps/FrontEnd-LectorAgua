@@ -1,7 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { IonicstorageService } from '../services/ionicstorage.service';
 import * as maplibregl from 'maplibre-gl';
-
+import { Feature, LineString, GeoJSON } from 'geojson';
 
 
 @Component({
@@ -16,6 +16,12 @@ export class UbilecturaPage implements AfterViewInit {
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
 
+  // Punto de referencia inicial (Longitud y Latitud)
+  referencia = {
+    lat: -1.329583,
+    lng: -78.545528
+  };
+
   constructor(private ionicStorageService: IonicstorageService) { }
 
   ngAfterViewInit() {
@@ -27,26 +33,29 @@ export class UbilecturaPage implements AfterViewInit {
   async obtenerCoordenadasYMostrar() {
     try {
       const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas();
+      
 
       if (!registrosLecturas || registrosLecturas.length === 0) {
         console.warn("No se encontraron lecturas registradas.");
         return;
       }
 
-      // Inicializar mapa con la primera lectura
-      const { X_LECTURA, Y_LECTURA } = registrosLecturas[0];
-      this.inicializarMapa(X_LECTURA, Y_LECTURA);
+      // Inicializar mapa con el punto de referencia inicial
+      this.inicializarMapa(this.referencia.lng, this.referencia.lat);
 
       // Agregar todos los marcadores al mapa
       this.agregarMarcadores(registrosLecturas);
+
+      // Agregar las líneas entre las lecturas
+      // this.agregarLineas([this.referencia, ...registrosLecturas]);
     } catch (error) {
       console.error('Error al obtener las coordenadas:', error);
     }
   }
 
-  inicializarMapa(xLectura: number, yLectura: number) {
-    if (!xLectura || !yLectura || isNaN(xLectura) || isNaN(yLectura)) {
-      console.error("Coordenadas inválidas:", xLectura, yLectura);
+  inicializarMapa(lng: number, lat: number) {
+    if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+      console.error("Coordenadas inválidas:", lat, lng);
       return;
     }
 
@@ -75,7 +84,7 @@ export class UbilecturaPage implements AfterViewInit {
           }
         ]
       },
-      center: [xLectura, yLectura],
+      center: [lng, lat],
       zoom: 15,
       maxZoom: 20,
       minZoom: 3,
@@ -107,4 +116,55 @@ export class UbilecturaPage implements AfterViewInit {
       }
     });
   }
+/* 
+  agregarLineas(lecturas: any[]) {
+    if (!this.map || lecturas.length < 2) return;
+  
+    const coordinates: [number, number][] = lecturas
+      .map(lectura => {
+        const lng = parseFloat(lectura.X_LECTURA);
+        const lat = parseFloat(lectura.Y_LECTURA);
+        return (!isNaN(lng) && !isNaN(lat)) ? [lng, lat] : null;
+      })
+      .filter(coord => coord !== null) as [number, number][];
+  
+    const geoJsonData: Feature<LineString> = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: coordinates
+      }
+    };
+  
+    if (this.map.loaded()) {
+      this.dibujarLinea(geoJsonData);
+    } else {
+      this.map.on('load', () => {
+        this.dibujarLinea(geoJsonData);
+      });
+    }
+  }
+  
+  dibujarLinea(geoJsonData: Feature<LineString>) {
+    if (this.map.getSource('line-source')) {
+      (this.map.getSource('line-source') as maplibregl.GeoJSONSource).setData(geoJsonData);
+    } else {
+      this.map.addSource('line-source', {
+        type: 'geojson',
+        data: geoJsonData
+      });
+  
+      this.map.addLayer({
+        id: 'line-layer',
+        type: 'line',
+        source: 'line-source',
+        paint: {
+          'line-color': '#FF0000',
+          'line-width': 4
+        }
+      });
+    }
+  } */
+  
 }

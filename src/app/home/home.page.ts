@@ -3,10 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { IonicstorageService } from '../services/ionicstorage.service';
-import { Geolocation } from '@capacitor/geolocation';
-import { Network } from '@capacitor/network';
 import { Platform } from '@ionic/angular';
 import { RolService } from '../services/rol.service';
+import { HTTP } from '@ionic-native/http/ngx';
 
 
 
@@ -23,6 +22,7 @@ export class HomePage {
   userRole: string = '';
   isLoggedIn: boolean = false;
 
+
   imagenLogin: string = '/assets/img/login2.jpeg';
 
 
@@ -33,6 +33,7 @@ export class HomePage {
     private storageService: IonicstorageService,
     private platform: Platform,
     private rolService: RolService,
+    private httpp: HTTP,
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is('android')) {
@@ -46,7 +47,6 @@ export class HomePage {
   }
 
   ngOnInit() {
-
     this.platform.ready().then(() => {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
       prefersDark.addEventListener('change', (e) => {
@@ -61,9 +61,9 @@ export class HomePage {
     this.loadImageFromServer();
   }
 
-
   async loadImageFromServer() {
-    const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18';
+
+    const dominio = await this.storageService.rescatar('dominio') || '186.46.238.254';
     const puerto = await this.storageService.rescatar('port') || '3000';
     const serverUrl = `http://${dominio}:${puerto}/api/auth/getimage`;
 
@@ -104,7 +104,7 @@ export class HomePage {
     }
 
     try {
-      const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18';
+      const dominio = await this.storageService.rescatar('dominio') || '186.46.238.254';
       const puerto = await this.storageService.rescatar('port') || '3000';
 
 
@@ -124,6 +124,7 @@ export class HomePage {
       // Enviar la solicitud POST
       this.http.post(baseUrl, body, { headers }).subscribe(
         async (response: any) => {
+          alert('Response: ' + response);
           if (response.message === 'Inicio de sesión exitoso.') {
             this.isLoggedIn = true;
 
@@ -173,6 +174,7 @@ export class HomePage {
       );
     } catch (error) {
       await this.showToast('⚠️ Ocurrió un error inesperado.');
+      
       console.error('Error inesperado:', error);
     }
     console.log('Submitting form...');
