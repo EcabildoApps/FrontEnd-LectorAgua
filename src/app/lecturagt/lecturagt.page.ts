@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   standalone: false,
 })
 export class LecturagtPage implements OnInit {
+
   filtros: string = '';
   valorFiltro: string = '';
   rutaSeleccionada: string = '';
@@ -21,8 +22,9 @@ export class LecturagtPage implements OnInit {
   registros: any[] = [];
   registrosSinFiltro: any[] = []; // Para almacenar los registros sin filtro
   idCuenta: number | null = null;
+  registrosOrdenados: any[] = []; // Guardar el orden actual de los registros
 
-  isEditing: boolean = false; // Indicador de si estamos en modo edición
+  isEditing: boolean = false;
 
   constructor(
     private toastController: ToastController,
@@ -79,7 +81,9 @@ export class LecturagtPage implements OnInit {
         registrosFiltrados = this.sortByOriginalOrder(registrosFiltrados, ordenActual);
       }
 
+      // Guardar los registros ordenados al actualizar la lista
       this.registros = registrosFiltrados;
+      this.registrosOrdenados = [...this.registros]; // Guardar el nuevo orden
 
       if (this.registros.length === 0) {
         await this.presentToast('No se encontraron registros pendientes.');
@@ -169,13 +173,15 @@ export class LecturagtPage implements OnInit {
     this.registros.splice(this.dragIndex, 1);
     this.registros.splice(dropIndex, 0, draggedItem);
 
+    // Guardar el nuevo orden de registros
+    this.registrosOrdenados = [...this.registros];
     this.dragIndex = null;
   }
 
   // Función para restaurar los registros sin filtro
   clearFilter() {
     this.valorFiltro = ''; // Limpiar el filtro
-    this.registros = [...this.registrosSinFiltro]; // Restaurar el orden original
+    this.registros = [...this.registrosOrdenados]; // Restaurar el orden original de los registros
     this.cargarRegistros(); // Recargar los registros
   }
 }
