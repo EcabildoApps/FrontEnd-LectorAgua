@@ -241,3 +241,11 @@ textarea::placeholder {
     font-size: 14px;
     /* Tamaño más pequeño para el texto del placeholder */
 }
+
+ion-item.invalid {
+    --border-color: red;
+}
+
+ion-text {
+    margin-top: 4px;
+}

@@ -13,14 +13,9 @@ import { Feature, LineString, GeoJSON } from 'geojson';
 
 export class UbilecturaPage implements AfterViewInit {
   lecturas: any[] = [];
+  lecturasFiltradas: any[] = [];
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
-
-  // Punto de referencia inicial (Longitud y Latitud)
-  referencia = {
-    lat: -1.329583,
-    lng: -78.545528
-  };
 
   constructor(private ionicStorageService: IonicstorageService) { }
 
@@ -33,25 +28,38 @@ export class UbilecturaPage implements AfterViewInit {
   async obtenerCoordenadasYMostrar() {
     try {
       const registrosLecturas = await this.ionicStorageService.obtenerRegistrosLecturas();
-      
+      console.log('Registros de lecturas:', registrosLecturas);
 
       if (!registrosLecturas || registrosLecturas.length === 0) {
         console.warn("No se encontraron lecturas registradas.");
         return;
       }
 
-      // Inicializar mapa con el punto de referencia inicial
-      this.inicializarMapa(this.referencia.lng, this.referencia.lat);
+      // Almacenar las lecturas en el array
+      this.lecturas = registrosLecturas;
+      this.lecturasFiltradas = [...this.lecturas]; // Inicializar lecturasFiltradas con todas las lecturas
 
-      // Agregar todos los marcadores al mapa
-      this.agregarMarcadores(registrosLecturas);
+      // Verificar que haya al menos una lectura con coordenadas válidas
+      const primeraLectura = this.lecturas[0];
+      const lng = primeraLectura.X_LECTURA;
+      const lat = primeraLectura.Y_LECTURA;
 
-      // Agregar las líneas entre las lecturas
-      // this.agregarLineas([this.referencia, ...registrosLecturas]);
+      // Verificar si las coordenadas son válidas
+      if (lat && lng) {
+        // Inicializar mapa con las coordenadas de la primera lectura
+        this.inicializarMapa(lng, lat);
+
+        // Agregar todos los marcadores al mapa
+        this.agregarMarcadores(this.lecturasFiltradas);
+      } else {
+        console.error('Las coordenadas de la primera lectura no son válidas.');
+      }
+
     } catch (error) {
       console.error('Error al obtener las coordenadas:', error);
     }
   }
+
 
   inicializarMapa(lng: number, lat: number) {
     if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
@@ -116,55 +124,22 @@ export class UbilecturaPage implements AfterViewInit {
       }
     });
   }
-/* 
-  agregarLineas(lecturas: any[]) {
-    if (!this.map || lecturas.length < 2) return;
-  
-    const coordinates: [number, number][] = lecturas
-      .map(lectura => {
-        const lng = parseFloat(lectura.X_LECTURA);
-        const lat = parseFloat(lectura.Y_LECTURA);
-        return (!isNaN(lng) && !isNaN(lat)) ? [lng, lat] : null;
-      })
-      .filter(coord => coord !== null) as [number, number][];
-  
-    const geoJsonData: Feature<LineString> = {
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "LineString",
-        coordinates: coordinates
-      }
-    };
-  
-    if (this.map.loaded()) {
-      this.dibujarLinea(geoJsonData);
+
+  filtrarMarcadores(event: any) {
+    const valorBusqueda = event.target.value?.trim() || '';
+
+    if (!valorBusqueda) {
+      // Si no hay valor, mostrar todos los marcadores
+      this.lecturasFiltradas = [...this.lecturas];
     } else {
-      this.map.on('load', () => {
-        this.dibujarLinea(geoJsonData);
-      });
+      // Filtrar las lecturas según el IDCUENTA
+      this.lecturasFiltradas = this.lecturas.filter(lectura =>
+        lectura.IDCUENTA.toString().includes(valorBusqueda)
+      );
     }
+
+    // Actualizar marcadores en el mapa de acuerdo a las lecturas filtradas
+    this.agregarMarcadores(this.lecturasFiltradas);
   }
-  
-  dibujarLinea(geoJsonData: Feature<LineString>) {
-    if (this.map.getSource('line-source')) {
-      (this.map.getSource('line-source') as maplibregl.GeoJSONSource).setData(geoJsonData);
-    } else {
-      this.map.addSource('line-source', {
-        type: 'geojson',
-        data: geoJsonData
-      });
-  
-      this.map.addLayer({
-        id: 'line-layer',
-        type: 'line',
-        source: 'line-source',
-        paint: {
-          'line-color': '#FF0000',
-          'line-width': 4
-        }
-      });
-    }
-  } */
-  
+
 }

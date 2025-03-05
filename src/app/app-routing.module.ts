@@ -155,7 +155,11 @@ const routes: Routes = [
   {
     path: 'contruccion-r/:PUR01CODI',
     loadChildren: () => import('./contruccion-r/contruccion-r.module').then( m => m.ContruccionRPageModule)
+  },  {
+    path: 'coordenadas',
+    loadChildren: () => import('./coordenadas/coordenadas.module').then( m => m.CoordenadasPageModule)
   },
+
 
 
 

@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Corrección Coordenadas</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/lectura"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Filtro de búsqueda -->
+  <ion-searchbar [(ngModel)]="filtro" (ionInput)="filtrarLecturas()" debounce="300"
+    placeholder="Buscar por ID Cuenta"></ion-searchbar>
+
+  <!-- Mostrar las lecturas en tarjetas -->
+  <div class="lecturas-container">
+    <ion-card *ngFor="let lectura of lecturasFiltradas" (click)="abrirModal(lectura)">
+      <ion-card-header>
+        <ion-card-title>{{ lectura.CONSUMIDOR }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label>ID Cuenta: {{ lectura.IDCUENTA }}</ion-label>
+          <ion-label>Dirección: {{ lectura.DIRECCION }}</ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Modal para editar lectura seleccionada -->
+  <ion-modal [isOpen]="modalAbierto" (ionModalDidDismiss)="cerrarModal()">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Editar Lectura</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="guardarCambios()">Guardar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content *ngIf="lecturaSeleccionada">
+      <ion-item>
+        <ion-label position="floating">ID Cuenta</ion-label>
+        <ion-input [(ngModel)]="lecturaSeleccionada.IDCUENTA" readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nueva X Lectura</ion-label>
+        <ion-input type="number" [(ngModel)]="lecturaSeleccionada.X_LECTURA"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nueva Y Lectura</ion-label>
+        <ion-input type="number" [(ngModel)]="lecturaSeleccionada.Y_LECTURA"></ion-input>
+      </ion-item>
+
+      <ion-footer class="modal-footer">
+        <ion-button expand="block" (click)="guardarCambios()">Guardar Cambios</ion-button>
+      </ion-footer>
+    </ion-content>
+  </ion-modal>
+</ion-content>

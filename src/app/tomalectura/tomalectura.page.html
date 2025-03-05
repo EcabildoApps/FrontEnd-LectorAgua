@@ -11,6 +11,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
   <ion-card *ngFor="let registro of registros">
     <ion-card-header>
       <!-- Título de la tarjeta -->
@@ -26,6 +27,7 @@
       <ion-separator></ion-separator>
       <p><strong>Secuencia:</strong> {{ registro.SEQUENCIA }}</p>
       <input type="number" [(ngModel)]="registro.LECT_ACTUAL" placeholder="Ingrese la lectura" required />
+      
       <ion-separator></ion-separator>
 
       <!-- Causa -->
@@ -75,10 +77,11 @@
 
 
       <!-- Botón para guardar -->
-      <ion-button expand="full" (click)="guardarLectura(registro); guardarImagenes()">Guardar</ion-button>
+      <ion-button expand="full" (click)="guardarImagenes(); guardarLectura(registro)">Guardar</ion-button>
     </ion-card-content>
   </ion-card>
 
   <!-- Mensaje si no hay registros -->
   <p *ngIf="registros.length === 0">No hay registros para mostrar.</p>
+
 </ion-content>

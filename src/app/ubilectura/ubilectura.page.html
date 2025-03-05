@@ -17,6 +17,9 @@
     </ion-toolbar>
   </ion-header>
 
+  <!-- Barra de búsqueda -->
+  <ion-searchbar placeholder="Buscar por IDCUENTA" (ionInput)="filtrarMarcadores($event)"></ion-searchbar>
+
   <!-- Contenedor para el mapa -->
   <div id="map" style="height: 100%;"></div>
 </ion-content>

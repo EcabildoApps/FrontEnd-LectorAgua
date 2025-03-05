@@ -1,23 +1,41 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Configuracion</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/lectura"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    <!-- Icono de gota grande -->
-    <div class="icon-container">
-      <ion-icon name="water" class="icon"></ion-icon>
-    </div>
-    
-    <div class="form-container">
-      <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input type="password" [(ngModel)]="password" placeholder="Ingresa tu contraseña"></ion-input>
-      </ion-item>
-      
-      <ion-button expand="block" color="primary" (click)="login()">Iniciar sesión</ion-button>
+  <div class="background-container" [ngStyle]="{'background-image': 'url(' + imagenLogin + ')'}">
+
+    <div class="container">
+      <!-- Icono de gota grande -->
+      <div class="logo-container">
+        <h1 class="ecabildo-text">ADMIN</h1>
+      </div>
+      <ion-card-content>
+        <div class="form-container">
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+          </ion-item>
+
+
+          <!-- Campo de Contraseña -->
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input [type]="passwordVisible ? 'text' : 'password'" [(ngModel)]="password" name="password"
+              required></ion-input>
+            <ion-button fill="clear" (click)="togglePasswordVisibility()" slot="end">
+              <ion-icon slot="icon-only" name="eye"></ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <ion-button expand="block" color="primary" (click)="login()">Iniciar sesión</ion-button>
+        </div>
+      </ion-card-content>
     </div>
   </div>
 </ion-content>

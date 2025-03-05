@@ -54,6 +54,36 @@ export class IonicstorageService {
     await this.storage.clear();
   }
 
+  async actualizarLectura(IDCUENTA: string, cambios: { X_LECTURA?: any; Y_LECTURA?: any }) {
+    // Obtener "LECTURAS" desde el almacenamiento
+    const lecturasObj = await this.storage.get("LECTURAS");
+
+    if (!lecturasObj || !lecturasObj.data) {
+      console.error("❌ No se encontró la tabla de LECTURAS en el almacenamiento.");
+      return;
+    }
+
+    // Buscar la lectura específica dentro de "data"
+    const index = lecturasObj.data.findIndex((lectura: any) => lectura.IDCUENTA.toString() === IDCUENTA);
+
+    if (index !== -1) {
+      // Actualizar solo los campos X_LECTURA e Y_LECTURA
+      lecturasObj.data[index] = {
+        ...lecturasObj.data[index],
+        ...cambios
+      };
+
+      // Guardar nuevamente en almacenamiento
+      await this.storage.set("LECTURAS", lecturasObj);
+      console.log(`✅ Lectura con IDCUENTA ${IDCUENTA} actualizada:`, lecturasObj.data[index]);
+    } else {
+      console.error(`❌ No se encontró la lectura con IDCUENTA: ${IDCUENTA}`);
+    }
+  }
+
+
+
+
 
   async eliminarLecturas() {
     try {

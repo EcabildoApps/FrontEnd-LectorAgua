@@ -130,20 +130,34 @@ export class TomalecturaPage {
 
       console.log('Lectura recibida:', registro);
 
+      if (!registro.LECT_ACTUAL) {
+        await this.presentToast2('Debe ingresar la lectura.!!');
+        return;
+      }
+
+      if (!registro.TIPOCAUSA) {
+        await this.presentToast2('La causa es obligatoria.');
+        return;
+      }
+      if (!registro.TIPONOVEDAD) {
+        await this.presentToast2('La novedad es obligatoria.');
+        return;
+      }
+
       // Buscar si el registro ya existe
       const index = lecturas.data.findIndex(item => item.NRO_CUENTA === registro.NRO_CUENTA);
 
       if (index !== -1) {
         const registroExistente = lecturas.data[index];
-         const position = await Geolocation.getCurrentPosition();
-         const { latitude, longitude } = position.coords;
+        //const position = await Geolocation.getCurrentPosition();
+        // const { latitude, longitude } = position.coords;
         // Actualizar la lectura
         registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
         registroExistente.TIPOCAUSA = registro.TIPOCAUSA || '';
         registroExistente.TIPONOVEDAD = registro.TIPONOVEDAD || '';
-         registroExistente.X_LECTURA = longitude;
-         registroExistente.Y_LECTURA = latitude;
-        
+        //registroExistente.X_LECTURA = longitude;
+        //registroExistente.Y_LECTURA = latitude;
+
 
         // Obtener la fecha actual
         const fechaSolo = new Date().toISOString().split('T')[0];
@@ -286,6 +300,16 @@ export class TomalecturaPage {
       duration: 2000,
       position: 'bottom',
       color: 'primary',
+    });
+    toast.present();
+  }
+
+  async presentToast2(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'danger',
     });
     toast.present();
   }

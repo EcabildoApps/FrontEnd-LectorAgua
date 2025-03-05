@@ -46,20 +46,42 @@ export class LecturagtPage implements OnInit {
   async cargarRegistros() {
     if (!this.rutaSeleccionada) {
       await this.presentToast('Por favor, selecciona una ruta primero.');
-      return; // No hacer nada si no se seleccionó una ruta
+      return;
     }
 
     try {
-      // Llamar al método del servicio para obtener los registros locales
-      this.registros = await this.ionicStorageService.cargarRegistrosConFiltroGeneral(
+      // Cargar registros sin aplicar filtro
+      const registrosOriginales = await this.ionicStorageService.cargarRegistrosConFiltroGeneral(
         this.rutaSeleccionada,
-        this.valorFiltro
+        ''
       );
 
-      // Filtrar registros que no estén marcados como 'realizada' (ESTADO !== '1')
-      this.registros = this.registros.filter(registro => registro.ESTADO !== '1');
+      // Aplicar filtro según el valor ingresado
+      let registrosFiltrados = registrosOriginales.filter(registro =>
+        registro.NRO_CUENTA.includes(this.valorFiltro) ||
+        registro.CONSUMIDOR.toLowerCase().includes(this.valorFiltro.toLowerCase()) ||
+        registro.NRO_MEDIDOR.includes(this.valorFiltro)
+      );
 
-      // Mostrar mensaje si no hay registros
+      // Eliminar los que tienen estado '1'
+      registrosFiltrados = registrosFiltrados.filter(registro => registro.ESTADO !== '1');
+
+      // Guardar el orden actual cuando se termine el drag
+      const ordenActual = [...this.registros];
+
+      // Actualizar los registros en base al filtro
+      this.registros = registrosFiltrados;
+
+      // Si estamos en modo edición, reordenar los registros según el último orden de arrastre
+      if (this.isEditing && ordenActual.length > 0) {
+        this.registros = this.registros.sort((a, b) => {
+          const indexA = ordenActual.indexOf(a);
+          const indexB = ordenActual.indexOf(b);
+          return indexA - indexB;
+        });
+      }
+
+      // Si no hay registros, mostrar un mensaje
       if (this.registros.length === 0) {
         await this.presentToast('No se encontraron registros pendientes.');
       }
@@ -145,7 +167,9 @@ export class LecturagtPage implements OnInit {
     this.registros.splice(this.dragIndex, 1);
     this.registros.splice(dropIndex, 0, draggedItem);
 
-    this.dragIndex = null; // Resetea el índice
+    // Guardar el nuevo orden después del drop
+    this.dragIndex = null;
+    //this.cargarRegistros(); // Recargar los registros después del drag para mantener la persistencia del orden
   }
 
 }

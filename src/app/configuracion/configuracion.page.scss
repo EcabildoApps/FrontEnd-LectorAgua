@@ -1,82 +1,186 @@
-.container {
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 20px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
+ion-content {
+    --background: transparent;
+    height: 100%;
+    overflow: hidden;
+}
+
+.background-container {
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: 20px;
-    background-color: #f4f5f8;
-    height: 100vh;
-    /* Asegura que ocupe todo el alto de la pantalla */
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
 }
 
-.icon-container {
-    margin-bottom: 20px;
+/* Estilos para los elementos */
+.logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 20px;
 }
 
-.icon {
-    font-size: 100px;
-    /* Hacer el icono de gota grande */
-    color: blue;
+.ecabildo-text {
+    font-size: 10vw;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
-.form-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 20px 0;
+.welcome-message {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 ion-item {
-    --background: #fff;
-    --border-radius: 10px;
     margin-bottom: 15px;
 }
 
 ion-label {
-    color: blue;
+    color: #3880ff;
 }
 
 ion-input {
-    --background: #fff;
-    --border-radius: 10px;
+    font-size: 16px;
 }
 
 ion-button {
-    margin-top: 20px;
-    --border-radius: 5px;
+    color: white;
+    font-weight: bold;
 }
 
-.button-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
+ion-button[expand="full"] {
     margin-top: 20px;
 }
 
-ion-button {
-    --border-radius: 5px;
-    margin-top: 10px;
+ion-select {
+    font-size: 16px;
 }
 
-ion-button[color='primary'] {
-    --background: blue;
-    --color: white;
-}
-
-ion-button[color='secondary'] {
-    --background: #8c8c8c;
-    --color: white;
-}
-
-footer {
+.connect-button {
     display: flex;
+    align-items: center;
     justify-content: center;
-    padding: 20px;
+    font-size: 16px;
+    color: rgb(255, 255, 255);
 }
 
-ion-footer {
-    margin-top: 20px;
+.connect-button ion-icon {
+    margin-left: 8px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+}
+
+.connect-button:hover {
+    background-color: #f0f0f0;
+    color: #3880ff;
+}
+
+.connect-button:hover ion-icon {
+    color: #3880ff;
+}
+
+ion-buttons[slot="end"] {
+    display: flex;
+    align-items: center;
+    color: black;
+}
+
+ion-icon[name="lock-closed"] {
+    color: black;
+    font-size: 24px;
+}
+
+ion-button[fill="clear"] {
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+}
+
+ion-icon[name="eye"] {
+    font-size: 30px;
+    color: #3880ff;
+}
+
+ion-button[fill="clear"]:hover ion-icon[name="eye"] {
+    color: #ff5733;
+}
+
+ion-button[fill="clear"]:active ion-icon[name="eye"] {
+    color: #ff9a3d;
+}
+
+/* Media Queries para dispositivos Tablet y pantallas más grandes */
+@media only screen and (max-width: 768px) {
+    .ecabildo-text {
+        font-size: 8vw;
+        /* Ajusta el tamaño de la fuente en dispositivos más pequeños */
+    }
+
+    ion-card {
+        width: 90%;
+        /* Asegura que el card ocupe más espacio en pantallas pequeñas */
+        max-width: 100%;
+    }
+
+    .logo-container {
+        margin-bottom: 10px;
+    }
+
+    ion-input,
+    ion-select {
+        font-size: 14px;
+    }
+
+    ion-button[expand="full"] {
+        margin-top: 10px;
+    }
+}
+
+/* Media Queries para pantallas más grandes como desktop */
+@media only screen and (min-width: 769px) {
+    .ecabildo-text {
+        font-size: 5vw;
+        /* Ajusta el tamaño de la fuente en pantallas grandes */
+    }
+
+    ion-card {
+        width: 60%;
+        max-width: 700px;
+    }
+
+    .logo-container {
+        margin-bottom: 30px;
+    }
+
+    ion-input,
+    ion-select {
+        font-size: 18px;
+    }
 }

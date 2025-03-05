@@ -1,0 +1,237 @@
+/* Estilo para el contenedor general */
+ion-header {
+    --background: #007bff;
+    --color: white;
+    padding-top: 20px;
+    height: auto;
+}
+
+/* Estilos para el toolbar */
+ion-toolbar {
+    --background: #007bff;
+    --color: white;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    height: auto;
+}
+
+.container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #f4f5f8;
+}
+
+/* Estilos para los filtros */
+.filter-container {
+    margin-bottom: 10px;
+
+    ion-item {
+        --background: #fff;
+        --border-radius: 10px;
+        margin-bottom: 10px;
+
+        ion-label {
+            font-weight: bold;
+            color: #3d7ff3;
+            /* Consistencia con el tema */
+        }
+
+        ion-select {
+            --placeholder-color: #7a7a7a;
+            /* Mejor visibilidad del placeholder */
+            --color: #000;
+        }
+    }
+
+    /* Input para filtro */
+    ion-item {
+        ion-label {
+            position: floating;
+        }
+
+        ion-input {
+            width: 100%;
+            --padding-start: 10px;
+        }
+    }
+}
+
+/* Contenedor de registros */
+.record-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Espaciado entre las tarjetas */
+
+    ion-card {
+        margin-bottom: 15px;
+        border: 1px solid #3d7ff3;
+        --border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Sombra suave */
+        background-color: #fff;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+        &:hover {
+            transform: scale(1.02);
+            /* Efecto de ampliación al pasar el ratón */
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+            /* Sombra más pronunciada al pasar el mouse */
+        }
+
+        /* Estilo de contenido de la tarjeta */
+        ion-card-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #000;
+
+            p {
+                margin: 5px 0;
+            }
+
+            strong {
+                color: #3d7ff3;
+            }
+        }
+    }
+}
+
+/* Pie de la página */
+.footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+
+    ion-chip {
+        --background: #3d7ff3;
+        --color: #fff;
+
+        ion-icon {
+            margin-right: 5px;
+        }
+    }
+}
+
+/* Modo de edición de las tarjetas */
+.record-container ion-card.edit-mode {
+    background-color: #e0e0e0;
+    border: 1px solid #000;
+    cursor: grab;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+/* Responsive: mejorando el diseño en dispositivos móviles y tabletas */
+@media (max-width: 768px) {
+    .container {
+        padding: 5px;
+        /* Menos espacio en pantallas pequeñas */
+    }
+
+    .filter-container {
+        margin-bottom: 5px;
+    }
+
+    /* Tarjetas en dispositivos móviles */
+    .record-container ion-card {
+        margin-bottom: 10px;
+        /* Menor espacio entre las tarjetas */
+    }
+
+    /* Cambiar la disposición de las tarjetas a 1 columna en pantallas pequeñas */
+    .record-container {
+        flex-direction: column;
+    }
+}
+
+/* Estilo para el botón flotante */
+ion-fab-button {
+    --background: #3d7ff3;
+    --color: white;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+/* Estilo cuando el modo de edición está activado */
+.record-container ion-card.edit-mode {
+    background-color: #e0e0e0;
+    border: 1px solid #000;
+    cursor: grab;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+ion-modal {
+    --background: #ffffff;
+    /* Fondo blanco para el modal */
+    --border-radius: 12px;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    --backdrop-opacity: 0;
+    --max-height: 90vh;
+}
+
+/* Header del modal */
+ion-modal ion-header {
+    --background: #007bff;
+    /* Color de fondo del header */
+    --color: white;
+    /* Color del texto del header */
+    border-radius: 12px 12px 0 0;
+    /* Bordes redondeados solo en la parte superior */
+}
+
+/* Estilos para el contenido del modal */
+ion-modal ion-content {
+    padding: 20px;
+}
+
+ion-item,
+ion-button {
+    width: 80%;
+    /* Ajustar el tamaño */
+    max-width: 400px;
+}
+
+/* Estilos para los inputs dentro del modal */
+ion-item {
+    margin-bottom: 15px;
+}
+
+ion-label {
+    font-weight: bold;
+    color: #3d7ff3;
+    /* Consistencia con el tema */
+}
+
+ion-input {
+    --border-radius: 10px;
+    --padding-start: 10px;
+}
+
+/* Estilo para el botón Guardar */
+ion-button {
+    --background: #007bff;
+    --color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        --background: #0056b3;
+        /* Cambio de color al pasar el ratón */
+    }
+}
+
+/* Footer del modal */
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}

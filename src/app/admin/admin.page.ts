@@ -12,6 +12,8 @@ import { ToastController } from '@ionic/angular';
 export class AdminPage {
   selectedFile: File | null = null;
   imagenLogin: string = '/assets/img/default-login-image.jpg';
+  lecturas: any[] = [];
+  lecturaSeleccionada: any;
 
   constructor(private http: HttpClient,
     private ionicStorageService: IonicstorageService,
@@ -62,6 +64,18 @@ export class AdminPage {
         alert('Hubo un error al subir la imagen');
       }
     );
+  }
+  async guardarCambios() {
+    if (this.lecturaSeleccionada) {
+      // Actualizar las lecturas en el almacenamiento
+      const indice = this.lecturas.findIndex(lectura => lectura.IDCUENTA === this.lecturaSeleccionada.IDCUENTA);
+      if (indice !== -1) {
+        this.lecturas[indice].X_LECTURA = this.lecturaSeleccionada.X_LECTURA;
+        this.lecturas[indice].Y_LECTURA = this.lecturaSeleccionada.Y_LECTURA;
+        await this.ionicStorageService.agregarConKey('LECTURAS', this.lecturas);
+        console.log('Cambios guardados:', this.lecturaSeleccionada);
+      }
+    }
   }
 
 }
