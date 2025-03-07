@@ -31,15 +31,18 @@
   </div>
 
   <!-- Modal para editar lectura seleccionada -->
-  <ion-modal [isOpen]="modalAbierto" (ionModalDidDismiss)="cerrarModal()">
+  <ion-modal [isOpen]="modalAbierto" (ionModalDidDismiss)="cerrarModal()" [backdropDismiss]="true">
     <ion-header>
       <ion-toolbar>
         <ion-title>Editar Lectura</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="guardarCambios()">Guardar</ion-button>
+          <ion-button (click)="cerrarModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
+
     <ion-content *ngIf="lecturaSeleccionada">
       <ion-item>
         <ion-label position="floating">ID Cuenta</ion-label>
