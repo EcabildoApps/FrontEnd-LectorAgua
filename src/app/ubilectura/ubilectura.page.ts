@@ -39,21 +39,13 @@ export class UbilecturaPage implements AfterViewInit {
       this.lecturas = registrosLecturas;
       this.lecturasFiltradas = [...this.lecturas]; // Inicializar lecturasFiltradas con todas las lecturas
 
-      // Verificar que haya al menos una lectura con coordenadas válidas
-      const primeraLectura = this.lecturas[0];
-      const lng = primeraLectura.X_LECTURA;
-      const lat = primeraLectura.Y_LECTURA;
+      // Inicializar mapa con las coordenadas predeterminadas
+      const lng = -78.545038;
+      const lat = -1.329917;
+      this.inicializarMapa(lng, lat);
 
-      // Verificar si las coordenadas son válidas
-      if (lat && lng) {
-        // Inicializar mapa con las coordenadas de la primera lectura
-        this.inicializarMapa(lng, lat);
-
-        // Agregar todos los marcadores al mapa
-        this.agregarMarcadores(this.lecturasFiltradas);
-      } else {
-        console.error('Las coordenadas de la primera lectura no son válidas.');
-      }
+      // Cargar los marcadores después de que el mapa esté inicializado
+      this.agregarMarcadores(this.lecturasFiltradas);
 
     } catch (error) {
       console.error('Error al obtener las coordenadas:', error);
