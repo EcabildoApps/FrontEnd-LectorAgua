@@ -149,14 +149,14 @@ export class TomalecturaPage {
 
       if (index !== -1) {
         const registroExistente = lecturas.data[index];
-        //const position = await Geolocation.getCurrentPosition();
-        // const { latitude, longitude } = position.coords;
+        const position = await Geolocation.getCurrentPosition();
+         const { latitude, longitude } = position.coords;
         // Actualizar la lectura
         registroExistente.LECT_ACTUAL = registro.LECT_ACTUAL;
         registroExistente.TIPOCAUSA = registro.TIPOCAUSA || '';
         registroExistente.TIPONOVEDAD = registro.TIPONOVEDAD || '';
-        //registroExistente.X_LECTURA = longitude;
-        //registroExistente.Y_LECTURA = latitude;
+        registroExistente.X_LECTURA = longitude;
+        registroExistente.Y_LECTURA = latitude;
 
 
         // Obtener la fecha actual
