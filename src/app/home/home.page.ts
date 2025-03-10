@@ -63,9 +63,9 @@ export class HomePage {
 
   async loadImageFromServer() {
 
-    const dominio = await this.storageService.rescatar('dominio') || '186.46.238.254';
+    const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18';
     const puerto = await this.storageService.rescatar('port') || '3000';
-    const serverUrl = `http://${dominio}:${puerto}/api/auth/getimage`;
+    const serverUrl = `https://${dominio}:${puerto}/api/auth/getimage`;
 
     this.http.get(serverUrl).subscribe(
       (response: any) => {
@@ -104,11 +104,11 @@ export class HomePage {
     }
 
     try {
-      const dominio = await this.storageService.rescatar('dominio') || '186.46.238.254';
+      const dominio = await this.storageService.rescatar('dominio') || '192.168.69.18';
       const puerto = await this.storageService.rescatar('port') || '3000';
 
 
-      const baseUrl = `http://${dominio}:${puerto}/api/auth/login`;
+      const baseUrl = `https://${dominio}:${puerto}/api/auth/login`;
 
       const body = {
         username: this.username,

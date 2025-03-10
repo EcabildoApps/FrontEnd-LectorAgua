@@ -35,7 +35,7 @@ export class ConfiguracionPage {
     console.log('Password:', this.password); // Depuración
 
     if (this.password.trim()) {
-      this.http.post(`http://${dominio}:${puerto}/api/auth/login`, {
+      this.http.post(`https://${dominio}:${puerto}/api/auth/login`, {
         username: this.username,
         password: this.password
       }).subscribe(
@@ -64,7 +64,7 @@ export class ConfiguracionPage {
 
     const dominio = await this.storageService.rescatar('dominio') || '186.46.238.254';
     const puerto = await this.storageService.rescatar('port') || '3000';
-    const serverUrl = `http://${dominio}:${puerto}/api/auth/getimage`;
+    const serverUrl = `https://${dominio}:${puerto}/api/auth/getimage`;
 
     this.http.get(serverUrl).subscribe(
       (response: any) => {
